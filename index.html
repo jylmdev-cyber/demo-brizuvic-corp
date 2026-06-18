@@ -674,7 +674,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
         <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
-          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+          <div onClick="{{ p.onClick }}" class="premium-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden;cursor:pointer">
             <div style="aspect-ratio:1/.82;background:linear-gradient(150deg,#23262F,#181A20);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)">
               <span style="position:absolute;top:11px;left:11px;font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#9AA1AC;background:rgba(12,13,16,.6);border:1px solid rgba(255,255,255,.1);padding:4px 9px;border-radius:2px">{{ p.cat }}</span>
               <sc-if value="{{ p.agotado }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:11px;right:11px;font-family:'Saira';font-weight:700;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#FFC107;background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.4);padding:4px 9px;border-radius:2px">Agotado</span></sc-if>
@@ -1568,6 +1568,96 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   </div>
   </sc-if>
 
+  <!-- Modal de Detalle del Producto -->
+  <sc-if value="{{ hasDetailProduct }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;background:rgba(12,13,16,.75);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:110;padding:20px">
+    <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:6px;width:100%;max-width:820px;box-shadow:0 20px 50px rgba(0,0,0,.65);overflow:hidden;display:grid;grid-template-columns:1.05fr 1.35fr;">
+      
+      <!-- Lado Izquierdo: Imagen & Categoría -->
+      <div style="background:linear-gradient(150deg,#23262F,#181A20);padding:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border-right:1px solid rgba(255,255,255,.06)">
+        <span style="position:absolute;top:20px;left:20px;font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#9AA1AC;background:rgba(12,13,16,.6);border:1px solid rgba(255,255,255,.1);padding:4px 10px;border-radius:2px">{{ detailProduct.cat }}</span>
+        <sc-if value="{{ detailProduct.agotado }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:20px;right:20px;font-family:'Saira';font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#FFC107;background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.4);padding:4px 10px;border-radius:2px">Agotado</span></sc-if>
+        
+        <div style="width:100%;aspect-ratio:1/.9;max-height:260px;display:flex;align-items:center;justify-content:center;color:#5A616C;border-radius:4px;overflow:hidden">
+          {{ detailProduct.iconEl }}
+        </div>
+        
+        <!-- Descuento Informativo -->
+        <div style="margin-top:28px;background:rgba(225,29,38,.07);border:1px dashed rgba(225,29,38,.25);border-radius:4px;padding:12px 14px;width:100%;display:flex;gap:10px;align-items:flex-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E11D26" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+          <div style="font-size:12px;line-height:1.45;color:#EAECEF">
+            <span style="font-weight:bold;color:#FF6168;display:block;margin-bottom:2px">Descuento Corporativo:</span>
+            {{ detailProduct.discountText }}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lado Derecho: Detalles, Specs, Calculadora -->
+      <div style="padding:34px;display:flex;flex-direction:column;justify-content:space-between;max-height:640px;overflow-y:auto">
+        <div>
+          <!-- Cabecera -->
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div>
+              <h2 style="font-family:'Saira';font-weight:800;font-size:26px;color:#fff;margin:0 0 4px;line-height:1.15;letter-spacing:-.01em">{{ detailProduct.name }}</h2>
+              <div style="font-size:13.5px;color:#8A9099">{{ detailProduct.sub }}</div>
+            </div>
+            <button onClick="{{ closeDetail }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:6px;border-radius:3px;margin-top:-6px;margin-right:-6px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <!-- Descripción -->
+          <p style="font-size:14px;line-height:1.55;color:#A6ADB8;margin:0 0 24px">{{ detailProduct.desc }}</p>
+
+          <!-- Especificaciones Técnicas -->
+          <div style="margin-bottom:28px">
+            <div style="font-family:'Saira';font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:#FFC107;margin-bottom:10px">Especificaciones Técnicas</div>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:12.5px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);padding:14px;border-radius:4px">
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:12px"><span style="color:#7E8591">Material:</span><span style="color:#EAECEF">{{ detailProduct.specs.material }}</span></div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:12px"><span style="color:#7E8591">Normativa:</span><span style="color:#EAECEF">{{ detailProduct.specs.certificacion }}</span></div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:12px"><span style="color:#7E8591">Peso/Dim:</span><span style="color:#EAECEF">{{ detailProduct.specs.peso }}</span></div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:12px"><span style="color:#7E8591">Procedencia:</span><span style="color:#EAECEF">{{ detailProduct.specs.origen }}</span></div>
+              <div style="display:grid;grid-template-columns:100px 1fr;gap:12px"><span style="color:#7E8591">Aplicación:</span><span style="color:#EAECEF">{{ detailProduct.specs.aplicacion }}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculadora e interacción -->
+        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:20px;margin-top:10px">
+          <sc-if value="{{ !detailProduct.agotado }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+              <div style="font-size:13.5px;color:#8A9099">Cantidad a cotizar:</div>
+              <div style="display:flex;align-items:center;background:#0C0D10;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden">
+                <button onClick="{{ decDetailQty }}" style="background:transparent;border:0;color:#fff;width:34px;height:34px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-weight:bold" style-hover="background:rgba(255,255,255,.05)">−</button>
+                <span style="font-family:'Saira';font-weight:700;font-size:14px;color:#fff;width:40px;text-align:center;display:inline-block">{{ detailQty }}</span>
+                <button onClick="{{ incDetailQty }}" style="background:transparent;border:0;color:#fff;width:34px;height:34px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-weight:bold" style-hover="background:rgba(255,255,255,.05)">+</button>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center">
+              <div>
+                <div style="font-size:11px;color:#7E8591;text-transform:uppercase;letter-spacing:.04em">Precio Unitario:</div>
+                <div style="font-family:'Saira';font-weight:800;font-size:22px;color:#fff;line-height:1.2">{{ detailProduct.price }}</div>
+              </div>
+              <button onClick="{{ addDetailToCart }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;display:flex;align-items:center;gap:8px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Agregar a Cotización
+              </button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ detailProduct.agotado }}" hint-placeholder-val="{{ false }}">
+            <div style="background:rgba(255,97,104,.06);border:1px solid rgba(255,97,104,.15);border-radius:4px;padding:12px 16px;font-size:13.5px;color:#FF6168;text-align:center">
+              Producto temporalmente sin stock. Puedes consultar la fecha de reposición por WhatsApp.
+            </div>
+          </sc-if>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
@@ -1583,6 +1673,7 @@ class Component extends DCLogic {
     cart:[], cartOpen:false, wizardStep:1, wizardRisk:null, wizardSize:null, wizardResult:null,
     waOpen:false, searchQuery:'', maxPrice:800, activeStep:'01',
     pdfModalOpen:false, pdfQuoteData:null,
+    activeProductDetailId:null, detailQty:1,
     logs:[
       {id:'l1',time:'Hace 5 mins',u:'ZH',desc:'Zuleica Huicho modificó el stock del Casco V-Gard'},
       {id:'l2',time:'Hace 1 hora',u:'ZH',desc:'Cotización #1 de Minera Las Bambas pasó a "En proceso"'},
@@ -1672,14 +1763,15 @@ class Component extends DCLogic {
   uid(prefix){ return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
   // CART METHODS
-  addToCart(id) {
+  addToCart(id, qty = 1) {
     const list = this.state.cart;
     const found = list.find(x => x.id === id);
     let newCart;
+    const q = Number(qty);
     if (found) {
-      newCart = list.map(x => x.id === id ? { ...x, qty: x.qty + 1 } : x);
+      newCart = list.map(x => x.id === id ? { ...x, qty: x.qty + q } : x);
     } else {
-      newCart = [...list, { id, qty: 1 }];
+      newCart = [...list, { id, qty: q }];
     }
     this.setState({ cart: newCart, cartOpen: true });
   }
@@ -1717,6 +1809,28 @@ class Component extends DCLogic {
     return this.state.cart.reduce((sum, item) => sum + item.qty, 0);
   }
 
+  // PRODUCT DETAIL METHODS
+  openProductDetail(id) {
+    this.setState({ activeProductDetailId: id, detailQty: 1 });
+  }
+  closeProductDetail() {
+    this.setState({ activeProductDetailId: null });
+  }
+  incrementDetailQty() {
+    this.setState({ detailQty: this.state.detailQty + 1 });
+  }
+  decrementDetailQty() {
+    if (this.state.detailQty > 1) {
+      this.setState({ detailQty: this.state.detailQty - 1 });
+    }
+  }
+  addDetailToCart() {
+    const id = this.state.activeProductDetailId;
+    const qty = this.state.detailQty;
+    this.addToCart(id, qty);
+    this.setState({ activeProductDetailId: null });
+  }
+
   // WIZARD METHODS
   setWizardRisk(risk) {
     this.setState({ wizardRisk: risk, wizardStep: 2 });
@@ -1745,14 +1859,90 @@ class Component extends DCLogic {
     const stock = Number(p.stock);
     const iconEl = p.img ? React.createElement('img',{src:p.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : this.el(this.ICON[ic]);
     const iconSmEl = p.img ? React.createElement('img',{src:p.img,style:{width:38,height:38,objectFit:'cover',borderRadius:3}}) : this.el(this.iconSm(ic));
+    
+    // Technical detail mockups
+    const detailsMap = {
+      p1: {
+        desc: "Casco de seguridad industrial modelo V-Gard de alta resistencia contra impactos y descargas eléctricas de baja tensión. Ideal para construcción civil, minería e industria general. Diseño clásico con arnés de suspensión ajustable para máxima comodidad durante jornadas prolongadas.",
+        specs: { material: "Polietileno de alta densidad (HDPE)", certificacion: "ANSI/ISEA Z89.1-2014 Tipo I, Clase E", peso: "380 g", origen: "Importado / EE.UU.", aplicacion: "Construcción, minería, manufactura" },
+        discount: "A partir de 50 unidades obtén 8% de descuento corporativo."
+      },
+      p2: {
+        desc: "Guantes de protección contra riesgos mecánicos extremos, fabricados con hilado de fibra anticorte de alto rendimiento (HPPE) recubiertos de poliuretano en la palma. Ofrecen un excelente agarre y sensibilidad táctil en seco o ligeramente húmedo.",
+        specs: { material: "Fibra HPPE con recubrimiento de Poliuretano (PU)", certificacion: "EN 388:2016 Nivel 5 de resistencia al corte", peso: "75 g (el par)", origen: "Nacional / Calidad de exportación", aplicacion: "Vidriería, metalmecánica, manipulación de láminas" },
+        discount: "Descuento del 10% por cajón cerrado de 120 pares."
+      },
+      p3: {
+        desc: "Lentes de seguridad ultraligeros con tratamiento antiempañante y antirrayaduras. Cuentan con lunas de policarbonato ópticamente rectificadas que bloquean el 99.9% de la radiación UV. Su diseño envolvente ofrece una cobertura lateral excelente.",
+        specs: { material: "Policarbonato resistente a impactos", certificacion: "ANSI Z87.1-2015 de alto impacto", peso: "26 g", origen: "Importado", aplicacion: "Inspecciones, laboratorios, talleres de corte y esmerilado" },
+        discount: "15% de descuento en pedidos para dotación mayor a 100 unidades."
+      },
+      p4: {
+        desc: "Respirador de media cara reutilizable, fabricado con material elastomérico termoplástico ligero y cómodo. Su diseño de bajo perfil minimiza la interferencia con los lentes de seguridad y el casco, con conexión de filtros tipo bayoneta de fácil ajuste.",
+        specs: { material: "Elastómero termoplástico hipoalergénico", certificacion: "NIOSH 42 CFR 84 aprobado", peso: "82 g (sin filtros)", origen: "Importado / 3M original", aplicacion: "Pintado con soplete, soldadura, manipulación química" },
+        discount: "5% de descuento en pedidos corporativos superiores a 20 respiradores."
+      },
+      p5: {
+        desc: "Botines de seguridad dieléctricos premium con puntera de composite ultra liviana. Su suela de poliuretano de doble densidad es antideslizante y resistente a aceites e hidrocarburos. No contienen partes metálicas (Metal-Free) y están certificados ante descargas eléctricas.",
+        specs: { material: "Cuero flor hidrofugado con suela de PU doble densidad", certificacion: "ASTM F2413-11 (Dieléctrico hasta 18 kV)", peso: "980 g (el par)", origen: "Nacional / Cuero legítimo peruano", aplicacion: "Mantenimiento eléctrico, subestaciones, minería" },
+        discount: "10% de descuento en compras de calzado corporativo para cuadrilla (30+ pares)."
+      },
+      p6: {
+        desc: "Arnés de cuerpo entero ajustable con 4 anillas en D (1 dorsal para detención de caídas, 1 esternal para ascenso/descenso, y 2 laterales para posicionamiento). Fabricado en reata de poliéster de alta tenacidad de 45 mm de ancho.",
+        specs: { material: "Reata de Poliéster de alta tenacidad con herrajes de acero", certificacion: "ANSI Z359.11-2014, OSHA 1926", peso: "1.65 kg", origen: "Nacional / Certificado de calibración", aplicacion: "Montajes de estructuras, andamios, torres de telecomunicación" },
+        discount: "Descuento de 8% por volumen en compras a partir de 15 arneses."
+      },
+      p7: {
+        desc: "Extintor de Polvo Químico Seco (PQS) de presurización directa con manómetro de control de presión. Diseñado para combatir fuegos Clase A (sólidos), B (líquidos) y C (gases o equipos eléctricos). Ideal para locales comerciales, oficinas y depósitos.",
+        specs: { material: "Cilindro de acero al carbono con pintura electrostática anticorrosiva", certificacion: "NTP 350.043 / Aprobado Defensa Civil INDECI", peso: "9.8 kg (peso total cargado)", origen: "Ensamblado en Lima, Perú con insumos certificados", aplicacion: "Locales comerciales, industrias, almacenes, vehículos" },
+        discount: "Ahorra 12% en equipamiento comercial completo (10+ extintores, incluye señales)."
+      },
+      p8: {
+        desc: "Extintor de Dióxido de Carbono (CO₂) de alta eficiencia para incendios en tableros eléctricos y servidores. El CO₂ es un agente limpio que no deja residuos ni daña los circuitos electrónicos delicados. Equipado con corneta de descarga dieléctrica.",
+        specs: { material: "Cilindro de aluminio de una sola pieza sin costuras", certificacion: "NTP 350.043 / Cumplimiento NFPA 10", peso: "7.2 kg (peso total cargado)", origen: "Cilindro importado, cargado y certificado localmente", aplicacion: "Salas de servidores, tableros eléctricos de fuerza, subestaciones" },
+        discount: "Descuento del 8% a partir de 5 extintores de CO2."
+      },
+      p9: {
+        desc: "Gabinete de contra incendio Clase II completo para uso de ocupantes. Incluye manguera de lona sintética de 1.5 pulgadas por 30 metros de longitud, pitón de chorro/niebla de policarbonato, válvula angular de bronce de 1.5\" y soporte de canastilla.",
+        specs: { material: "Plancha de acero LAF de 1/16\" con vidrio de seguridad", certificacion: "Normas NFPA 14 e INDECI Defensa Civil", peso: "28 kg (gabinete vacío)", origen: "Fabricación nacional, pintura epóxica al horno roja", aplicacion: "Centros comerciales, almacenes de techos altos, edificios multifamiliares" },
+        discount: "Cotización y precios especiales para proyectos de construcción de redes húmedas."
+      },
+      p10: {
+        desc: "Detector de humo fotoeléctrico autónomo a batería de 9V (incluida) con alarma acústica integrada de 85dB. Utiliza tecnología de detección fotoeléctrica avanzada para identificar partículas de humo densas causadas por incendios lentos de combustión interna.",
+        specs: { material: "Carcasa de ABS ignífugo", certificacion: "UL 217 aprobado", peso: "135 g", origen: "Importado", aplicacion: "Oficinas, viviendas, depósitos pequeños" },
+        discount: "15% de descuento por caja de 24 unidades."
+      },
+      p11: {
+        desc: "Señal de seguridad fabricada en PVC rígido de alto impacto con propiedades fotoluminiscentes de alta intensidad. Almacena la luz ambiental para brillar intensamente en la oscuridad total en caso de corte de energía, marcando la ruta de evacuación.",
+        specs: { material: "PVC celda cerrada de 2.0 mm con tintas fotoluminiscentes certificadas", certificacion: "NTP 399.010-1 de señalética de seguridad", peso: "90 g", origen: "Fabricación propia / Brizuvic", aplicacion: "Rutas de evacuación, escaleras, pasadizos de locales públicos" },
+        discount: "Descuento de 20% en pedidos de señalética para zonificación completa (50+ señales)."
+      },
+      p12: {
+        desc: "Cinta autideslizante autoadhesiva de grano abrasivo mineral de alta resistencia a la abrasión y al agua. Diseñada especialmente para escalones, rampas, pasarelas y áreas húmedas para prevenir resbalones y caídas. Excelente adherencia sobre concreto y metal.",
+        specs: { material: "Partículas abrasivas unidas por polímero resistente sobre film de PVC", certificacion: "Cumplimiento de estándares de fricción OSHA", peso: "150 g (por rollo de 5m)", origen: "Importado", aplicacion: "Escaleras mecánicas, rampas de carga, bordes de peldaños" },
+        discount: "10% de descuento por la compra de una caja de 10 rollos."
+      }
+    };
+
+    const d = detailsMap[p.id] || {
+      desc: "Producto de seguridad industrial certificado de alta calidad. Para mayor información técnica o cotizaciones corporativas al por mayor, póngase en contacto con nuestro equipo de ingenieros SSOMA.",
+      specs: { material: "Estándar industrial", certificacion: "NTP / INDECI conforme", peso: "N/D", origen: "Certificado", aplicacion: "Multiuso industrial" },
+      discount: "Cotización por volumen disponible."
+    };
+
     return { ...p, price:'S/ '+Number(p.price).toFixed(2), stock:String(p.stock), agotado, iconEl, iconSmEl,
       stockCol: agotado?'#FF6168':(stock<15?'#FFC107':'#A6ADB8'),
       estBg: agotado?'rgba(255,97,104,.13)':'rgba(34,197,94,.13)',
       estCol: agotado?'#FF6168':'#4ADE80',
       onEdit:()=>this.openModal('product',p.id), onDelete:()=>this.removeItem('products',p.id),
-      onQuote:()=>this.addToCart(p.id),
+      onQuote:(e)=>{ e && e.stopPropagation(); this.addToCart(p.id); },
+      onClick:()=>this.openProductDetail(p.id),
       destBg: p.dest?'#E11D26':'rgba(255,255,255,.16)', destKnob: p.dest?'17px':'2px',
-      onToggleDest:()=>this.setState({products:this.state.products.map(x=>x.id===p.id?{...x,dest:!x.dest}:x)}) };
+      onToggleDest:()=>this.setState({products:this.state.products.map(x=>x.id===p.id?{...x,dest:!x.dest}:x)}),
+      desc: d.desc,
+      specs: d.specs,
+      discountText: d.discount
+    };
   }
   get allProducts(){ return this.state.products.map(p=>this.decorate(p)); }
 
@@ -1942,6 +2132,13 @@ class Component extends DCLogic {
       pdfQuoteData: s.pdfQuoteData ? this.decorateQuote(s.pdfQuoteData) : null,
       hasPdfQuoteData: !!s.pdfQuoteData,
       closePdf: () => this.closePdf(),
+      detailProduct: s.activeProductDetailId ? this.decorate(s.products.find(p => p.id === s.activeProductDetailId)) : null,
+      hasDetailProduct: !!s.activeProductDetailId,
+      detailQty: s.detailQty,
+      closeDetail: () => this.closeProductDetail(),
+      incDetailQty: () => this.incrementDetailQty(),
+      decDetailQty: () => this.decrementDetailQty(),
+      addDetailToCart: () => this.addDetailToCart(),
       logs: s.logs,
       homeOn:s.sitePage==='home', catOn:s.sitePage==='catalogo', servOn:s.sitePage==='servicios', siteBlogOn:s.sitePage==='blog', nosOn:s.sitePage==='nosotros', conOn:s.sitePage==='contacto',
       dashOn:s.adminPage==='dashboard', prodOn:s.adminPage==='productos', svOn:s.adminPage==='servicios', cotOn:s.adminPage==='cotizaciones', contOn:s.adminPage==='contenido', blogOn:s.adminPage==='blog', cfgOn:s.adminPage==='config',
