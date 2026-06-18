@@ -1,0 +1,6 @@
+.thumbnail/
+.DS_Store
+Thumbs.db
+.gemini/
+.agents/
+*.log

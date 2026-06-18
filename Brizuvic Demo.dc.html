@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0}
+::selection{background:#E11D26;color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2A2E36;border-radius:6px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+input,textarea,select,button{font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
+
+/* --- PREMIUM STYLES --- */
+.premium-card {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s !important;
+}
+.premium-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(225, 29, 38, 0.4) !important;
+  box-shadow: 0 12px 30px rgba(225, 29, 38, 0.12) !important;
+}
+.page-fade {
+  animation: fadeUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Cart Drawer */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 13, 16, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 98;
+}
+.cart-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 380px;
+  background: #15171C;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99;
+  box-shadow: 15px 0 40px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+}
+.cart-drawer.open {
+  transform: translateX(0);
+}
+
+/* Wizard */
+.wizard-option {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wizard-option:hover {
+  background: rgba(225, 29, 38, 0.06);
+  border-color: rgba(225, 29, 38, 0.3);
+  transform: translateX(3px);
+}
+.wizard-option.selected {
+  background: rgba(225, 29, 38, 0.12);
+  border-color: #E11D26;
+  font-weight: 600;
+}
+</style>
+</helmet>
+
+<div style="font-family:'Barlow',sans-serif;background:#0C0D10;color:#EAECEF;min-height:100vh;-webkit-font-smoothing:antialiased">
+
+  <!-- ============ SITIO WEB ============ -->
+  <sc-if value="{{ isSite }}" hint-placeholder-val="{{ true }}">
+  <div>
+    <div style="height:6px;background:repeating-linear-gradient(45deg,#FFC107 0 15px,#15171C 15px 30px)"></div>
+
+    <!-- Header -->
+    <header style="position:sticky;top:0;z-index:40;background:rgba(12,13,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="max-width:1200px;margin:0 auto;padding:15px 28px;display:flex;align-items:center;gap:30px">
+        <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:9px;font-family:'Saira';font-weight:800;font-size:23px;letter-spacing:-.02em;color:#fff;cursor:pointer">
+          {{ logoHeaderEl }}
+          <span style="display:flex;align-items:baseline">BRIZUVIC<span style="color:#E11D26;font-size:13px;font-weight:700;margin-left:5px;letter-spacing:0">Corp.</span></span>
+        </div>
+        <nav style="display:flex;gap:2px;margin-left:auto">
+          <sc-for list="{{ siteNav }}" as="n" hint-placeholder-count="5">
+            <button onClick="{{ n.onClick }}" style="font-family:'Barlow';font-weight:600;font-size:13px;letter-spacing:.04em;color:{{ n.col }};background:transparent;border:0;border-bottom:2px solid {{ n.bar }};padding:9px 14px;cursor:pointer;text-transform:uppercase;transition:color .15s">{{ n.label }}</button>
+          </sc-for>
+        </nav>
+        <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:#E11D26;border:0;padding:11px 20px;cursor:pointer;border-radius:2px">Cotiza ahora</button>
+      </div>
+    </header>
+
+    <!-- ===== HOME ===== -->
+    <sc-if value="{{ homeOn }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <!-- Hero -->
+      <section style="position:relative;overflow:hidden;background:radial-gradient(120% 90% at 80% -10%,#1c1f27 0%,#0C0D10 55%)">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 80%)"></div>
+        <div style="position:relative;max-width:1200px;margin:0 auto;padding:74px 28px 84px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(225,29,38,.12);border:1px solid rgba(225,29,38,.3);color:#FF6168;font-family:'Barlow';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:2px;margin-bottom:24px"><span style="width:7px;height:7px;background:#E11D26;border-radius:50%;box-shadow:0 0 8px #E11D26"></span>Seguridad industrial · Lima, Perú</div>
+            <h1 style="font-family:'Saira';font-weight:800;font-size:60px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:0 0 22px;text-wrap:balance">{{ heroTitle }}</h1>
+            <p style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
+            <div style="display:flex;gap:13px;flex-wrap:wrap">
+              <button onClick="{{ goCat }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 28px;cursor:pointer;border-radius:2px">Ver catálogo</button>
+              <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px">
+              <sc-for list="{{ certs }}" as="c" hint-placeholder-count="5">
+                <span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;color:#7E8591;border:1px solid rgba(255,255,255,.12);padding:6px 12px;border-radius:2px">{{ c }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <!-- Hero visual -->
+          <div style="position:relative;aspect-ratio:4/4.4;border-radius:4px;overflow:hidden;background:linear-gradient(160deg,#23262F,#15171C);border:1px solid rgba(255,255,255,.09)">
+            <div style="position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(45deg,#FFC107 0 13px,#1A1C22 13px 26px);z-index:2"></div>
+            {{ heroImgBgEl }}
+            <sc-if value="{{ !hasHeroImg }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+              <svg width="160" height="160" viewBox="0 0 24 24" fill="none" stroke="#E11D26" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" style="opacity:.9"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1z"/></svg>
+            </div>
+            </sc-if>
+            <div style="position:absolute;left:18px;bottom:18px;right:18px;display:flex;gap:10px;z-index:2">
+              <div style="flex:1;background:rgba(12,13,16,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:13px 15px"><div style="font-family:'Saira';font-weight:800;font-size:24px;color:#fff;line-height:1">+500</div><div style="font-size:11px;color:#9AA1AC;text-transform:uppercase;letter-spacing:.05em">empresas</div></div>
+              <div style="flex:1;background:rgba(12,13,16,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:13px 15px"><div style="font-family:'Saira';font-weight:800;font-size:24px;color:#FFC107;line-height:1">24/7</div><div style="font-size:11px;color:#9AA1AC;text-transform:uppercase;letter-spacing:.05em">emergencias</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Categorías -->
+      <section style="max-width:1200px;margin:0 auto;padding:18px 28px 8px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+          <sc-for list="{{ categoryCards }}" as="c" hint-placeholder-count="4">
+            <div onClick="{{ c.onClick }}" style="position:relative;background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;cursor:pointer;overflow:hidden;transition:border-color .2s" style-hover="border-color:rgba(225,29,38,.5)" className="premium-card">
+              <div style="color:#E11D26;margin-bottom:30px">{{ c.iconEl }}</div>
+              <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:3px">{{ c.label }}</div>
+              <div style="font-size:13px;color:#8A9099">{{ c.count }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Asistente Selector de Seguridad -->
+      <section style="max-width:1200px;margin:34px auto;padding:0 28px">
+        <div style="background:linear-gradient(135deg, #1A1C22 0%, #111317 100%);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:34px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#E11D26;"></div>
+          
+          <sc-if value="{{ wStep1 }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+                <div>
+                  <div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#E11D26;margin-bottom:6px;">Asistente Digital</div>
+                  <h3 style="font-family:'Saira';font-weight:800;font-size:24px;color:#fff;margin:0;letter-spacing:-.01em;">¿Qué tipo de riesgo necesitas proteger?</h3>
+                </div>
+                <span style="font-family:'Saira';font-weight:700;font-size:12px;color:#7E8591;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:10px;">Paso 1 de 3</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div onClick="{{ wSetRiskElectrico }}" className="wizard-option">
+                  <div>
+                    <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Riesgo Eléctrico</div>
+                    <div style="font-size:12.5px;color:#8A9099;">Tableros, servidores, oficinas con computadoras.</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#FFC107;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div onClick="{{ wSetRiskSolidos }}" className="wizard-option">
+                  <div>
+                    <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Materiales Sólidos y Combustibles</div>
+                    <div style="font-size:12.5px;color:#8A9099;">Almacenes, madera, papel, cartón, plástico.</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#E11D26;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                </div>
+                <div onClick="{{ wSetRiskCocina }}" className="wizard-option">
+                  <div>
+                    <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Cocinas y Grasas</div>
+                    <div style="font-size:12.5px;color:#8A9099;">Cocinas comerciales, grasas y aceites de cocina.</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#FFC107;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div onClick="{{ wSetRiskDeteccion }}" className="wizard-option">
+                  <div>
+                    <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Detección Temprana de Fuego</div>
+                    <div style="font-size:12.5px;color:#8A9099;">Prevención y aviso acústico antes de la propagación.</div>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#6AA8FF;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ wStep2 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+                <div>
+                  <div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#E11D26;margin-bottom:6px;">Asistente Digital</div>
+                  <h3 style="font-family:'Saira';font-weight:800;font-size:24px;color:#fff;margin:0;letter-spacing:-.01em;">¿Cuál es el área o tamaño aproximado del local?</h3>
+                </div>
+                <span style="font-family:'Saira';font-weight:700;font-size:12px;color:#7E8591;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:10px;">Paso 2 de 3</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+                <div onClick="{{ wSetSizePequeno }}" className="wizard-option" style="flex-direction:column;align-items:flex-start;gap:8px;">
+                  <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;">Pequeño (Menor a 50m²)</div>
+                  <div style="font-size:12.5px;color:#8A9099;">Oficinas pequeñas, tiendas minoristas, locales chicos.</div>
+                </div>
+                <div onClick="{{ wSetSizeMediano }}" className="wizard-option" style="flex-direction:column;align-items:flex-start;gap:8px;">
+                  <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;">Mediano (50m² a 150m²)</div>
+                  <div style="font-size:12.5px;color:#8A9099;">Oficinas amplias, restaurantes de aforo medio, depósitos.</div>
+                </div>
+                <div onClick="{{ wSetSizeGrande }}" className="wizard-option" style="flex-direction:column;align-items:flex-start;gap:8px;">
+                  <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;">Grande (Mayor a 150m²)</div>
+                  <div style="font-size:12.5px;color:#8A9099;">Almacenes logísticos, fábricas, depósitos grandes.</div>
+                </div>
+              </div>
+              <button onClick="{{ resetWizard }}" style="margin-top:18px;background:transparent;border:0;color:#9AA1AC;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Barlow';font-weight:700;text-transform:uppercase;letter-spacing:.04em;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Regresar</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ wStep3 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+                <div>
+                  <div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#4ADE80;margin-bottom:6px;">Recomendación Lista</div>
+                  <h3 style="font-family:'Saira';font-weight:800;font-size:24px;color:#fff;margin:0;letter-spacing:-.01em;">Producto recomendado para tu seguridad</h3>
+                </div>
+                <span style="font-family:'Saira';font-weight:700;font-size:12px;color:#7E8591;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:10px;">Paso 3 de 3</span>
+              </div>
+              
+              <sc-if value="{{ wizardResultProduct }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:24px;align-items:center;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:20px;margin-bottom:18px;">
+                  <div style="width:90px;height:90px;border-radius:4px;background:#23262F;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,.08)">
+                    {{ wizardResultProduct.iconEl }}
+                  </div>
+                  <div style="flex:1;">
+                    <span style="font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#FFC107;background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.3);padding:3px 8px;border-radius:2px;">{{ wizardResultProduct.cat }}</span>
+                    <h4 style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin:6px 0 2px;">{{ wizardResultProduct.name }}</h4>
+                    <p style="font-size:13px;color:#8A9099;margin:0 0 10px;">{{ wizardResultProduct.sub }}</p>
+                    <div style="font-family:'Saira';font-weight:800;font-size:19px;color:#fff;">{{ wizardResultProduct.price }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <button onClick="{{ wizardResultProduct.onQuote }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 20px;cursor:pointer;border-radius:2px;white-space:nowrap;">Agregar a cotización</button>
+                    <button onClick="{{ resetWizard }}" style="font-family:'Barlow';font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.12);padding:10px 20px;cursor:pointer;border-radius:2px;">Consultar otro</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <!-- Stats band -->
+      <section style="max-width:1200px;margin:46px auto;padding:0 28px">
+        <div style="background:#E11D26;border-radius:4px;display:grid;grid-template-columns:repeat(4,1fr)">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="padding:30px 26px;border-right:1px solid rgba(255,255,255,.16)"><div style="font-family:'Saira';font-weight:800;font-size:42px;color:#fff;line-height:1">{{ s.k }}</div><div style="font-size:13px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.05em;margin-top:6px">{{ s.l }}</div></div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Clientes -->
+      <sc-if value="{{ sectionsOn.clientes }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:1200px;margin:0 auto;padding:36px 28px 10px">
+        <div style="text-align:center;font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#7E8591;margin-bottom:24px">Empresas que confían en nosotros</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+          <sc-for list="{{ clientCards }}" as="c" hint-placeholder-count="8">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;display:flex;align-items:center;justify-content:center;height:64px">
+              <sc-if value="{{ c.logoEl }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">{{ c.logoEl }}</div></sc-if>
+              <sc-if value="{{ !c.logoEl }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Saira';font-weight:700;font-size:14px;color:#5A616C;letter-spacing:.02em;text-align:center">{{ c.name }}</div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- Servicios preview -->
+      <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px">
+          <div><div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Lo que hacemos</div><h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Servicios certificados</h2></div>
+          <button onClick="{{ goServ }}" style="font-family:'Barlow';font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 18px;cursor:pointer;border-radius:2px">Ver todos</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+          <sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;display:flex;flex-direction:column">
+              <div style="font-family:'Saira';font-weight:800;font-size:32px;color:#2A2E36;line-height:1;margin-bottom:18px">{{ s.num }}</div>
+              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:9px;line-height:1.15">{{ s.n }}</div>
+              <div style="font-size:13.5px;line-height:1.5;color:#8A9099;flex:1">{{ s.d }}</div>
+              <div style="margin-top:16px;font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;color:#FFC107;text-transform:uppercase">{{ s.tag }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Testimonios -->
+      <sc-if value="{{ sectionsOn.testimonios }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
+        <div style="text-align:center;margin-bottom:30px">
+          <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Testimonios</div>
+          <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Lo que dicen nuestros clientes</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+          <sc-for list="{{ testimonialCards }}" as="t" hint-placeholder-count="3">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
+              <div style="color:#FFC107;font-size:14px;letter-spacing:2px;margin-bottom:14px">★★★★★</div>
+              <p style="font-size:14.5px;line-height:1.6;color:#C7CCD3;margin:0 0 20px">"{{ t.quote }}"</p>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:42px;height:42px;border-radius:50%;background:#23262F;display:flex;align-items:center;justify-content:center;color:#9AA1AC;font-family:'Saira';font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0">
+                  <sc-if value="{{ t.avatarEl }}" hint-placeholder-val="{{ false }}">{{ t.avatarEl }}</sc-if>
+                  <sc-if value="{{ !t.avatarEl }}" hint-placeholder-val="{{ true }}">{{ t.initials }}</sc-if>
+                </div>
+                <div><div style="font-family:'Saira';font-weight:700;font-size:14px;color:#fff">{{ t.name }}</div><div style="font-size:12px;color:#8A9099">{{ t.role }} · {{ t.company }}</div></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- Productos destacados -->
+      <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
+        <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Catálogo</div>
+        <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0 0 26px;letter-spacing:-.01em">Productos destacados</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+          <sc-for list="{{ featured }}" as="p" hint-placeholder-count="4">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+              <div style="aspect-ratio:1/.82;background:linear-gradient(150deg,#23262F,#181A20);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)">
+                <span style="position:absolute;top:11px;left:11px;font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#9AA1AC;background:rgba(12,13,16,.6);border:1px solid rgba(255,255,255,.1);padding:4px 9px;border-radius:2px">{{ p.cat }}</span>
+                <div style="color:#5A616C;width:100%;height:100%;display:flex;align-items:center;justify-content:center">{{ p.iconEl }}</div>
+              </div>
+              <div style="padding:16px">
+                <div style="font-family:'Saira';font-weight:600;font-size:15px;color:#fff;line-height:1.2;margin-bottom:4px">{{ p.name }}</div>
+                <div style="font-size:12px;color:#8A9099;margin-bottom:14px">{{ p.sub }}</div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-family:'Saira';font-weight:800;font-size:19px;color:#fff">{{ p.price }}</span>
+                  <button onClick="{{ p.onQuote }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#E11D26;background:rgba(225,29,38,.1);border:1px solid rgba(225,29,38,.3);padding:8px 13px;cursor:pointer;border-radius:2px">Cotizar</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Galería de proyectos -->
+      <sc-if value="{{ sectionsOn.galeria }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
+        <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Galería</div>
+        <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0 0 26px;letter-spacing:-.01em">Proyectos en campo</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <sc-for list="{{ galleryCards }}" as="g" hint-placeholder-count="8">
+            <div style="aspect-ratio:1/.85;border-radius:4px;overflow:hidden;background:linear-gradient(150deg,#23262F,#181A20);position:relative;border:1px solid rgba(255,255,255,.08)">
+              <sc-if value="{{ g.imgEl }}" hint-placeholder-val="{{ false }}">{{ g.imgEl }}</sc-if>
+              <div style="position:absolute;left:0;right:0;bottom:0;padding:9px 11px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-family:'Saira';font-weight:600;font-size:11.5px;color:#fff">{{ g.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- Certificaciones (light) -->
+      <section style="background:#F4F2EC;margin-top:46px">
+        <div style="max-width:1200px;margin:0 auto;padding:50px 28px;display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center">
+          <div>
+            <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:10px">Respaldo</div>
+            <h2 style="font-family:'Saira';font-weight:800;font-size:34px;color:#14161A;margin:0 0 14px;letter-spacing:-.01em;line-height:1.05">Cumplimos la normativa que tu auditoría exige</h2>
+            <p style="font-size:16px;line-height:1.55;color:#54585F;margin:0">Cada producto y servicio se entrega con documentación válida ante INDECI y auditorías de seguridad. Trabajamos bajo norma técnica peruana y estándares internacionales.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+            <sc-for list="{{ certCards }}" as="c" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #E4E1D8;border-radius:4px;padding:20px 22px"><div style="font-family:'Saira';font-weight:800;font-size:20px;color:#14161A">{{ c.k }}</div><div style="font-size:13px;color:#7A7E85;margin-top:3px">{{ c.l }}</div></div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section style="max-width:1200px;margin:56px auto;padding:0 28px">
+        <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#1A1C22,#15171C);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:54px 48px;text-align:center">
+          <div style="position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#FFC107 0 14px,#15171C 14px 28px)"></div>
+          <h2 style="font-family:'Saira';font-weight:800;font-size:40px;color:#fff;margin:0 0 12px;letter-spacing:-.01em">¿Listo para certificar tu empresa?</h2>
+          <p style="font-size:17px;color:#A6ADB8;max-width:560px;margin:0 auto 28px">Recibe una cotización a medida en menos de 24 horas hábiles.</p>
+          <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:16px 34px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
+        </div>
+      </section>
+
+      <!-- Blog preview -->
+      <sc-if value="{{ sectionsOn.blogPreview }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:1200px;margin:0 auto;padding:30px 28px 56px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px">
+          <div><div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Blog</div><h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Últimos artículos</h2></div>
+          <button onClick="{{ goBlog }}" style="font-family:'Barlow';font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 18px;cursor:pointer;border-radius:2px">Ver todos los artículos</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+          <sc-for list="{{ blogPreview }}" as="b" hint-placeholder-count="3">
+            <div onClick="{{ goBlog }}" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden;cursor:pointer">
+              <div style="aspect-ratio:16/10;background:linear-gradient(150deg,#23262F,#181A20)">
+                <sc-if value="{{ b.imgEl }}" hint-placeholder-val="{{ false }}">{{ b.imgEl }}</sc-if>
+              </div>
+              <div style="padding:18px">
+                <div style="display:flex;gap:12px;font-size:11.5px;margin-bottom:8px"><span style="color:#FFC107;font-family:'Saira';font-weight:600;text-transform:uppercase">{{ b.cat }}</span><span style="color:#7E8591">{{ b.fecha }}</span></div>
+                <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;line-height:1.3">{{ b.t }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <!-- ===== CATÁLOGO ===== -->
+    <sc-if value="{{ catOn }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px">
+      <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Catálogo</div>
+      <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Productos de seguridad</h1>
+      <p style="font-size:16px;color:#8A9099;margin:0 0 28px">{{ productCount }} productos disponibles · cotización inmediata por volumen</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px">
+        <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onClick }}" style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.02em;color:{{ c.col }};background:{{ c.bg }};border:1px solid {{ c.bd }};padding:9px 17px;cursor:pointer;border-radius:2px;text-transform:uppercase">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+            <div style="aspect-ratio:1/.82;background:linear-gradient(150deg,#23262F,#181A20);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)">
+              <span style="position:absolute;top:11px;left:11px;font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#9AA1AC;background:rgba(12,13,16,.6);border:1px solid rgba(255,255,255,.1);padding:4px 9px;border-radius:2px">{{ p.cat }}</span>
+              <sc-if value="{{ p.agotado }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:11px;right:11px;font-family:'Saira';font-weight:700;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#FFC107;background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.4);padding:4px 9px;border-radius:2px">Agotado</span></sc-if>
+              <div style="color:#5A616C;width:100%;height:100%;display:flex;align-items:center;justify-content:center">{{ p.iconEl }}</div>
+            </div>
+            <div style="padding:16px">
+              <div style="font-family:'Saira';font-weight:600;font-size:15px;color:#fff;line-height:1.2;margin-bottom:4px">{{ p.name }}</div>
+              <div style="font-size:12px;color:#8A9099;margin-bottom:14px">{{ p.sub }}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:'Saira';font-weight:800;font-size:19px;color:#fff">{{ p.price }}</span>
+                <button onClick="{{ p.onQuote }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#E11D26;background:rgba(225,29,38,.1);border:1px solid rgba(225,29,38,.3);padding:8px 13px;cursor:pointer;border-radius:2px">Cotizar</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== SERVICIOS ===== -->
+    <sc-if value="{{ servOn }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px">
+      <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Servicios</div>
+      <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Soluciones integrales de seguridad</h1>
+      <p style="font-size:16px;color:#8A9099;margin:0 0 36px;max-width:640px">Desde la dotación de tu equipo hasta la certificación de tus sistemas contra incendio, gestionamos cada etapa.</p>
+
+      <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:50px">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px 28px;display:grid;grid-template-columns:70px 1fr auto;gap:24px;align-items:center">
+            <div style="font-family:'Saira';font-weight:800;font-size:40px;color:#E11D26;line-height:1">{{ s.num }}</div>
+            <div><div style="font-family:'Saira';font-weight:700;font-size:21px;color:#fff;margin-bottom:5px">{{ s.n }}</div><div style="font-size:14.5px;line-height:1.5;color:#8A9099;max-width:600px">{{ s.d }}</div></div>
+            <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;color:#FFC107;text-transform:uppercase;border:1px solid rgba(255,193,7,.3);padding:7px 13px;border-radius:2px">{{ s.tag }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;margin-bottom:24px;letter-spacing:-.01em">Cómo trabajamos</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #E11D26">
+            <div style="font-family:'Saira';font-weight:800;font-size:26px;color:#2A2E36;margin-bottom:14px">{{ s.num }}</div>
+            <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:8px">{{ s.t }}</div>
+            <div style="font-size:13.5px;line-height:1.5;color:#8A9099">{{ s.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== BLOG ===== -->
+    <sc-if value="{{ siteBlogOn }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px">
+      <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Blog</div>
+      <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Artículos y novedades</h1>
+      <p style="font-size:16px;color:#8A9099;margin:0 0 36px">Prevención, normativa y casos de uso en seguridad industrial.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <sc-for list="{{ blogPosts }}" as="b" hint-placeholder-count="3">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+            <div style="aspect-ratio:16/10;background:linear-gradient(150deg,#23262F,#181A20)">
+              <sc-if value="{{ b.imgEl }}" hint-placeholder-val="{{ false }}">{{ b.imgEl }}</sc-if>
+            </div>
+            <div style="padding:18px">
+              <div style="display:flex;gap:12px;font-size:11.5px;margin-bottom:8px"><span style="color:#FFC107;font-family:'Saira';font-weight:600;text-transform:uppercase">{{ b.cat }}</span><span style="color:#7E8591">{{ b.fecha }}</span><span style="color:#7E8591">{{ b.read }}</span></div>
+              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;line-height:1.3">{{ b.t }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== NOSOTROS ===== -->
+    <sc-if value="{{ nosOn }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px">
+      <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Nosotros</div>
+      <h1 style="font-family:'Saira';font-weight:800;font-size:48px;color:#fff;margin:0 0 20px;letter-spacing:-.02em;max-width:780px;line-height:1.02">Más de 12 años blindando la industria peruana</h1>
+      <p style="font-size:18px;line-height:1.6;color:#A6ADB8;max-width:720px;margin:0 0 44px">Corporación Brizuvic nace en Lima con una misión simple: que ninguna empresa tenga que elegir entre productividad y la vida de su gente. Hoy equipamos minería, construcción, industria alimentaria y salud con EPP certificado y sistemas contra incendio operativos.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+        <sc-for list="{{ values }}" as="v" hint-placeholder-count="3">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:28px"><div style="color:#E11D26;margin-bottom:18px">{{ v.iconEl }}</div><div style="font-family:'Saira';font-weight:700;font-size:19px;color:#fff;margin-bottom:8px">{{ v.t }}</div><div style="font-size:14px;line-height:1.55;color:#8A9099">{{ v.d }}</div></div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== CONTACTO ===== -->
+    <sc-if value="{{ conOn }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:44px">
+      <div>
+        <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Contacto</div>
+        <h1 style="font-family:'Saira';font-weight:800;font-size:42px;color:#fff;margin:0 0 8px;letter-spacing:-.02em">Solicita tu cotización</h1>
+        <p style="font-size:16px;color:#8A9099;margin:0 0 30px">Cuéntanos qué necesitas y un asesor te responde en menos de 24 horas hábiles.</p>
+        <sc-if value="{{ !contactSent }}" hint-placeholder-val="{{ true }}">
+        <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label><input placeholder="Tu nombre" value="{{ contactForm.name }}" onChange="{{ cfSetName }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
+          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Empresa</label><input placeholder="Razón social" value="{{ contactForm.company }}" onChange="{{ cfSetCompany }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
+          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Correo</label><input placeholder="correo@empresa.com" value="{{ contactForm.email }}" onChange="{{ cfSetEmail }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
+          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono</label><input placeholder="+51 999 999 999" value="{{ contactForm.phone }}" onChange="{{ cfSetPhone }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
+        </div>
+        <div style="margin-bottom:18px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Mensaje</label><textarea placeholder="Describe los productos o servicios que necesitas..." rows="4" value="{{ contactForm.message }}" onInput="{{ cfSetMessage }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px;resize:vertical"></textarea></div>
+        <button onClick="{{ submitContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 30px;cursor:pointer;border-radius:2px">Enviar solicitud</button>
+        </div>
+        </sc-if>
+        <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
+        <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:4px;padding:30px;text-align:center">
+          <div style="font-family:'Saira';font-weight:700;font-size:19px;color:#4ADE80;margin-bottom:8px">¡Solicitud enviada!</div>
+          <p style="font-size:14.5px;color:#A6ADB8;margin:0 0 18px">Gracias {{ contactForm.name }}, un asesor se comunicará contigo en menos de 24 horas hábiles.</p>
+          <button onClick="{{ newContactRequest }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:11px 20px;cursor:pointer;border-radius:2px">Enviar otra solicitud</button>
+        </div>
+        </sc-if>
+      </div>
+      <div>
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:28px;margin-bottom:14px">
+          <sc-for list="{{ contactInfo }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+              <div style="color:#E11D26;flex-shrink:0">{{ c.iconEl }}</div>
+              <div><div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8A9099;margin-bottom:2px">{{ c.label }}</div><div style="font-size:15px;color:#fff">{{ c.value }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="aspect-ratio:1/.7;background:linear-gradient(150deg,#23262F,#181A20);border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:30px 30px"></div>
+          <div style="position:relative;text-align:center;color:#5A616C"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><div style="font-family:'Saira';font-size:12px;margin-top:8px;letter-spacing:.04em">Av. Argentina 327, Cercado de Lima</div></div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- Footer -->
+    <footer style="border-top:1px solid rgba(255,255,255,.08);margin-top:20px">
+      <div style="max-width:1200px;margin:0 auto;padding:44px 28px 28px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;font-family:'Saira';font-weight:800;font-size:21px;color:#fff;margin-bottom:14px">
+            {{ logoFooterEl }}
+            <span style="display:flex;align-items:baseline">BRIZUVIC<span style="color:#E11D26;font-size:12px;margin-left:5px">Corp.</span></span>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#7E8591;max-width:280px;margin:0">Soluciones en equipos de protección personal, extintores y sistemas contra incendio. RUC 20602073476 · Lima, Perú.</p>
+        </div>
+        <div><div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px">Productos</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#7E8591"><span>EPP</span><span>Extintores</span><span>Contra incendio</span><span>Señalización</span></div></div>
+        <div><div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px">Empresa</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#7E8591"><span>Nosotros</span><span>Servicios</span><span>Certificaciones</span><span>Contacto</span></div></div>
+        <div><div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px">Contacto</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#7E8591"><span>(01) 759-4690</span><span>961 823 490</span><span>ventas@brizuvic.com</span></div></div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,.06)"><div style="max-width:1200px;margin:0 auto;padding:18px 28px;display:flex;justify-content:space-between;font-size:12px;color:#5A616C"><span>© 2026 Corporación Brizuvic E.I.R.L.</span><span>Demo de propuesta · diseño conceptual</span></div></div>
+    </footer>
+
+    <!-- Carrito de Cotización Flotante -->
+    <button onClick="{{ toggleCart }}" style="position:fixed;bottom:24px;left:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#E11D26;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;cursor:pointer;border:0;" className="premium-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <sc-if value="{{ !cartIsEmpty }}" hint-placeholder-val="{{ false }}">
+        <span style="position:absolute;top:-4px;right:-4px;background:#FFC107;color:#15171C;font-family:'Saira';font-weight:700;font-size:11px;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">{{ cartCount }}</span>
+      </sc-if>
+    </button>
+
+    <!-- Overlay del Carrito -->
+    <div onClick="{{ toggleCart }}" className="cart-overlay {{ cartOpen ? 'open' : '' }}"></div>
+
+    <!-- Drawer Lateral del Carrito -->
+    <div className="cart-drawer {{ cartOpen ? 'open' : '' }}">
+      <div style="padding:22px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;display:flex;align-items:center;gap:10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E11D26" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Tu Cotización
+        </div>
+        <button onClick="{{ toggleCart }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:6px;border-radius:3px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;padding:20px;">
+        <sc-if value="{{ cartIsEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="text-align:center;padding:40px 10px;color:#7E8591;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4;margin-bottom:16px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <div style="font-family:'Saira';font-weight:600;font-size:15px;color:#9AA1AC;margin-bottom:6px;">Tu cotización está vacía</div>
+            <div style="font-size:12.5px;line-height:1.4;">Agrega productos de nuestro catálogo para cotizar en volumen.</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ !cartIsEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <sc-for list="{{ cartItems }}" as="item" hint-placeholder-count="3">
+              <div style="display:flex;gap:12px;padding:12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:4px;">
+                <div style="width:48px;height:48px;border-radius:3px;background:#23262F;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,.05)">
+                  <sc-if value="{{ item.img }}" hint-placeholder-val="{{ true }}">
+                    <img src="{{ item.img }}" style="width:100%;height:100%;object-fit:cover;" />
+                  </sc-if>
+                  <sc-if value="{{ !item.img }}" hint-placeholder-val="{{ false }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6A707A" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </sc-if>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-family:'Saira';font-weight:700;font-size:13.5px;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.name }}</div>
+                  <div style="font-size:11px;color:#8A9099;margin-bottom:8px;">{{ item.cat }}</div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="display:flex;align-items:center;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;">
+                      <button onClick="{{ item.onDec }}" style="background:transparent;border:0;color:#9AA1AC;width:24px;height:24px;cursor:pointer;font-family:'Barlow';font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;">-</button>
+                      <span style="font-family:'Saira';font-weight:700;font-size:12.5px;color:#fff;width:24px;text-align:center;">{{ item.qty }}</span>
+                      <button onClick="{{ item.onInc }}" style="background:transparent;border:0;color:#9AA1AC;width:24px;height:24px;cursor:pointer;font-family:'Barlow';font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;">+</button>
+                    </div>
+                    <button onClick="{{ item.onRemove }}" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:4px;border-radius:3px;display:flex;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ !cartIsEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:22px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.15);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+            <div style="font-size:13.5px;color:#8A9099;">Total Estimado</div>
+            <div style="font-family:'Saira';font-weight:800;font-size:22px;color:#fff;">{{ cartTotalFormatted }}</div>
+          </div>
+          <button onClick="{{ submitCartQuote }}" style="width:100%;font-family:'Barlow';font-weight:700;font-size:13.5px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:14px 20px;cursor:pointer;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:10px;">
+            Generar Cotización
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- WhatsApp flotante -->
+    <a href="{{ whatsappHref }}" target="_blank" rel="noopener" style="position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;text-decoration:none">{{ waIconEl }}</a>
+  </div>
+  </sc-if>
+
+  <!-- ============ PANEL CMS ============ -->
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+  <div style="display:grid;grid-template-columns:248px 1fr;min-height:100vh">
+    <!-- Sidebar -->
+    <aside style="background:#101216;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:22px 16px">
+      <div style="display:flex;align-items:baseline;font-family:'Saira';font-weight:800;font-size:20px;color:#fff;padding:0 8px;margin-bottom:4px">BRIZUVIC<span style="color:#E11D26;font-size:11px;margin-left:4px">Corp.</span></div>
+      <div style="font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#5A616C;padding:0 8px;margin-bottom:26px">Panel administrativo</div>
+      <nav style="display:flex;flex-direction:column;gap:3px">
+        <button onClick="{{ nav.dashboard.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.dashboard.col }};background:{{ nav.dashboard.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.dashboard.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</button>
+        <button onClick="{{ nav.productos.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.productos.col }};background:{{ nav.productos.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.productos.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Productos</button>
+        <button onClick="{{ nav.servicios.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.servicios.col }};background:{{ nav.servicios.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.servicios.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Servicios</button>
+        <button onClick="{{ nav.cotizaciones.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.cotizaciones.col }};background:{{ nav.cotizaciones.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.cotizaciones.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Cotizaciones</button>
+        <button onClick="{{ nav.contenido.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.contenido.col }};background:{{ nav.contenido.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.contenido.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>Contenido del home</button>
+        <button onClick="{{ nav.blog.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.blog.col }};background:{{ nav.blog.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.blog.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M8 7h6"/><path d="M8 11h8"/><path d="M16 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2 2 2 0 0 1 2 2v16a2 2 0 0 0 2 2"/></svg>Blog</button>
+        <button onClick="{{ nav.config.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.config.col }};background:{{ nav.config.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.config.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2"/><circle cx="12" cy="12" r="3"/></svg>Configuración</button>
+      </nav>
+      <div style="margin-top:auto;display:flex;align-items:center;gap:11px;padding:12px;background:#15171C;border:1px solid rgba(255,255,255,.07);border-radius:4px">
+        <div style="width:34px;height:34px;border-radius:50%;background:#E11D26;display:flex;align-items:center;justify-content:center;font-family:'Saira';font-weight:700;font-size:14px;color:#fff">ZH</div>
+        <div style="line-height:1.2"><div style="font-size:13px;font-weight:600;color:#fff">Zuleica Huicho</div><div style="font-size:11px;color:#7E8591">Administrador</div></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main style="background:#0C0D10;display:flex;flex-direction:column;max-height:100vh;overflow-y:auto">
+      <div style="position:sticky;top:0;z-index:10;background:rgba(12,13,16,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);padding:16px 30px;display:flex;align-items:center;gap:18px">
+        <div style="font-family:'Saira';font-weight:700;font-size:20px;color:#fff">{{ adminTitle }}</div>
+        <div style="margin-left:auto;position:relative"><svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#6A707A" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar..." style="background:#15171C;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:9px 12px 9px 34px;color:#fff;font-size:13px;width:220px"></div>
+        <sc-if value="{{ newBtn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onNewClick }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:#E11D26;border:0;padding:10px 18px;cursor:pointer;border-radius:2px">{{ newBtn.label }}</button></sc-if>
+      </div>
+
+      <div style="padding:30px;flex:1">
+        <!-- Dashboard -->
+        <sc-if value="{{ dashOn }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px">
+            <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+              <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px">
+                <div style="font-size:12px;color:#8A9099;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">{{ m.l }}</div>
+                <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;line-height:1">{{ m.k }}</div>
+                <div style="font-family:'Saira';font-weight:600;font-size:12px;color:{{ m.col }};margin-top:8px">{{ m.d }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px"><div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff">Ventas 2026</div><div style="font-size:12px;color:#8A9099">Últimos 7 meses</div></div>
+              <div style="display:flex;align-items:flex-end;gap:14px;height:180px;position:relative;padding-bottom:5px;">
+                <!-- Grid background lines -->
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;opacity:0.06;padding-bottom:24px;">
+                  <div style="border-bottom:1.5px dashed #fff;width:100%;height:0;"></div>
+                  <div style="border-bottom:1.5px dashed #fff;width:100%;height:0;"></div>
+                  <div style="border-bottom:1.5px dashed #fff;width:100%;height:0;"></div>
+                  <div style="border-bottom:1.5px dashed #fff;width:100%;height:0;"></div>
+                </div>
+                <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;height:100%;justify-content:flex-end;position:relative;z-index:2;">
+                    <svg width="100%" height="{{ b.h }}" viewBox="0 0 40 100" preserveAspectRatio="none" style="display:block;overflow:visible;">
+                      <defs>
+                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#E11D26" />
+                          <stop offset="100%" stop-color="#8A1218" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="6" y="0" width="28" height="100%" rx="4" fill="url(#barGrad)" style="transition:all 0.3s;filter:drop-shadow(0px 2px 4px rgba(225,29,38,0.2));" />
+                    </svg>
+                    <div style="font-family:'Saira';font-size:11px;color:#7E8591">{{ b.m }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:18px">Stock bajo</div>
+              <sc-for list="{{ lowStock }}" as="p" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div><div style="font-size:14px;color:#fff;font-weight:500">{{ p.name }}</div><div style="font-size:12px;color:#8A9099">{{ p.cat }}</div></div><div style="font-family:'Saira';font-weight:700;font-size:15px;color:#FFC107;flex-shrink:0;min-width:28px;text-align:right">{{ p.stock }}</div></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- Productos -->
+        <sc-if value="{{ prodOn }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:#101216;text-align:left">
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Producto</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Categoría</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Precio</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Stock</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Estado</th>
+              <th style="padding:14px 20px"></th>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{ allProducts }}" as="p" hint-placeholder-count="8">
+                <tr style="border-top:1px solid rgba(255,255,255,.06)">
+                  <td style="padding:14px 20px;display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:3px;background:#23262F;display:flex;align-items:center;justify-content:center;color:#6A707A;flex-shrink:0">{{ p.iconSmEl }}</div><div style="font-size:14px;color:#fff;font-weight:500">{{ p.name }}</div></td>
+                  <td style="padding:14px 20px;font-size:13px;color:#A6ADB8">{{ p.cat }}</td>
+                  <td style="padding:14px 20px;font-family:'Saira';font-weight:600;font-size:14px;color:#fff">{{ p.price }}</td>
+                  <td style="padding:14px 20px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ p.stockCol }}">{{ p.stock }}</td>
+                  <td style="padding:14px 20px"><span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:{{ p.estCol }};background:{{ p.estBg }};padding:5px 11px;border-radius:2px">{{ p.estado }}</span></td>
+                  <td style="padding:14px 20px;text-align:right;white-space:nowrap"><button onClick="{{ p.onEdit }}" title="Editar" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ editIconEl }}</button><button onClick="{{ p.onDelete }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ trashIconEl }}</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        </sc-if>
+
+        <!-- Servicios -->
+        <sc-if value="{{ svOn }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:#101216;text-align:left">
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Núm</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Nombre</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Descripción</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Tag</th>
+              <th style="padding:14px 20px"></th>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{ services }}" as="sv" hint-placeholder-count="4">
+                <tr style="border-top:1px solid rgba(255,255,255,.06)">
+                  <td style="padding:14px 20px;font-family:'Saira';font-weight:700;font-size:13px;color:#FFC107">{{ sv.num }}</td>
+                  <td style="padding:14px 20px;font-size:14px;color:#fff;font-weight:500">{{ sv.n }}</td>
+                  <td style="padding:14px 20px;font-size:13px;color:#A6ADB8;max-width:320px">{{ sv.d }}</td>
+                  <td style="padding:14px 20px"><span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#6AA8FF;background:rgba(106,168,255,.14);padding:5px 11px;border-radius:2px">{{ sv.tag }}</span></td>
+                  <td style="padding:14px 20px;text-align:right;white-space:nowrap"><button onClick="{{ sv.onEdit }}" title="Editar" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ editIconEl }}</button><button onClick="{{ sv.onDelete }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ trashIconEl }}</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        </sc-if>
+
+        <!-- Cotizaciones -->
+        <sc-if value="{{ cotOn }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:#101216;text-align:left">
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Cliente</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Solicitud</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Monto</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Fecha</th>
+              <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Estado</th>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{ quoteRows }}" as="q" hint-placeholder-count="5">
+                <tr onClick="{{ q.onToggle }}" style="border-top:1px solid rgba(255,255,255,.06);cursor:pointer">
+                  <td style="padding:15px 20px"><div style="font-size:14px;color:#fff;font-weight:600">{{ q.cliente }}</div><div style="font-size:12px;color:#8A9099">{{ q.cont }}</div></td>
+                  <td style="padding:15px 20px;font-size:13.5px;color:#A6ADB8">{{ q.items }}</td>
+                  <td style="padding:15px 20px;font-family:'Saira';font-weight:700;font-size:14px;color:#fff">{{ q.monto }}</td>
+                  <td style="padding:15px 20px;font-size:13px;color:#8A9099">{{ q.fecha }}</td>
+                  <td style="padding:15px 20px"><span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:{{ q.col }};background:{{ q.bg }};padding:5px 11px;border-radius:2px">{{ q.estado }}</span></td>
+                </tr>
+                <sc-if value="{{ q.expanded }}" hint-placeholder-val="{{ false }}">
+                <tr style="border-top:1px solid rgba(255,255,255,.06);background:#101216">
+                  <td colspan="5" style="padding:22px 24px">
+                    <div style="display:flex;gap:34px;align-items:flex-end;flex-wrap:wrap">
+                      <div style="flex:1;min-width:220px">
+                        <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Detalle de la solicitud</div>
+                        <div style="font-size:14px;color:#EAECEF;line-height:1.6">{{ q.items }}</div>
+                      </div>
+                      <div>
+                        <label style="display:block;font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Cambiar estado</label>
+                        <select value="{{ q.estado }}" onChange="{{ q.onStatusChange }}" style="background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:9px 12px;color:#fff;font-size:13px">
+                          <sc-for list="{{ quoteEstadoOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                        </select>
+                      </div>
+                      <button onClick="{{ q.onArchive }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#FF6168;background:rgba(255,97,104,.1);border:1px solid rgba(255,97,104,.3);padding:10px 16px;cursor:pointer;border-radius:2px">Archivar</button>
+                    </div>
+                  </td>
+                </tr>
+                </sc-if>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        </sc-if>
+
+        <!-- Contenido del home -->
+        <sc-if value="{{ contOn }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
+              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:4px">Banner principal (Hero)</div>
+              <div style="font-size:13px;color:#8A9099;margin-bottom:22px">Edita y mira el cambio al volver al sitio →</div>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Título</label>
+              <textarea rows="2" onInput="{{ onHeroTitle }}" value="{{ heroTitle }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px;resize:vertical;margin-bottom:18px"></textarea>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Subtítulo</label>
+              <textarea rows="3" onInput="{{ onHeroSub }}" value="{{ heroSub }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px;resize:vertical;margin-bottom:18px"></textarea>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Imagen de fondo</label>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+                <div style="width:104px;height:62px;border-radius:4px;background:#0C0D10;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                  {{ heroImgThumbEl }}
+                  <sc-if value="{{ !hasHeroImg }}" hint-placeholder-val="{{ true }}"><span style="color:#5A616C;font-size:10px;text-align:center">Sin imagen</span></sc-if>
+                </div>
+                <input type="file" accept="image/*" onChange="{{ onHeroImg }}" style="font-size:12px;color:#9AA1AC;max-width:160px">
+                <sc-if value="{{ hasHeroImg }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearHeroImg }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#9AA1AC;border-radius:3px;padding:7px 12px;font-size:12px;cursor:pointer">Quitar</button></sc-if>
+              </div>
+              <button onClick="{{ goHome }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 20px;cursor:pointer;border-radius:2px">Guardar y previsualizar</button>
+            </div>
+
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff">Clientes</div><button onClick="{{ addClient }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.08);border:0;padding:7px 12px;cursor:pointer;border-radius:2px">+ Agregar</button></div>
+              <sc-for list="{{ clientCards }}" as="c" hint-placeholder-count="8">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+                  <div style="width:34px;height:34px;border-radius:3px;background:#0C0D10;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">{{ c.logoEl }}</div>
+                  <input value="{{ c.name }}" onChange="{{ c.onNameChange }}" style="flex:1;min-width:0;background:#0C0D10;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:8px 10px;color:#fff;font-size:13px">
+                  <input type="file" accept="image/*" onChange="{{ c.onLogoChange }}" style="font-size:11px;color:#7E8591;width:84px;flex-shrink:0">
+                  <button onClick="{{ c.onRemove }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:5px;border-radius:3px;display:inline-flex;flex-shrink:0">{{ trashIconEl }}</button>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff">Galería de proyectos</div><button onClick="{{ addGalleryItem }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.08);border:0;padding:7px 12px;cursor:pointer;border-radius:2px">+ Agregar</button></div>
+              <sc-for list="{{ galleryCards }}" as="g" hint-placeholder-count="8">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+                  <div style="width:44px;height:34px;border-radius:3px;background:#0C0D10;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">{{ g.imgEl }}</div>
+                  <input value="{{ g.label }}" onChange="{{ g.onLabelChange }}" style="flex:1;min-width:0;background:#0C0D10;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:8px 10px;color:#fff;font-size:13px">
+                  <input type="file" accept="image/*" onChange="{{ g.onImgChange }}" style="font-size:11px;color:#7E8591;width:84px;flex-shrink:0">
+                  <button onClick="{{ g.onRemove }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:5px;border-radius:3px;display:inline-flex;flex-shrink:0">{{ trashIconEl }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:16px">Secciones visibles en el home</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div style="font-size:14px;color:#EAECEF">Clientes</div><div onClick="{{ secClientes.onClick }}" style="cursor:pointer;width:34px;height:19px;background:{{ secClientes.bg }};border-radius:20px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;left:{{ secClientes.knobLeft }};width:15px;height:15px;background:#fff;border-radius:50%;transition:left .15s"></div></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div style="font-size:14px;color:#EAECEF">Testimonios</div><div onClick="{{ secTestimonios.onClick }}" style="cursor:pointer;width:34px;height:19px;background:{{ secTestimonios.bg }};border-radius:20px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;left:{{ secTestimonios.knobLeft }};width:15px;height:15px;background:#fff;border-radius:50%;transition:left .15s"></div></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div style="font-size:14px;color:#EAECEF">Galería de proyectos</div><div onClick="{{ secGaleria.onClick }}" style="cursor:pointer;width:34px;height:19px;background:{{ secGaleria.bg }};border-radius:20px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;left:{{ secGaleria.knobLeft }};width:15px;height:15px;background:#fff;border-radius:50%;transition:left .15s"></div></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0"><div style="font-size:14px;color:#EAECEF">Blog preview</div><div onClick="{{ secBlogPreview.onClick }}" style="cursor:pointer;width:34px;height:19px;background:{{ secBlogPreview.bg }};border-radius:20px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;left:{{ secBlogPreview.knobLeft }};width:15px;height:15px;background:#fff;border-radius:50%;transition:left .15s"></div></div></div>
+            </div>
+
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:16px">Productos destacados en el home</div>
+              <sc-for list="{{ allProducts }}" as="p" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div style="font-size:14px;color:#EAECEF">{{ p.name }}</div><div onClick="{{ p.onToggleDest }}" style="cursor:pointer;width:34px;height:19px;background:{{ p.destBg }};border-radius:20px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;left:{{ p.destKnob }};width:15px;height:15px;background:#fff;border-radius:50%;transition:left .15s"></div></div></div>
+              </sc-for>
+            </div>
+
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff">Testimonios</div><button onClick="{{ onAddTestimonial }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.08);border:0;padding:7px 12px;cursor:pointer;border-radius:2px">+ Agregar</button></div>
+              <sc-for list="{{ testimonialCards }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+                  <div style="flex:1;min-width:0"><div style="font-size:14px;color:#fff;font-weight:600">{{ t.name }}</div><div style="font-size:12px;color:#8A9099;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.company }}</div></div>
+                  <button onClick="{{ t.onEdit }}" title="Editar" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex;flex-shrink:0">{{ editIconEl }}</button>
+                  <button onClick="{{ t.onDelete }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex;flex-shrink:0">{{ trashIconEl }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- Blog -->
+        <sc-if value="{{ blogOn }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ blogPosts }}" as="b" hint-placeholder-count="3">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px;display:flex;align-items:center;gap:22px">
+              <div style="width:90px;height:60px;border-radius:3px;background:linear-gradient(150deg,#23262F,#181A20);flex-shrink:0;overflow:hidden">{{ b.imgEl }}</div>
+              <div style="flex:1"><div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:5px">{{ b.t }}</div><div style="display:flex;gap:14px;font-size:12.5px;color:#8A9099"><span style="color:#FFC107">{{ b.cat }}</span><span>{{ b.fecha }}</span><span>{{ b.read }}</span></div></div>
+              <span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:{{ b.estCol }};background:{{ b.estBg }};padding:5px 11px;border-radius:2px">{{ b.estado }}</span>
+              <button onClick="{{ b.onEdit }}" title="Editar" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ editIconEl }}</button>
+              <button onClick="{{ b.onDelete }}" title="Eliminar" style="background:transparent;border:0;color:#FF6168;cursor:pointer;padding:6px;border-radius:3px;display:inline-flex">{{ trashIconEl }}</button>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <!-- Config -->
+        <sc-if value="{{ cfgOn }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
+            <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:20px">Datos de la empresa</div>
+            <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre / razón social</label><input value="{{ company.name }}" onChange="{{ cSetName }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">RUC</label><input value="{{ company.ruc }}" onChange="{{ cSetRuc }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Correo</label><input value="{{ company.email }}" onChange="{{ cSetEmail }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            </div>
+            <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Dirección</label><input value="{{ company.address }}" onChange="{{ cSetAddress }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono 1</label><input value="{{ company.phone1 }}" onChange="{{ cSetPhone1 }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono 2</label><input value="{{ company.phone2 }}" onChange="{{ cSetPhone2 }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            </div>
+            <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">WhatsApp (con código de país, sin +)</label><input value="{{ company.whatsapp }}" onChange="{{ cSetWhatsapp }}" placeholder="51961823490" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Instagram</label><input value="{{ company.instagram }}" onChange="{{ cSetInstagram }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Facebook</label><input value="{{ company.facebook }}" onChange="{{ cSetFacebook }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:4px">Logo</div>
+              <div style="font-size:13px;color:#8A9099;margin-bottom:18px">Aparece en el header y el footer del sitio.</div>
+              <div style="display:flex;align-items:center;gap:14px">
+                <div style="width:60px;height:60px;border-radius:4px;background:#0C0D10;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                  {{ logoThumbEl }}
+                  <sc-if value="{{ !hasLogo }}" hint-placeholder-val="{{ true }}"><span style="color:#5A616C;font-size:10px;text-align:center">Sin logo</span></sc-if>
+                </div>
+                <input type="file" accept="image/*" onChange="{{ onLogo }}" style="font-size:12px;color:#9AA1AC;max-width:170px">
+                <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearLogo }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#9AA1AC;border-radius:3px;padding:7px 12px;font-size:12px;cursor:pointer">Quitar</button></sc-if>
+              </div>
+            </div>
+
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:4px">SEO</div>
+              <div style="font-size:13px;color:#8A9099;margin-bottom:18px">Título y descripción meta (decorativo en este demo).</div>
+              <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Título SEO</label><input value="{{ company.seoTitle }}" onChange="{{ cSetSeoTitle }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+              <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Descripción meta</label><textarea rows="3" value="{{ company.seoDesc }}" onInput="{{ cSetSeoDesc }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px;resize:vertical"></textarea></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+    </main>
+  </div>
+  </sc-if>
+
+  <!-- ============ DEMO SWITCH ============ -->
+  <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:6px;background:rgba(20,22,27,.92);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:40px;padding:6px 7px;box-shadow:0 12px 40px rgba(0,0,0,.5)">
+    <span style="font-family:'Saira';font-weight:700;font-size:10px;letter-spacing:.1em;color:#FFC107;padding:0 10px 0 8px;text-transform:uppercase">Demo</span>
+    <button onClick="{{ goSiteView }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:{{ siteToggleCol }};background:{{ siteToggleBg }};border:0;padding:9px 18px;cursor:pointer;border-radius:30px;transition:all .2s">Sitio Web</button>
+    <button onClick="{{ goAdminView }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:{{ adminToggleCol }};background:{{ adminToggleBg }};border:0;padding:9px 18px;cursor:pointer;border-radius:30px;transition:all .2s">Panel CMS</button>
+  </div>
+
+  <!-- ============ MODAL CRUD ============ -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;background:rgba(8,9,11,.72);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div onClick="{{ stopProp }}" style="background:#15171C;border:1px solid rgba(255,255,255,.1);border-radius:6px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#15171C;z-index:1">
+        <div style="font-family:'Saira';font-weight:700;font-size:19px;color:#fff">{{ modalTitle }}</div>
+        <button onClick="{{ closeModal }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;font-size:18px;padding:4px;line-height:1">✕</button>
+      </div>
+      <div style="padding:26px">
+
+        <!-- Producto -->
+        <sc-if value="{{ modalIsProduct }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label><input value="{{ mf.name }}" onChange="{{ pSetName }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Categoría</label>
+              <select value="{{ mf.cat }}" onChange="{{ pSetCat }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px">
+                <sc-for list="{{ productCatOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Estado</label>
+              <select value="{{ mf.estado }}" onChange="{{ pSetEstado }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px">
+                <sc-for list="{{ productEstadoOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Descripción corta</label><input value="{{ mf.sub }}" onChange="{{ pSetSub }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Precio (S/)</label><input type="text" inputmode="decimal" value="{{ mf.price }}" onChange="{{ pSetPrice }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Stock</label><input type="text" inputmode="numeric" value="{{ mf.stock }}" onChange="{{ pSetStock }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:18px"><input type="checkbox" checked="{{ mf.dest }}" onChange="{{ pSetDest }}"><span style="font-size:13.5px;color:#EAECEF">Mostrar en "Productos destacados" del home</span></label>
+          <div style="margin-bottom:6px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Imagen</label>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:60px;height:60px;border-radius:4px;background:#0C0D10;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                {{ mfImgEl }}
+                <sc-if value="{{ !mf.img }}" hint-placeholder-val="{{ true }}"><span style="color:#5A616C;font-size:10px;text-align:center">Sin foto</span></sc-if>
+              </div>
+              <input type="file" accept="image/*" onChange="{{ pSetImg }}" style="font-size:12px;color:#9AA1AC;max-width:180px">
+              <sc-if value="{{ mf.img }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pClearImg }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#9AA1AC;border-radius:3px;padding:7px 12px;font-size:12px;cursor:pointer">Quitar</button></sc-if>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- Servicio -->
+        <sc-if value="{{ modalIsService }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Número de orden</label><input value="{{ mf.num }}" onChange="{{ svSetNum }}" placeholder="01" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label><input value="{{ mf.n }}" onChange="{{ svSetN }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Descripción</label><textarea rows="3" value="{{ mf.d }}" onInput="{{ svSetD }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px;resize:vertical"></textarea></div>
+          <div style="margin-bottom:6px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Tag / certificación</label><input value="{{ mf.tag }}" onChange="{{ svSetTag }}" placeholder="NTP 350.043" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+        </div>
+        </sc-if>
+
+        <!-- Blog -->
+        <sc-if value="{{ modalIsBlog }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Título</label><input value="{{ mf.t }}" onChange="{{ bSetT }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Categoría</label><input value="{{ mf.cat }}" onChange="{{ bSetCat }}" placeholder="Prevención" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Estado</label>
+              <select value="{{ mf.estado }}" onChange="{{ bSetEstado }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px">
+                <sc-for list="{{ blogEstadoOptions }}" as="o" hint-placeholder-count="2"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Fecha</label><input value="{{ mf.fecha }}" onChange="{{ bSetFecha }}" placeholder="18 Jun 2026" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Tiempo de lectura</label><input value="{{ mf.read }}" onChange="{{ bSetRead }}" placeholder="4 min" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          </div>
+          <div style="margin-bottom:6px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Imagen de portada</label>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:60px;height:60px;border-radius:4px;background:#0C0D10;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                {{ mfImgEl }}
+                <sc-if value="{{ !mf.img }}" hint-placeholder-val="{{ true }}"><span style="color:#5A616C;font-size:10px;text-align:center">Sin foto</span></sc-if>
+              </div>
+              <input type="file" accept="image/*" onChange="{{ bSetImg }}" style="font-size:12px;color:#9AA1AC;max-width:180px">
+              <sc-if value="{{ mf.img }}" hint-placeholder-val="{{ false }}"><button onClick="{{ bClearImg }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#9AA1AC;border-radius:3px;padding:7px 12px;font-size:12px;cursor:pointer">Quitar</button></sc-if>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- Testimonio -->
+        <sc-if value="{{ modalIsTestimonial }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label><input value="{{ mf.name }}" onChange="{{ tSetName }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Cargo</label><input value="{{ mf.role }}" onChange="{{ tSetRole }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+            <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Empresa</label><input value="{{ mf.company }}" onChange="{{ tSetCompany }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
+          </div>
+          <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Cita</label><textarea rows="3" value="{{ mf.quote }}" onInput="{{ tSetQuote }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px;resize:vertical"></textarea></div>
+          <div style="margin-bottom:6px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Avatar</label>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:60px;height:60px;border-radius:50%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                {{ mfAvatarEl }}
+                <sc-if value="{{ !mf.avatar }}" hint-placeholder-val="{{ true }}"><span style="color:#5A616C;font-size:10px;text-align:center">Sin foto</span></sc-if>
+              </div>
+              <input type="file" accept="image/*" onChange="{{ tSetAvatar }}" style="font-size:12px;color:#9AA1AC;max-width:180px">
+              <sc-if value="{{ mf.avatar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ tClearAvatar }}" style="background:transparent;border:1px solid rgba(255,255,255,.14);color:#9AA1AC;border-radius:3px;padding:7px 12px;font-size:12px;cursor:pointer">Quitar</button></sc-if>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;padding:18px 26px;border-top:1px solid rgba(255,255,255,.08);position:sticky;bottom:0;background:#15171C">
+        <button onClick="{{ closeModal }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 20px;cursor:pointer;border-radius:2px">Cancelar</button>
+        <button onClick="{{ saveModal }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:11px 22px;cursor:pointer;border-radius:2px">Guardar</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = {
+    view:'site', sitePage:'home', adminPage:'dashboard', cat:'Todos',
+    heroTitle:'Protegemos lo que más importa: tu gente.',
+    heroSub:'Equipos de protección personal, extintores y sistemas contra incendio con certificación NTP. Más de 12 años blindando la industria peruana.',
+    heroImg:'./uploads/hero.png', logo:'./uploads/logo.png',
+    modal:null, modalForm:{}, expandedQuoteId:null,
+    contactForm:{name:'',company:'',email:'',phone:'',message:''}, contactSent:false,
+    sectionsOn:{clientes:true,testimonios:true,galeria:true,blogPreview:true},
+    cart:[], cartOpen:false, wizardStep:1, wizardRisk:null, wizardSize:null, wizardResult:null,
+    company:{
+      name:'Corporación Brizuvic E.I.R.L.', ruc:'20602073476', address:'Av. Argentina 327, Cercado de Lima',
+      phone1:'(01) 759-4690', phone2:'961 823 490', email:'ventas@brizuvic.com',
+      whatsapp:'51961823490', instagram:'@brizuvic.corp', facebook:'/brizuvic.corp',
+      seoTitle:'Brizuvic Corp. — EPP, Extintores y Sistemas Contra Incendio',
+      seoDesc:'Equipos de protección personal, extintores y sistemas contra incendio certificados NTP en Lima, Perú.'
+    },
+    products:[
+      {id:'p1',name:'Casco de Seguridad V-Gard',cat:'EPP',sub:'Protección de cabeza',price:39.90,stock:120,estado:'Activo',dest:true,img:'./uploads/p1.png'},
+      {id:'p2',name:'Guantes Anticorte Nivel 5',cat:'EPP',sub:'Protección de manos',price:24.50,stock:8,estado:'Activo',dest:false,img:'./uploads/p2.png'},
+      {id:'p3',name:'Lentes Antiempañante Claro',cat:'EPP',sub:'Protección visual',price:12.90,stock:340,estado:'Activo',dest:false,img:'./uploads/p3.png'},
+      {id:'p4',name:'Respirador Media Cara 6200',cat:'EPP',sub:'Protección respiratoria',price:89.00,stock:42,estado:'Activo',dest:true,img:'./uploads/p4.png'},
+      {id:'p5',name:'Botín Dieléctrico Composite',cat:'EPP',sub:'Protección de pies',price:129.00,stock:60,estado:'Activo',dest:false,img:'./uploads/p5.png'},
+      {id:'p6',name:'Arnés Cuerpo Entero 4 Anillas',cat:'EPP',sub:'Trabajo en altura',price:215.00,stock:18,estado:'Activo',dest:false,img:'./uploads/p6.png'},
+      {id:'p7',name:'Extintor PQS ABC 6 kg',cat:'Extintores',sub:'Polvo químico seco',price:95.00,stock:75,estado:'Activo',dest:true,img:'./uploads/p7.png'},
+      {id:'p8',name:'Extintor CO₂ 5 lb',cat:'Extintores',sub:'Dióxido de carbono',price:180.00,stock:30,estado:'Activo',dest:false,img:'./uploads/p8.png'},
+      {id:'p9',name:'Gabinete Contra Incendio II',cat:'Contra Incendio',sub:'Manguera y válvula',price:640.00,stock:12,estado:'Activo',dest:false,img:'./uploads/p9.png'},
+      {id:'p10',name:'Detector de Humo Fotoeléctrico',cat:'Contra Incendio',sub:'Detección temprana',price:58.00,stock:90,estado:'Activo',dest:true,img:'./uploads/p10.png'},
+      {id:'p11',name:'Señal Fotoluminiscente "Salida"',cat:'Señalización',sub:'Ruta de evacuación',price:9.90,stock:500,estado:'Activo',dest:false,img:'./uploads/p11.png'},
+      {id:'p12',name:'Cinta Antideslizante Peldaños',cat:'Señalización',sub:'Prevención de caídas',price:16.00,stock:0,estado:'Agotado',dest:false,img:'./uploads/p12.png'},
+    ],
+    services:[
+      {id:'sv1',num:'01',n:'Recarga de extintores',d:'Servicio certificado bajo NTP 350.043 con prueba hidrostática y garantía de operatividad.',tag:'NTP 350.043'},
+      {id:'sv2',num:'02',n:'Sistemas contra incendio',d:'Diseño, instalación e inspección de redes húmedas, gabinetes y detección automática.',tag:'INDECI'},
+      {id:'sv3',num:'03',n:'Capacitaciones',d:'Brigadas, uso de extintores y evacuación, con certificado válido para tu personal.',tag:'Certificado'},
+      {id:'sv4',num:'04',n:'Equipamiento de EPP',d:'Dotación integral de protección personal por puesto de trabajo y rubro industrial.',tag:'ISO 9001'},
+    ],
+    blogPosts:[
+      {id:'b1',t:'5 señales de que tus extintores necesitan recarga',cat:'Prevención',fecha:'12 Jun 2026',read:'4 min',estado:'Publicado',img:'./uploads/b1.png'},
+      {id:'b2',t:'Guía: EPP obligatorio en obras de construcción',cat:'Normativa',fecha:'03 Jun 2026',read:'6 min',estado:'Publicado',img:'./uploads/b2.png'},
+      {id:'b3',t:'Cómo armar una brigada contra incendios efectiva',cat:'Capacitación',fecha:'21 May 2026',read:'5 min',estado:'Publicado',img:'./uploads/b3.png'},
+    ],
+    quotes:[
+      {id:'q1',cliente:'Minera Las Bambas',cont:'Compras · J. Ramírez',items:'Dotación EPP x 24',monto:18400,estado:'Nuevo',fecha:'17 Jun'},
+      {id:'q2',cliente:'Constructora Cosapi',cont:'SSOMA · L. Vega',items:'Recarga 40 extintores',monto:6200,estado:'En proceso',fecha:'16 Jun'},
+      {id:'q3',cliente:'Backus Ate',cont:'Mantenimiento',items:'Gabinetes CI x 6',monto:4950,estado:'Enviada',fecha:'14 Jun'},
+      {id:'q4',cliente:'Clínica Internacional',cont:'Administración',items:'Señalización piso 3',monto:1280,estado:'Enviada',fecha:'13 Jun'},
+      {id:'q5',cliente:'Alicorp Callao',cont:'Seguridad Industrial',items:'Capacitación brigadas',monto:3400,estado:'Cerrada',fecha:'10 Jun'},
+    ],
+    testimonials:[
+      {id:'t1',name:'Jorge Ramírez',role:'Jefe de Compras',company:'Minera Las Bambas',quote:'La rapidez en la recarga de extintores nos salvó en plena auditoría INDECI. Documentación impecable.',avatar:null},
+      {id:'t2',name:'Lucía Vega',role:'Coordinadora SSOMA',company:'Constructora Cosapi',quote:'Equiparon a más de 300 trabajadores con EPP certificado en menos de una semana.',avatar:null},
+      {id:'t3',name:'Manuel Ortiz',role:'Jefe de Mantenimiento',company:'Backus Ate',quote:'Soporte 24/7 real. Una emergencia un domingo y llegaron en menos de dos horas.',avatar:null},
+    ],
+    clients:[
+      {id:'cl1',name:'Minera Las Bambas',logo:null},{id:'cl2',name:'Constructora Cosapi',logo:null},
+      {id:'cl3',name:'Backus',logo:null},{id:'cl4',name:'Alicorp',logo:null},
+      {id:'cl5',name:'Clínica Internacional',logo:null},{id:'cl6',name:'Cementos Pacasmayo',logo:null},
+      {id:'cl7',name:'Ferreyros',logo:null},{id:'cl8',name:'Komatsu',logo:null},
+    ],
+    gallery:[
+      {id:'g1',img:'./uploads/p9.png',label:'Instalación de gabinetes — Planta Callao'},
+      {id:'g2',img:'./uploads/b3.png',label:'Capacitación de brigadas — Cosapi'},
+      {id:'g3',img:'./uploads/b1.png',label:'Recarga de extintores en sitio'},
+      {id:'g4',img:'./uploads/b2.png',label:'Entrega de EPP — Minera Las Bambas'},
+      {id:'g5',img:'./uploads/hero.png',label:'Inspección de redes húmedas'},
+      {id:'g6',img:'./uploads/p11.png',label:'Señalización industrial'},
+      {id:'g7',img:'./uploads/p1.png',label:'Auditoría de cumplimiento NTP'},
+      {id:'g8',img:'./uploads/hero.png',label:'Operativo de emergencia 24/7'},
+    ],
+  };
+
+  ICON = {
+    helmet:'<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/></svg>',
+    ext:'<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1z"/></svg>',
+    fire:'<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+    sign:'<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    edit:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>',
+    trash:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    plus:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+    x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+    wrench:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>',
+    star:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>',
+    upload:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>',
+    msg:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>',
+    photo:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>'
+  };
+  iconSm(t){ return this.ICON[t].replace(/width="44" height="44"/,'width="20" height="20"'); }
+  el(svg){ return React.createElement('span',{dangerouslySetInnerHTML:{__html:svg},style:{display:'inline-flex',lineHeight:0}}); }
+
+  uid(prefix){ return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  // CART METHODS
+  addToCart(id) {
+    const list = this.state.cart;
+    const found = list.find(x => x.id === id);
+    let newCart;
+    if (found) {
+      newCart = list.map(x => x.id === id ? { ...x, qty: x.qty + 1 } : x);
+    } else {
+      newCart = [...list, { id, qty: 1 }];
+    }
+    this.setState({ cart: newCart, cartOpen: true });
+  }
+  removeFromCart(id) {
+    this.setState({ cart: this.state.cart.filter(x => x.id !== id) });
+  }
+  updateCartQty(id, qty) {
+    const q = Number(qty);
+    if (q < 1 || isNaN(q)) return;
+    this.setState({ cart: this.state.cart.map(x => x.id === id ? { ...x, qty: q } : x) });
+  }
+  toggleCart() {
+    this.setState({ cartOpen: !this.state.cartOpen });
+  }
+  submitCartQuote() {
+    const items = this.cartItems;
+    if (!items.length) return;
+    let text = "Hola, solicito cotización para los siguientes productos:\n";
+    items.forEach(item => {
+      text += `- ${item.qty}x ${item.name} (${item.cat})\n`;
+    });
+    this.setState({
+      contactForm: { ...this.state.contactForm, message: text },
+      sitePage: 'contacto',
+      cartOpen: false
+    });
+  }
+  get cartItems() {
+    return this.state.cart.map(item => {
+      const prod = this.state.products.find(p => p.id === item.id);
+      return prod ? { ...item, name: prod.name, cat: prod.cat, sub: prod.sub, price: prod.price, img: prod.img } : null;
+    }).filter(Boolean);
+  }
+  get cartCount() {
+    return this.state.cart.reduce((sum, item) => sum + item.qty, 0);
+  }
+
+  // WIZARD METHODS
+  setWizardRisk(risk) {
+    this.setState({ wizardRisk: risk, wizardStep: 2 });
+  }
+  setWizardSize(size) {
+    let result = null;
+    const risk = this.state.wizardRisk;
+    if (risk === 'electrico') {
+      result = 'p8'; // Extintor CO2 5 lb
+    } else if (risk === 'solidos') {
+      result = 'p7'; // Extintor PQS ABC 6 kg
+    } else if (risk === 'cocina') {
+      result = 'p8'; // Extintor CO2 5 lb
+    } else {
+      result = 'p10'; // Detector de humo fotoelectrico
+    }
+    this.setState({ wizardSize: size, wizardResult: result, wizardStep: 3 });
+  }
+  resetWizard() {
+    this.setState({ wizardStep: 1, wizardRisk: null, wizardSize: null, wizardResult: null });
+  }
+
+  decorate(p){
+    const ic = p.cat==='EPP'?'helmet':p.cat==='Extintores'?'ext':p.cat==='Contra Incendio'?'fire':'sign';
+    const agotado = p.estado==='Agotado';
+    const stock = Number(p.stock);
+    const iconEl = p.img ? React.createElement('img',{src:p.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : this.el(this.ICON[ic]);
+    const iconSmEl = p.img ? React.createElement('img',{src:p.img,style:{width:38,height:38,objectFit:'cover',borderRadius:3}}) : this.el(this.iconSm(ic));
+    return { ...p, price:'S/ '+Number(p.price).toFixed(2), stock:String(p.stock), agotado, iconEl, iconSmEl,
+      stockCol: agotado?'#FF6168':(stock<15?'#FFC107':'#A6ADB8'),
+      estBg: agotado?'rgba(255,97,104,.13)':'rgba(34,197,94,.13)',
+      estCol: agotado?'#FF6168':'#4ADE80',
+      onEdit:()=>this.openModal('product',p.id), onDelete:()=>this.removeItem('products',p.id),
+      onQuote:()=>this.addToCart(p.id),
+      destBg: p.dest?'#E11D26':'rgba(255,255,255,.16)', destKnob: p.dest?'17px':'2px',
+      onToggleDest:()=>this.setState({products:this.state.products.map(x=>x.id===p.id?{...x,dest:!x.dest}:x)}) };
+  }
+  get allProducts(){ return this.state.products.map(p=>this.decorate(p)); }
+
+  decorateService(sv){
+    return { ...sv, onEdit:()=>this.openModal('service',sv.id), onDelete:()=>this.removeItem('services',sv.id) };
+  }
+  decorateBlog(b){
+    const imgEl = b.img ? React.createElement('img',{src:b.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null;
+    const pub = b.estado==='Publicado';
+    return { ...b, imgEl, estCol:pub?'#4ADE80':'#FFC107', estBg:pub?'rgba(34,197,94,.13)':'rgba(255,193,7,.14)',
+      onEdit:()=>this.openModal('blog',b.id), onDelete:()=>this.removeItem('blogPosts',b.id) };
+  }
+  decorateTestimonial(t){
+    const avatarEl = t.avatar ? React.createElement('img',{src:t.avatar,style:{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}) : null;
+    return { ...t, avatarEl, initials:t.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(),
+      onEdit:()=>this.openModal('testimonial',t.id), onDelete:()=>this.removeItem('testimonials',t.id) };
+  }
+  decorateQuote(q){
+    const map = {
+      'Nuevo':['rgba(255,193,7,.14)','#FFC107'],
+      'En proceso':['rgba(106,168,255,.14)','#6AA8FF'],
+      'Enviada':['rgba(34,197,94,.13)','#4ADE80'],
+      'Cerrada':['rgba(255,255,255,.08)','#9AA1AC']
+    };
+    const [bg,col]=map[q.estado]||map['Nuevo'];
+    const expanded = this.state.expandedQuoteId===q.id;
+    return { ...q, bg, col, monto:'S/ '+Number(q.monto).toLocaleString('en-US'), expanded,
+      onToggle:()=>this.setState({expandedQuoteId:expanded?null:q.id}),
+      onStatusChange:(e)=>this.setState({quotes:this.state.quotes.map(x=>x.id===q.id?{...x,estado:e.target.value}:x)}),
+      onArchive:()=>this.removeItem('quotes',q.id) };
+  }
+
+  listKeyFor(type){ return {product:'products',service:'services',blog:'blogPosts',testimonial:'testimonials'}[type]; }
+  emptyForm(type){
+    if(type==='product') return {name:'',cat:'EPP',sub:'',price:'',stock:'',estado:'Activo',dest:false,img:null};
+    if(type==='service') return {num:'',n:'',d:'',tag:''};
+    if(type==='blog') return {t:'',cat:'',fecha:'',read:'',estado:'Publicado',img:null};
+    if(type==='testimonial') return {name:'',role:'',company:'',quote:'',avatar:null};
+    return {};
+  }
+  openModal(type,id){
+    const list = this.state[this.listKeyFor(type)];
+    const found = id ? list.find(x=>x.id===id) : null;
+    this.setState({modal:{type,id:id||null}, modalForm: found ? {...found} : this.emptyForm(type)});
+  }
+  closeModal(){ this.setState({modal:null, modalForm:{}}); }
+  setModalField(key,value){ this.setState({modalForm:{...this.state.modalForm,[key]:value}}); }
+  saveModal(){
+    const {type,id} = this.state.modal;
+    const listKey = this.listKeyFor(type);
+    const list = this.state[listKey];
+    const form = this.state.modalForm;
+    if(id){
+      this.setState({[listKey]: list.map(x=>x.id===id?{...x,...form,id}:x), modal:null, modalForm:{}});
+    } else {
+      const prefix = {product:'p',service:'sv',blog:'b',testimonial:'t'}[type];
+      this.setState({[listKey]: [{...form,id:this.uid(prefix)}, ...list], modal:null, modalForm:{}});
+    }
+  }
+  removeItem(listKey,id){
+    if(typeof window!=='undefined' && !window.confirm('¿Eliminar este elemento? Esta acción no se puede deshacer.')) return;
+    this.setState({[listKey]: this.state[listKey].filter(x=>x.id!==id)});
+  }
+  readFileAsDataUrl(file,cb){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=>cb(reader.result);
+    reader.readAsDataURL(file);
+  }
+  decorateClient(c){
+    const logoEl = c.logo ? React.createElement('img',{src:c.logo,style:{width:'100%',height:'100%',objectFit:'contain'}}) : null;
+    return { ...c, logoEl,
+      onNameChange:(e)=>this.setState({clients:this.state.clients.map(x=>x.id===c.id?{...x,name:e.target.value}:x)}),
+      onLogoChange:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setState({clients:this.state.clients.map(x=>x.id===c.id?{...x,logo:url}:x)})),
+      onLogoClear:()=>this.setState({clients:this.state.clients.map(x=>x.id===c.id?{...x,logo:null}:x)}),
+      onRemove:()=>this.removeItem('clients',c.id) };
+  }
+  addClient(){ this.setState({clients:[...this.state.clients,{id:this.uid('cl'),name:'Nuevo cliente',logo:null}]}); }
+  decorateGalleryItem(g){
+    const imgEl = g.img ? React.createElement('img',{src:g.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null;
+    return { ...g, imgEl,
+      onLabelChange:(e)=>this.setState({gallery:this.state.gallery.map(x=>x.id===g.id?{...x,label:e.target.value}:x)}),
+      onImgChange:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setState({gallery:this.state.gallery.map(x=>x.id===g.id?{...x,img:url}:x)})),
+      onRemove:()=>this.removeItem('gallery',g.id) };
+  }
+  addGalleryItem(){ this.setState({gallery:[...this.state.gallery,{id:this.uid('g'),img:null,label:'Nuevo proyecto'}]}); }
+  toggleSection(key){ this.setState({sectionsOn:{...this.state.sectionsOn,[key]:!this.state.sectionsOn[key]}}); }
+  setCompanyField(key,value){ this.setState({company:{...this.state.company,[key]:value}}); }
+
+  renderVals(){
+    const s=this.state;
+    const isSite=s.view==='site', isAdmin=s.view==='admin';
+
+    const siteNav=[['Inicio','home'],['Catálogo','catalogo'],['Servicios','servicios'],['Blog','blog'],['Nosotros','nosotros'],['Contacto','contacto']]
+      .map(([label,page])=>{const on=s.sitePage===page;return {label,page,on,col:on?'#fff':'#9AA1AC',bar:on?'#E11D26':'transparent',onClick:()=>this.setState({view:'site',sitePage:page})};});
+
+    const cats=['Todos','EPP','Extintores','Contra Incendio','Señalización'];
+    const catChips=cats.map(c=>{const on=s.cat===c;return {label:c,on,col:on?'#fff':'#9AA1AC',bg:on?'#E11D26':'transparent',bd:on?'#E11D26':'rgba(255,255,255,.14)',onClick:()=>this.setState({cat:c})};});
+
+    const all=this.allProducts;
+    const products=all.filter(p=>s.cat==='Todos'||p.cat===s.cat);
+    const featured=all.filter(p=>p.dest);
+
+    const categoryCards=[
+      {label:'EPP',count:'6 productos',icon:this.ICON.helmet,cat:'EPP'},
+      {label:'Extintores',count:'2 productos',icon:this.ICON.ext,cat:'Extintores'},
+      {label:'Contra Incendio',count:'2 productos',icon:this.ICON.fire,cat:'Contra Incendio'},
+      {label:'Señalización',count:'2 productos',icon:this.ICON.sign,cat:'Señalización'},
+    ].map(c=>({...c,iconEl:this.el(c.icon),onClick:()=>this.setState({view:'site',sitePage:'catalogo',cat:c.cat})}));
+
+    const mkNav=(id)=>({col:s.adminPage===id?'#fff':'#9AA1AC',bg:s.adminPage===id?'rgba(225,29,38,.14)':'transparent',bar:s.adminPage===id?'#E11D26':'transparent',onClick:()=>this.setState({adminPage:id})});
+    const nav={dashboard:mkNav('dashboard'),productos:mkNav('productos'),servicios:mkNav('servicios'),cotizaciones:mkNav('cotizaciones'),contenido:mkNav('contenido'),blog:mkNav('blog'),config:mkNav('config')};
+    const titles={dashboard:'Dashboard',productos:'Productos',servicios:'Servicios',cotizaciones:'Cotizaciones',contenido:'Contenido del home',blog:'Blog',config:'Configuración'};
+
+    const newBtnMap={productos:{type:'product',label:'+ Nuevo producto'},servicios:{type:'service',label:'+ Nuevo servicio'},blog:{type:'blog',label:'+ Nuevo artículo'}};
+    const newBtn=newBtnMap[s.adminPage]||null;
+
+    const modalTypeTitles={product:'Producto',service:'Servicio',blog:'Artículo del blog',testimonial:'Testimonio'};
+    const mf=s.modalForm||{};
+    const modalOpen=!!s.modal;
+    const modalIsProduct=modalOpen&&s.modal.type==='product';
+    const modalIsService=modalOpen&&s.modal.type==='service';
+    const modalIsBlog=modalOpen&&s.modal.type==='blog';
+    const modalIsTestimonial=modalOpen&&s.modal.type==='testimonial';
+    const modalTitle=modalOpen?((s.modal.id?'Editar ':'Nuevo ')+modalTypeTitles[s.modal.type]):'';
+    const togg=(on,onClick)=>({on,bg:on?'#E11D26':'rgba(255,255,255,.16)',knobLeft:on?'17px':'2px',onClick});
+
+    return {
+      isSite, isAdmin,
+      homeOn:s.sitePage==='home', catOn:s.sitePage==='catalogo', servOn:s.sitePage==='servicios', siteBlogOn:s.sitePage==='blog', nosOn:s.sitePage==='nosotros', conOn:s.sitePage==='contacto',
+      dashOn:s.adminPage==='dashboard', prodOn:s.adminPage==='productos', svOn:s.adminPage==='servicios', cotOn:s.adminPage==='cotizaciones', contOn:s.adminPage==='contenido', blogOn:s.adminPage==='blog', cfgOn:s.adminPage==='config',
+      siteNav, catChips, activeCat:s.cat, products, productCount:products.length, featured, allProducts:all, categoryCards, nav, adminTitle:titles[s.adminPage],
+      newBtn, onNewClick:()=>newBtn&&this.openModal(newBtn.type), editIconEl:this.el(this.ICON.edit), trashIconEl:this.el(this.ICON.trash),
+      modalOpen, modalTitle, modalIsProduct, modalIsService, modalIsBlog, modalIsTestimonial, mf,
+      productCatOptions:['EPP','Extintores','Contra Incendio','Señalización'], productEstadoOptions:['Activo','Agotado'], blogEstadoOptions:['Publicado','Borrador'],
+      quoteEstadoOptions:['Nuevo','En proceso','Enviada','Cerrada'],
+      closeModal:()=>this.closeModal(), saveModal:()=>this.saveModal(), stopProp:(e)=>e.stopPropagation(),
+      pSetName:(e)=>this.setModalField('name',e.target.value), pSetCat:(e)=>this.setModalField('cat',e.target.value), pSetSub:(e)=>this.setModalField('sub',e.target.value),
+      pSetPrice:(e)=>this.setModalField('price',e.target.value), pSetStock:(e)=>this.setModalField('stock',e.target.value), pSetEstado:(e)=>this.setModalField('estado',e.target.value),
+      pSetDest:(e)=>this.setModalField('dest',e.target.checked), pSetImg:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setModalField('img',url)), pClearImg:()=>this.setModalField('img',null),
+      svSetNum:(e)=>this.setModalField('num',e.target.value), svSetN:(e)=>this.setModalField('n',e.target.value), svSetD:(e)=>this.setModalField('d',e.target.value), svSetTag:(e)=>this.setModalField('tag',e.target.value),
+      bSetT:(e)=>this.setModalField('t',e.target.value), bSetCat:(e)=>this.setModalField('cat',e.target.value), bSetFecha:(e)=>this.setModalField('fecha',e.target.value),
+      bSetRead:(e)=>this.setModalField('read',e.target.value), bSetEstado:(e)=>this.setModalField('estado',e.target.value),
+      bSetImg:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setModalField('img',url)), bClearImg:()=>this.setModalField('img',null),
+      tSetName:(e)=>this.setModalField('name',e.target.value), tSetRole:(e)=>this.setModalField('role',e.target.value), tSetCompany:(e)=>this.setModalField('company',e.target.value),
+      tSetQuote:(e)=>this.setModalField('quote',e.target.value), tSetAvatar:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setModalField('avatar',url)), tClearAvatar:()=>this.setModalField('avatar',null),
+      heroTitle:s.heroTitle, heroSub:s.heroSub,
+      certs:['NTP 350.043','ISO 9001','INDECI','OSHA','RNP'],
+      certCards:[{k:'NTP 350.043',l:'Recarga de extintores'},{k:'ISO 9001:2015',l:'Gestión de calidad'},{k:'INDECI',l:'Defensa civil'},{k:'OSHA',l:'Estándar internacional'}],
+      stats:[{k:'+12',l:'años en el rubro'},{k:'+500',l:'empresas atendidas'},{k:'24/7',l:'emergencias'},{k:'100%',l:'extintores certificados'}],
+      services:s.services.map(sv=>this.decorateService(sv)),
+      steps:[
+        {num:'01',t:'Diagnóstico',d:'Evaluamos riesgos y necesidades reales de tu operación.'},
+        {num:'02',t:'Propuesta',d:'Cotización detallada por puesto y normativa aplicable.'},
+        {num:'03',t:'Implementación',d:'Entrega de EPP, instalación y recarga en sitio.'},
+        {num:'04',t:'Certificación',d:'Documentación NTP y soporte continuo post-venta.'},
+      ],
+      values:[
+        {t:'Cumplimiento garantizado',d:'Cada entrega llega con documentación válida ante INDECI y auditorías.',iconEl:this.el(this.ICON.sign)},
+        {t:'Respuesta 24/7',d:'Atendemos emergencias y recargas urgentes en todo Lima y provincias.',iconEl:this.el(this.ICON.fire)},
+        {t:'Asesoría especializada',d:'Te acompañamos a elegir el EPP correcto por cada puesto de trabajo.',iconEl:this.el(this.ICON.helmet)},
+      ],
+      contactInfo:[
+        {label:'Dirección',value:s.company.address,iconEl:this.el('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>')},
+        {label:'Teléfono',value:s.company.phone1+' · '+s.company.phone2,iconEl:this.el('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>')},
+        {label:'Correo',value:s.company.email,iconEl:this.el('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>')},
+        {label:'RUC',value:s.company.ruc,iconEl:this.el('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 9V6a2 2 0 0 1 2-2h6l2 3"/></svg>')},
+      ],
+      metrics:[
+        {k:'S/ 124,500',l:'Ventas del mes',d:'+12.4% vs. mayo',col:'#4ADE80'},
+        {k:'38',l:'Cotizaciones nuevas',d:'+9 esta semana',col:'#4ADE80'},
+        {k:'212',l:'Productos activos',d:'4 categorías',col:'#9AA1AC'},
+        {k:String(all.filter(p=>Number(p.stock)<15).length),l:'Stock bajo',d:'Requieren atención',col:'#FFC107'},
+      ],
+      bars:[{m:'Ene',h:'52%'},{m:'Feb',h:'63%'},{m:'Mar',h:'47%'},{m:'Abr',h:'78%'},{m:'May',h:'69%'},{m:'Jun',h:'92%'},{m:'Jul',h:'58%'}],
+      lowStock:all.filter(p=>Number(p.stock)<15).map(p=>({name:p.name,cat:p.cat,stock:p.stock})),
+      quoteRows:s.quotes.map(q=>this.decorateQuote(q)),
+      blogPosts:s.blogPosts.map(b=>this.decorateBlog(b)),
+      blogPreview:s.blogPosts.slice(0,3).map(b=>this.decorateBlog(b)),
+      testimonialCards:s.testimonials.map(t=>this.decorateTestimonial(t)),
+      clientCards:s.clients.map(c=>this.decorateClient(c)),
+      galleryCards:s.gallery.map(g=>this.decorateGalleryItem(g)),
+      sectionsOn:s.sectionsOn,
+      addClient:()=>this.addClient(), addGalleryItem:()=>this.addGalleryItem(),
+      onAddTestimonial:()=>this.openModal('testimonial'),
+      siteToggleBg:isSite?'#E11D26':'transparent', siteToggleCol:isSite?'#fff':'#9AA1AC',
+      adminToggleBg:isAdmin?'#E11D26':'transparent', adminToggleCol:isAdmin?'#fff':'#9AA1AC',
+      goSiteView:()=>this.setState({view:'site'}),
+      goAdminView:()=>this.setState({view:'admin'}),
+      goHome:()=>this.setState({view:'site',sitePage:'home'}),
+      goCat:()=>this.setState({view:'site',sitePage:'catalogo'}),
+      goServ:()=>this.setState({view:'site',sitePage:'servicios'}),
+      goBlog:()=>this.setState({view:'site',sitePage:'blog'}),
+      goContact:()=>this.setState({view:'site',sitePage:'contacto'}),
+      onHeroTitle:(e)=>this.setState({heroTitle:e.target.value}),
+      onHeroSub:(e)=>this.setState({heroSub:e.target.value}),
+
+      heroImg:s.heroImg, hasHeroImg:!!s.heroImg,
+      heroImgBgEl: s.heroImg ? React.createElement('img',{src:s.heroImg,style:{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}) : null,
+      heroImgThumbEl: s.heroImg ? React.createElement('img',{src:s.heroImg,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null,
+      onHeroImg:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setState({heroImg:url})),
+      clearHeroImg:()=>this.setState({heroImg:null}),
+      logo:s.logo, hasLogo:!!s.logo,
+      logoHeaderEl: s.logo ? React.createElement('img',{src:s.logo,style:{height:32,width:32,objectFit:'contain',borderRadius:3}}) : null,
+      logoFooterEl: s.logo ? React.createElement('img',{src:s.logo,style:{height:28,width:28,objectFit:'contain',borderRadius:3}}) : null,
+      logoThumbEl: s.logo ? React.createElement('img',{src:s.logo,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null,
+      onLogo:(e)=>this.readFileAsDataUrl(e.target.files[0],(url)=>this.setState({logo:url})),
+      clearLogo:()=>this.setState({logo:null}),
+      mfImgEl: mf.img ? React.createElement('img',{src:mf.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null,
+      mfAvatarEl: mf.avatar ? React.createElement('img',{src:mf.avatar,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null,
+
+      company:s.company, whatsappHref:'https://wa.me/'+s.company.whatsapp, waIconEl:this.el(this.ICON.msg),
+      cSetName:(e)=>this.setCompanyField('name',e.target.value),
+      cSetRuc:(e)=>this.setCompanyField('ruc',e.target.value),
+      cSetAddress:(e)=>this.setCompanyField('address',e.target.value),
+      cSetPhone1:(e)=>this.setCompanyField('phone1',e.target.value),
+      cSetPhone2:(e)=>this.setCompanyField('phone2',e.target.value),
+      cSetEmail:(e)=>this.setCompanyField('email',e.target.value),
+      cSetWhatsapp:(e)=>this.setCompanyField('whatsapp',e.target.value),
+      cSetInstagram:(e)=>this.setCompanyField('instagram',e.target.value),
+      cSetFacebook:(e)=>this.setCompanyField('facebook',e.target.value),
+      cSetSeoTitle:(e)=>this.setCompanyField('seoTitle',e.target.value),
+      cSetSeoDesc:(e)=>this.setCompanyField('seoDesc',e.target.value),
+
+      secClientes:togg(s.sectionsOn.clientes,()=>this.toggleSection('clientes')),
+      secTestimonios:togg(s.sectionsOn.testimonios,()=>this.toggleSection('testimonios')),
+      secGaleria:togg(s.sectionsOn.galeria,()=>this.toggleSection('galeria')),
+      secBlogPreview:togg(s.sectionsOn.blogPreview,()=>this.toggleSection('blogPreview')),
+
+      contactForm:s.contactForm, contactSent:s.contactSent,
+      cfSetName:(e)=>this.setState({contactForm:{...this.state.contactForm,name:e.target.value}}),
+      cfSetCompany:(e)=>this.setState({contactForm:{...this.state.contactForm,company:e.target.value}}),
+      cfSetEmail:(e)=>this.setState({contactForm:{...this.state.contactForm,email:e.target.value}}),
+      cfSetPhone:(e)=>this.setState({contactForm:{...this.state.contactForm,phone:e.target.value}}),
+      cfSetMessage:(e)=>this.setState({contactForm:{...this.state.contactForm,message:e.target.value}}),
+      submitContact:()=>this.setState({contactSent:true}),
+      newContactRequest:()=>this.setState({contactSent:false,contactForm:{name:'',company:'',email:'',phone:'',message:''}}),
+
+      cartOpen:s.cartOpen,
+      cartCount:this.cartCount,
+      cartItems:this.cartItems.map(item=>({
+        ...item,
+        priceFormatted:'S/ '+Number(item.price).toFixed(2),
+        totalFormatted:'S/ '+(Number(item.price)*item.qty).toFixed(2),
+        onRemove:()=>this.removeFromCart(item.id),
+        onInc:()=>this.updateCartQty(item.id,item.qty+1),
+        onDec:()=>this.updateCartQty(item.id,item.qty-1),
+        onQtyChange:(e)=>this.updateCartQty(item.id,e.target.value)
+      })),
+      cartTotalFormatted:'S/ '+this.cartItems.reduce((sum,item)=>sum+(Number(item.price)*item.qty),0).toFixed(2),
+      toggleCart:()=>this.toggleCart(),
+      submitCartQuote:()=>this.submitCartQuote(),
+      cartIsEmpty:this.cartCount===0,
+      addToCart:(id)=>this.addToCart(id),
+
+      wizardStep:s.wizardStep,
+      wizardRisk:s.wizardRisk,
+      wizardSize:s.wizardSize,
+      wizardResult:s.wizardResult,
+      wizardResultProduct:s.wizardResult ? this.decorate(s.products.find(p=>p.id===s.wizardResult)) : null,
+      setWizardRisk:(risk)=>this.setWizardRisk(risk),
+      setWizardSize:(size)=>this.setWizardSize(size),
+      resetWizard:()=>this.resetWizard(),
+      wStep1:s.wizardStep===1,
+      wStep2:s.wizardStep===2,
+      wStep3:s.wizardStep===3,
+      wSetRiskElectrico:()=>this.setWizardRisk('electrico'),
+      wSetRiskSolidos:()=>this.setWizardRisk('solidos'),
+      wSetRiskCocina:()=>this.setWizardRisk('cocina'),
+      wSetRiskDeteccion:()=>this.setWizardRisk('deteccion'),
+      wSetSizePequeno:()=>this.setWizardSize('pequeno'),
+      wSetSizeMediano:()=>this.setWizardSize('mediano'),
+      wSetSizeGrande:()=>this.setWizardSize('grande'),
+    };
+  }
+}
+</script>
+</body>
+</html>
