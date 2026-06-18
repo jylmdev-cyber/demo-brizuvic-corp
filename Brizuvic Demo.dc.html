@@ -91,6 +91,97 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   border-color: #E11D26;
   font-weight: 600;
 }
+
+/* WhatsApp Bubble */
+.wa-bubble {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 320px;
+  background: #15171C;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+}
+.wa-bubble.open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.wa-header {
+  background: #25D366;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+.wa-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wa-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 12px 14px;
+  text-align: left;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wa-btn:hover {
+  background: rgba(37, 211, 102, 0.08);
+  border-color: #25D366;
+}
+
+/* Backlight Glows */
+.backlight-red {
+  background: radial-gradient(120% 90% at 80% -10%, rgba(225, 29, 38, 0.1) 0%, rgba(12, 13, 16, 0) 60%) !important;
+}
+.backlight-yellow {
+  background: radial-gradient(100% 100% at 20% 20%, rgba(255, 193, 7, 0.06) 0%, rgba(12, 13, 16, 0) 70%) !important;
+}
+
+/* Accordion Steps (Servicios) */
+.step-card {
+  background: #15171C;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 4px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-top: 3px solid rgba(255, 255, 255, 0.08);
+}
+.step-card:hover {
+  border-top-color: #E11D26;
+  transform: translateY(-3px);
+}
+.step-card.active {
+  background: rgba(225,29,38,0.02);
+  border-color: rgba(225,29,38,0.25);
+  border-top-color: #E11D26;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
 </style>
 </helmet>
 
@@ -121,7 +212,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
     <sc-if value="{{ homeOn }}" hint-placeholder-val="{{ true }}">
     <div>
       <!-- Hero -->
-      <section style="position:relative;overflow:hidden;background:radial-gradient(120% 90% at 80% -10%,#1c1f27 0%,#0C0D10 55%)">
+      <section className="backlight-red" style="position:relative;overflow:hidden;background:radial-gradient(120% 90% at 80% -10%,#1c1f27 0%,#0C0D10 55%)">
         <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 80%)"></div>
         <div style="position:relative;max-width:1200px;margin:0 auto;padding:74px 28px 84px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
           <div>
@@ -169,7 +260,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       </section>
 
       <!-- Asistente Selector de Seguridad -->
-      <section style="max-width:1200px;margin:34px auto;padding:0 28px">
+      <section className="backlight-yellow" style="max-width:1200px;margin:34px auto;padding:0 28px">
         <div style="background:linear-gradient(135deg, #1A1C22 0%, #111317 100%);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:34px;position:relative;overflow:hidden;">
           <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#E11D26;"></div>
           
@@ -438,11 +529,38 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Catálogo</div>
       <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Productos de seguridad</h1>
       <p style="font-size:16px;color:#8A9099;margin:0 0 28px">{{ productCount }} productos disponibles · cotización inmediata por volumen</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
         <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="5">
           <button onClick="{{ c.onClick }}" style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.02em;color:{{ c.col }};background:{{ c.bg }};border:1px solid {{ c.bd }};padding:9px 17px;cursor:pointer;border-radius:2px;text-transform:uppercase">{{ c.label }}</button>
         </sc-for>
       </div>
+
+      <!-- Filtros Avanzados -->
+      <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:18px 24px;margin-bottom:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center">
+        <!-- Búsqueda -->
+        <div>
+          <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:8px">Buscar por nombre o descripción:</label>
+          <div style="position:relative">
+            <input value="{{ searchQuery }}" onInput="{{ onSearchChange }}" placeholder="Ej. Casco, Extintor, Guantes..." style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:11px 14px 11px 36px;color:#fff;font-size:14px;box-sizing:border-box">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5A616C;display:flex;align-items:center">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+          </div>
+        </div>
+        <!-- Rango de Precios -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+            <label style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC">Precio Máximo:</label>
+            <span style="font-family:'Saira';font-weight:700;font-size:14px;color:#fff">S/ {{ maxPrice }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:11px;color:#5A616C">S/ 0</span>
+            <input type="range" min="0" max="800" step="10" value="{{ maxPrice }}" onInput="{{ onPriceChange }}" style="flex:1;accent-color:#E11D26;height:4px;border-radius:2px;background:rgba(255,255,255,.1);cursor:pointer">
+            <span style="font-size:11px;color:#5A616C">S/ 800</span>
+          </div>
+        </div>
+      </div>
+
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
         <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
           <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
@@ -483,12 +601,28 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       </div>
 
       <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;margin-bottom:24px;letter-spacing:-.01em">Cómo trabajamos</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px">
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
-          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #E11D26">
-            <div style="font-family:'Saira';font-weight:800;font-size:26px;color:#2A2E36;margin-bottom:14px">{{ s.num }}</div>
-            <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:8px">{{ s.t }}</div>
-            <div style="font-size:13.5px;line-height:1.5;color:#8A9099">{{ s.d }}</div>
+          <div onClick="{{ s.onClick }}" className="step-card {{ s.on ? 'active' : '' }}" style="display:flex;flex-direction:column;justify-content:space-between;min-height:180px">
+            <div>
+              <div style="font-family:'Saira';font-weight:800;font-size:26px;color:#2A2E36;margin-bottom:14px;transition:color 0.2s" style-hover="color:#E11D26">{{ s.num }}</div>
+              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:8px">{{ s.t }}</div>
+              <div style="font-size:13.5px;line-height:1.5;color:#8A9099">{{ s.d }}</div>
+            </div>
+            
+            <!-- Deliverables details if active -->
+            <sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;padding-top:12px;border-top:1px dashed rgba(255,255,255,0.1)">
+                <div style="font-family:'Saira';font-weight:600;font-size:11px;color:#FFC107;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Entregables:</div>
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <sc-for list="{{ s.docs }}" as="doc" hint-placeholder-count="3">
+                    <div style="font-size:11.5px;color:#A6ADB8;display:flex;align-items:center;gap:6px">
+                      <span style="color:#25D366;font-weight:bold">✓</span> {{ doc }}
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -674,7 +808,37 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
     </div>
 
     <!-- WhatsApp flotante -->
-    <a href="{{ whatsappHref }}" target="_blank" rel="noopener" style="position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;text-decoration:none">{{ waIconEl }}</a>
+    <div className="wa-bubble {{ waOpen ? 'open' : '' }}">
+      <div className="wa-header" style="background:#25D366;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;color:#fff">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;animation:pulse 1.5s infinite"></div>
+          <div>
+            <div style="font-family:'Saira';font-weight:700;font-size:14px;line-height:1.2">Soporte Brizuvic</div>
+            <div style="font-size:11px;opacity:0.9">En línea - Respuesta inmediata</div>
+          </div>
+        </div>
+        <button onClick="{{ toggleWa }}" style="background:transparent;border:0;color:#fff;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div className="wa-body" style="padding:18px;display:flex;flex-direction:column;gap:12px;background:#15171C">
+        <p style="font-size:13px;color:#A6ADB8;margin:0 0 4px;line-height:1.4">Seleccione una opción para iniciar el chat en WhatsApp:</p>
+        
+        <a href="{{ waQuoteHref }}" target="_blank" rel="noopener" onClick="{{ toggleWa }}" className="wa-btn" style="text-decoration:none">
+          <span>📋 Cotizar Equipos y EPP</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <a href="{{ waEmergenciaHref }}" target="_blank" rel="noopener" onClick="{{ toggleWa }}" className="wa-btn" style="text-decoration:none">
+          <span>🚨 Emergencias y Recargas 24/7</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+        <a href="{{ waAsesoriaHref }}" target="_blank" rel="noopener" onClick="{{ toggleWa }}" className="wa-btn" style="text-decoration:none">
+          <span>🛡️ Asesoría Técnica INDECI</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+    <button onClick="{{ toggleWa }}" style="position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;border:0;cursor:pointer">{{ waIconEl }}</button>
   </div>
   </sc-if>
 
@@ -714,10 +878,18 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px">
             <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
-              <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px">
-                <div style="font-size:12px;color:#8A9099;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">{{ m.l }}</div>
-                <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;line-height:1">{{ m.k }}</div>
-                <div style="font-family:'Saira';font-weight:600;font-size:12px;color:{{ m.col }};margin-top:8px">{{ m.d }}</div>
+              <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;display:flex;flex-direction:column;justify-content:space-between">
+                <div>
+                  <div style="font-size:12px;color:#8A9099;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">{{ m.l }}</div>
+                  <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;line-height:1">{{ m.k }}</div>
+                </div>
+                <!-- Sparkline SVG -->
+                <div style="height:32px;margin:12px 0 6px 0;opacity:0.85">
+                  <svg width="100%" height="100%" viewBox="0 0 100 30" preserveAspectRatio="none" style="display:block">
+                    <path d="{{ m.sparklinePath }}" fill="none" stroke="{{ m.sparklineCol }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <div style="font-family:'Saira';font-weight:600;font-size:12px;color:{{ m.col }};margin-top:2px">{{ m.d }}</div>
               </div>
             </sc-for>
           </div>
@@ -748,11 +920,30 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
                 </sc-for>
               </div>
             </div>
-            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
-              <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:18px">Stock bajo</div>
-              <sc-for list="{{ lowStock }}" as="p" hint-placeholder-count="3">
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div><div style="font-size:14px;color:#fff;font-weight:500">{{ p.name }}</div><div style="font-size:12px;color:#8A9099">{{ p.cat }}</div></div><div style="font-family:'Saira';font-weight:700;font-size:15px;color:#FFC107;flex-shrink:0;min-width:28px;text-align:right">{{ p.stock }}</div></div>
-              </sc-for>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <!-- Stock bajo -->
+              <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px">
+                <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:14px">Stock bajo</div>
+                <sc-for list="{{ lowStock }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div><div style="font-size:13.5px;color:#fff;font-weight:500">{{ p.name }}</div><div style="font-size:11.5px;color:#8A9099">{{ p.cat }}</div></div><div style="font-family:'Saira';font-weight:700;font-size:14px;color:#FFC107;flex-shrink:0;min-width:28px;text-align:right">{{ p.stock }}</div></div>
+                </sc-for>
+              </div>
+              
+              <!-- Bitácora de Actividades (Logs) -->
+              <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px">
+                <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:14px">Bitácora de Auditoría</div>
+                <div style="display:flex;flex-direction:column;gap:10px;max-height:220px;overflow-y:auto;padding-right:4px">
+                  <sc-for list="{{ logs }}" as="log" hint-placeholder-count="4">
+                    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px;align-items:flex-start">
+                      <div style="width:24px;height:24px;background:rgba(225,29,38,0.12);color:#E11D26;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0">{{ log.u }}</div>
+                      <div style="flex:1">
+                        <div style="color:#EAECEF;line-height:1.3">{{ log.desc }}</div>
+                        <div style="font-size:10.5px;color:#7E8591;margin-top:2px">{{ log.time }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -822,6 +1013,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Monto</th>
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Fecha</th>
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Estado</th>
+              <th style="padding:14px 20px;text-align:right">Acciones</th>
             </tr></thead>
             <tbody>
               <sc-for list="{{ quoteRows }}" as="q" hint-placeholder-count="5">
@@ -831,22 +1023,46 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
                   <td style="padding:15px 20px;font-family:'Saira';font-weight:700;font-size:14px;color:#fff">{{ q.monto }}</td>
                   <td style="padding:15px 20px;font-size:13px;color:#8A9099">{{ q.fecha }}</td>
                   <td style="padding:15px 20px"><span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:{{ q.col }};background:{{ q.bg }};padding:5px 11px;border-radius:2px">{{ q.estado }}</span></td>
+                  <td style="padding:15px 20px;text-align:right">
+                    <button onClick="{{ q.onOpenPdf }}" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:6px 11.5px;border-radius:3px;cursor:pointer;color:#9AA1AC;font-size:11px;display:inline-flex;align-items:center;gap:6px" style-hover="color:#fff;border-color:rgba(255,255,255,0.25)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF
+                    </button>
+                  </td>
                 </tr>
                 <sc-if value="{{ q.expanded }}" hint-placeholder-val="{{ false }}">
                 <tr style="border-top:1px solid rgba(255,255,255,.06);background:#101216">
-                  <td colspan="5" style="padding:22px 24px">
-                    <div style="display:flex;gap:34px;align-items:flex-end;flex-wrap:wrap">
-                      <div style="flex:1;min-width:220px">
-                        <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Detalle de la solicitud</div>
-                        <div style="font-size:14px;color:#EAECEF;line-height:1.6">{{ q.items }}</div>
+                  <td colspan="6" style="padding:22px 24px">
+                    <div style="display:flex;flex-direction:column;gap:18px">
+                      <!-- Descuento Sugerido -->
+                      <sc-if value="{{ q.hasDiscount }}" hint-placeholder-val="{{ false }}">
+                        <div style="background:rgba(255,193,7,0.06);border:1px solid rgba(255,193,7,0.2);border-radius:4px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+                          <div style="display:flex;align-items:center;gap:10px">
+                            <span style="font-size:18px">💰</span>
+                            <div>
+                              <div style="font-family:'Saira';font-weight:700;font-size:13px;color:#FFC107">Descuento Sugerido por Volumen Detectado</div>
+                              <div style="font-size:12px;color:#A6ADB8">Este requerimiento califica para un <span style="font-weight:700;color:#fff">{{ q.discountPct }}% de descuento</span>.</div>
+                            </div>
+                          </div>
+                          <div style="text-align:right">
+                            <div style="font-size:11px;color:#8A9099">Descuento: <span style="font-weight:600;color:#FF6168">{{ q.discountValFormatted }}</span></div>
+                            <div style="font-family:'Saira';font-weight:700;font-size:13.5px;color:#4ADE80">Monto sugerido: {{ q.finalValFormatted }}</div>
+                          </div>
+                        </div>
+                      </sc-if>
+
+                      <div style="display:flex;gap:34px;align-items:flex-end;flex-wrap:wrap">
+                        <div style="flex:1;min-width:220px">
+                          <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Detalle de la solicitud</div>
+                          <div style="font-size:14px;color:#EAECEF;line-height:1.6">{{ q.items }}</div>
+                        </div>
+                        <div>
+                          <label style="display:block;font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Cambiar estado</label>
+                          <select value="{{ q.estado }}" onChange="{{ q.onStatusChange }}" style="background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:9px 12px;color:#fff;font-size:13px">
+                            <sc-for list="{{ quoteEstadoOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                          </select>
+                        </div>
+                        <button onClick="{{ q.onArchive }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#FF6168;background:rgba(255,97,104,.1);border:1px solid rgba(255,97,104,.3);padding:10px 16px;cursor:pointer;border-radius:2px">Archivar</button>
                       </div>
-                      <div>
-                        <label style="display:block;font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;margin-bottom:6px">Cambiar estado</label>
-                        <select value="{{ q.estado }}" onChange="{{ q.onStatusChange }}" style="background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:9px 12px;color:#fff;font-size:13px">
-                          <sc-for list="{{ quoteEstadoOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
-                        </select>
-                      </div>
-                      <button onClick="{{ q.onArchive }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#FF6168;background:rgba(255,97,104,.1);border:1px solid rgba(255,97,104,.3);padding:10px 16px;cursor:pointer;border-radius:2px">Archivar</button>
                     </div>
                   </td>
                 </tr>
@@ -1122,6 +1338,125 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   </div>
   </sc-if>
 
+  <!-- PDF Preview Modal -->
+  <sc-if value="{{ pdfModalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closePdf }}" style="position:fixed;inset:0;background:rgba(12,13,16,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:150;padding:24px">
+    <div onClick="{{ stopProp }}" style="background:#15171C;border:1px solid rgba(255,255,255,.1);border-radius:6px;width:100%;max-width:750px;box-shadow:0 24px 60px rgba(0,0,0,0.8);display:flex;flex-direction:column;max-height:90vh;overflow:hidden">
+      <!-- Modal Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6168" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff">Previsualización de Documento PDF</span>
+        </div>
+        <button onClick="{{ closePdf }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:4px" style-hover="color:#fff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Simulated PDF Sheet) -->
+      <div style="flex:1;overflow-y:auto;padding:32px;background:#23262F;display:flex;justify-content:center">
+        <!-- PDF Page -->
+        <sc-if value="{{ hasPdfQuoteData }}" hint-placeholder-val="{{ true }}">
+        <div id="pdf-printable-area" style="background:#ffffff;color:#1e293b;width:100%;max-width:620px;padding:40px;box-shadow:0 8px 20px rgba(0,0,0,0.3);font-family:Arial, sans-serif;font-size:12px;line-height:1.5;box-sizing:border-box">
+          <!-- Header -->
+          <div style="display:flex;justify-content:space-between;border-bottom:2px solid #E11D26;padding-bottom:15px;margin-bottom:20px">
+            <div>
+              <div style="font-weight:bold;font-size:18px;color:#0f172a;letter-spacing:-0.02em">CORPORACIÓN BRIZUVIC E.I.R.L.</div>
+              <div style="font-size:10px;color:#64748b;margin-top:2px">RUC: 20602073476 · Seguridad Industrial Integrada</div>
+              <div style="font-size:10px;color:#64748b">Av. Argentina 327, Cercado de Lima · ventas@brizuvic.com</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:bold;font-size:14px;color:#E11D26">COTIZACIÓN OFICIAL</div>
+              <div style="font-size:11px;color:#0f172a;font-weight:bold;margin-top:4px">Nº COT-2026-{{ pdfQuoteData.id }}</div>
+              <div style="font-size:10px;color:#64748b">Fecha Emisión: {{ pdfQuoteData.fecha }} Jun 2026</div>
+            </div>
+          </div>
+
+          <!-- Customer info -->
+          <div style="margin-bottom:20px;background:#f8fafc;padding:12px 15px;border-radius:4px;border-left:3px solid #64748b">
+            <div style="font-weight:bold;color:#334155;margin-bottom:4px;text-transform:uppercase">DATOS DEL CLIENTE</div>
+            <div style="font-size:12px;font-weight:bold;color:#0f172a">{{ pdfQuoteData.cliente }}</div>
+            <div style="color:#475569;margin-top:2px">Contacto: {{ pdfQuoteData.cont }}</div>
+            <div style="color:#475569">Validez de oferta: 30 días calendario</div>
+          </div>
+
+          <!-- Document details table -->
+          <table style="width:100%;border-collapse:collapse;margin-bottom:25px">
+            <thead>
+              <tr style="background:#f1f5f9;text-align:left;border-bottom:1px solid #cbd5e1">
+                <th style="padding:8px 10px;font-weight:bold;color:#334155">Concepto / Descripción del Requerimiento</th>
+                <th style="padding:8px 10px;font-weight:bold;color:#334155;text-align:right;width:120px">Total Unitario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #e2e8f0">
+                <td style="padding:10px;color:#334155">
+                  <div style="font-weight:bold;color:#0f172a">{{ pdfQuoteData.items }}</div>
+                  <div style="font-size:10.5px;color:#64748b;margin-top:2px">Suministro de equipamiento homologado con certificación de calidad según normativa técnica nacional vigente. Incluye certificados oficiales de garantía.</div>
+                </td>
+                <td style="padding:10px;text-align:right;font-weight:bold;color:#0f172a;vertical-align:top">{{ pdfQuoteData.monto }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Totals block -->
+          <div style="display:flex;justify-content:flex-end">
+            <div style="width:240px">
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0">
+                <span style="color:#64748b">Monto Bruto:</span>
+                <span style="font-weight:bold;color:#334155">{{ pdfQuoteData.monto }}</span>
+              </div>
+              <sc-if value="{{ pdfQuoteData.hasDiscount }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0;color:#dc2626">
+                  <span>Descuento Volumen ({{ pdfQuoteData.discountPct }}%):</span>
+                  <span style="font-weight:bold">- {{ pdfQuoteData.discountValFormatted }}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;font-weight:bold;color:#0f172a">
+                  <span>Total Neto:</span>
+                  <span style="color:#16a34a">{{ pdfQuoteData.finalValFormatted }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ !pdfQuoteData.hasDiscount }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;font-weight:bold;color:#0f172a">
+                  <span>Total Neto:</span>
+                  <span style="color:#0f172a">{{ pdfQuoteData.monto }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- Footer terms -->
+          <div style="margin-top:40px;border-top:1px solid #cbd5e1;padding-top:15px;font-size:9.5px;color:#64748b;line-height:1.4">
+            <div style="font-weight:bold;color:#475569;margin-bottom:3px">TÉRMINOS Y CONDICIONES:</div>
+            <div>1. Forma de pago: Crédito 30 días previa orden de compra autorizada.</div>
+            <div>2. Los precios incluyen I.G.V. (18%).</div>
+            <div>3. La entrega se coordinará de acuerdo al stock de planta (estimado de 3 a 5 días hábiles).</div>
+          </div>
+
+          <!-- Signatures block -->
+          <div style="margin-top:45px;display:flex;justify-content:space-around">
+            <div style="text-align:center;width:150px">
+              <div style="border-top:1px solid #94a3b8;margin-top:30px;padding-top:6px;font-size:10px;color:#64748b">Firma Autorizada Brizuvic</div>
+            </div>
+            <div style="text-align:center;width:150px">
+              <div style="border-top:1px solid #94a3b8;margin-top:30px;padding-top:6px;font-size:10px;color:#64748b">Aceptado por el Cliente</div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display:flex;justify-content:flex-end;gap:12px;padding:16px 24px;border-top:1px solid rgba(255,255,255,.08);background:#15171C">
+        <button onClick="{{ closePdf }}" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:10px 18px;cursor:pointer;border-radius:2px">Cerrar</button>
+        <button onClick="window.print()" style="font-family:'Barlow';font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:10px 20px;cursor:pointer;border-radius:2px;display:inline-flex;align-items:center;gap:6px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg> Imprimir / Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
@@ -1135,6 +1470,14 @@ class Component extends DCLogic {
     contactForm:{name:'',company:'',email:'',phone:'',message:''}, contactSent:false,
     sectionsOn:{clientes:true,testimonios:true,galeria:true,blogPreview:true},
     cart:[], cartOpen:false, wizardStep:1, wizardRisk:null, wizardSize:null, wizardResult:null,
+    waOpen:false, searchQuery:'', maxPrice:800, activeStep:'01',
+    pdfModalOpen:false, pdfQuoteData:null,
+    logs:[
+      {id:'l1',time:'Hace 5 mins',u:'ZH',desc:'Zuleica Huicho modificó el stock del Casco V-Gard'},
+      {id:'l2',time:'Hace 1 hora',u:'ZH',desc:'Cotización #1 de Minera Las Bambas pasó a "En proceso"'},
+      {id:'l3',time:'Hace 3 horas',u:'ZH',desc:'Se agregó el nuevo producto "Cinta Antideslizante"'},
+      {id:'l4',time:'Ayer',u:'ZH',desc:'Se actualizó el banner principal en el CMS'},
+    ],
     company:{
       name:'Corporación Brizuvic E.I.R.L.', ruc:'20602073476', address:'Av. Argentina 327, Cercado de Lima',
       phone1:'(01) 759-4690', phone2:'961 823 490', email:'ventas@brizuvic.com',
@@ -1325,10 +1668,35 @@ class Component extends DCLogic {
     };
     const [bg,col]=map[q.estado]||map['Nuevo'];
     const expanded = this.state.expandedQuoteId===q.id;
-    return { ...q, bg, col, monto:'S/ '+Number(q.monto).toLocaleString('en-US'), expanded,
+    const rawMonto = Number(q.monto);
+    const hasDiscount = rawMonto > 2000;
+    const discountPct = rawMonto > 10000 ? 15 : (rawMonto > 5000 ? 10 : 5);
+    const discountVal = hasDiscount ? rawMonto * (discountPct / 100) : 0;
+    const finalVal = rawMonto - discountVal;
+
+    return { 
+      ...q, bg, col, 
+      monto:'S/ '+rawMonto.toLocaleString('en-US'), 
+      expanded,
+      hasDiscount,
+      discountPct,
+      discountValFormatted:'S/ '+discountVal.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+      finalValFormatted:'S/ '+finalVal.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
       onToggle:()=>this.setState({expandedQuoteId:expanded?null:q.id}),
       onStatusChange:(e)=>this.setState({quotes:this.state.quotes.map(x=>x.id===q.id?{...x,estado:e.target.value}:x)}),
-      onArchive:()=>this.removeItem('quotes',q.id) };
+      onArchive:()=>this.removeItem('quotes',q.id),
+      onOpenPdf:(e)=>{ e.stopPropagation(); this.openPdf(q); } 
+    };
+  }
+
+  toggleWa() {
+    this.setState({ waOpen: !this.state.waOpen });
+  }
+  openPdf(quote) {
+    this.setState({ pdfModalOpen: true, pdfQuoteData: quote });
+  }
+  closePdf() {
+    this.setState({ pdfModalOpen: false, pdfQuoteData: null });
   }
 
   listKeyFor(type){ return {product:'products',service:'services',blog:'blogPosts',testimonial:'testimonials'}[type]; }
@@ -1399,7 +1767,14 @@ class Component extends DCLogic {
     const catChips=cats.map(c=>{const on=s.cat===c;return {label:c,on,col:on?'#fff':'#9AA1AC',bg:on?'#E11D26':'transparent',bd:on?'#E11D26':'rgba(255,255,255,.14)',onClick:()=>this.setState({cat:c})};});
 
     const all=this.allProducts;
-    const products=all.filter(p=>s.cat==='Todos'||p.cat===s.cat);
+    const products=all.filter(p => {
+      const matchCat = s.cat === 'Todos' || p.cat === s.cat;
+      const qText = s.searchQuery.toLowerCase();
+      const matchSearch = !qText || p.name.toLowerCase().includes(qText) || p.cat.toLowerCase().includes(qText) || p.sub.toLowerCase().includes(qText);
+      const priceNum = parseFloat(p.price.replace('S/ ', '').replace(',', ''));
+      const matchPrice = isNaN(priceNum) || priceNum <= s.maxPrice;
+      return matchCat && matchSearch && matchPrice;
+    });
     const featured=all.filter(p=>p.dest);
 
     const categoryCards=[
@@ -1412,6 +1787,20 @@ class Component extends DCLogic {
     const mkNav=(id)=>({col:s.adminPage===id?'#fff':'#9AA1AC',bg:s.adminPage===id?'rgba(225,29,38,.14)':'transparent',bar:s.adminPage===id?'#E11D26':'transparent',onClick:()=>this.setState({adminPage:id})});
     const nav={dashboard:mkNav('dashboard'),productos:mkNav('productos'),servicios:mkNav('servicios'),cotizaciones:mkNav('cotizaciones'),contenido:mkNav('contenido'),blog:mkNav('blog'),config:mkNav('config')};
     const titles={dashboard:'Dashboard',productos:'Productos',servicios:'Servicios',cotizaciones:'Cotizaciones',contenido:'Contenido del home',blog:'Blog',config:'Configuración'};
+    const steps = [
+      {num:'01',t:'Diagnóstico',d:'Evaluamos riesgos y necesidades reales de tu operación.',
+       docs:['Informe de vulnerabilidades','Análisis de riesgos preliminar','Recomendaciones normativas NTP']},
+      {num:'02',t:'Propuesta',d:'Cotización detallada por puesto y normativa aplicable.',
+       docs:['Cotización formal y plazos','Fichas técnicas de EPP','Plan preliminar de instalación']},
+      {num:'03',t:'Implementación',d:'Entrega de EPP, instalación y recarga en sitio.',
+       docs:['EPP certificados entregados','Actas de conformidad de instalación','Protocolo de recarga física']},
+      {num:'04',t:'Certificación',d:'Documentación NTP y soporte continuo post-venta.',
+       docs:['Certificados oficiales firmados','Planos de evacuación y señales','Dossier técnico para INDECI']}
+    ].map(item => ({
+      ...item,
+      on: s.activeStep === item.num,
+      onClick: () => this.setState({ activeStep: item.num })
+    }));
 
     const newBtnMap={productos:{type:'product',label:'+ Nuevo producto'},servicios:{type:'service',label:'+ Nuevo servicio'},blog:{type:'blog',label:'+ Nuevo artículo'}};
     const newBtn=newBtnMap[s.adminPage]||null;
@@ -1428,6 +1817,21 @@ class Component extends DCLogic {
 
     return {
       isSite, isAdmin,
+      searchQuery: s.searchQuery,
+      maxPrice: s.maxPrice,
+      onSearchChange: (e) => this.setState({ searchQuery: e.target.value }),
+      onPriceChange: (e) => this.setState({ maxPrice: Number(e.target.value) }),
+      waOpen: s.waOpen,
+      toggleWa: () => this.toggleWa(),
+      waQuoteHref: 'https://wa.me/' + s.company.whatsapp + '?text=' + encodeURIComponent('Hola, me gustaría cotizar equipos de seguridad y protección para mi empresa.'),
+      waEmergenciaHref: 'https://wa.me/' + s.company.whatsapp + '?text=' + encodeURIComponent('Hola, requiero atención inmediata para una de emergencia / recarga de extintores de urgencia.'),
+      waAsesoriaHref: 'https://wa.me/' + s.company.whatsapp + '?text=' + encodeURIComponent('Hola, necesito asesoría técnica para el cumplimiento de la normativa de seguridad de INDECI.'),
+      waCloseIconEl: this.el(this.ICON.x),
+      pdfModalOpen: s.pdfModalOpen,
+      pdfQuoteData: s.pdfQuoteData ? this.decorateQuote(s.pdfQuoteData) : null,
+      hasPdfQuoteData: !!s.pdfQuoteData,
+      closePdf: () => this.closePdf(),
+      logs: s.logs,
       homeOn:s.sitePage==='home', catOn:s.sitePage==='catalogo', servOn:s.sitePage==='servicios', siteBlogOn:s.sitePage==='blog', nosOn:s.sitePage==='nosotros', conOn:s.sitePage==='contacto',
       dashOn:s.adminPage==='dashboard', prodOn:s.adminPage==='productos', svOn:s.adminPage==='servicios', cotOn:s.adminPage==='cotizaciones', contOn:s.adminPage==='contenido', blogOn:s.adminPage==='blog', cfgOn:s.adminPage==='config',
       siteNav, catChips, activeCat:s.cat, products, productCount:products.length, featured, allProducts:all, categoryCards, nav, adminTitle:titles[s.adminPage],
@@ -1450,12 +1854,7 @@ class Component extends DCLogic {
       certCards:[{k:'NTP 350.043',l:'Recarga de extintores'},{k:'ISO 9001:2015',l:'Gestión de calidad'},{k:'INDECI',l:'Defensa civil'},{k:'OSHA',l:'Estándar internacional'}],
       stats:[{k:'+12',l:'años en el rubro'},{k:'+500',l:'empresas atendidas'},{k:'24/7',l:'emergencias'},{k:'100%',l:'extintores certificados'}],
       services:s.services.map(sv=>this.decorateService(sv)),
-      steps:[
-        {num:'01',t:'Diagnóstico',d:'Evaluamos riesgos y necesidades reales de tu operación.'},
-        {num:'02',t:'Propuesta',d:'Cotización detallada por puesto y normativa aplicable.'},
-        {num:'03',t:'Implementación',d:'Entrega de EPP, instalación y recarga en sitio.'},
-        {num:'04',t:'Certificación',d:'Documentación NTP y soporte continuo post-venta.'},
-      ],
+      steps: steps,
       values:[
         {t:'Cumplimiento garantizado',d:'Cada entrega llega con documentación válida ante INDECI y auditorías.',iconEl:this.el(this.ICON.sign)},
         {t:'Respuesta 24/7',d:'Atendemos emergencias y recargas urgentes en todo Lima y provincias.',iconEl:this.el(this.ICON.fire)},
@@ -1468,10 +1867,10 @@ class Component extends DCLogic {
         {label:'RUC',value:s.company.ruc,iconEl:this.el('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 9V6a2 2 0 0 1 2-2h6l2 3"/></svg>')},
       ],
       metrics:[
-        {k:'S/ 124,500',l:'Ventas del mes',d:'+12.4% vs. mayo',col:'#4ADE80'},
-        {k:'38',l:'Cotizaciones nuevas',d:'+9 esta semana',col:'#4ADE80'},
-        {k:'212',l:'Productos activos',d:'4 categorías',col:'#9AA1AC'},
-        {k:String(all.filter(p=>Number(p.stock)<15).length),l:'Stock bajo',d:'Requieren atención',col:'#FFC107'},
+        {k:'S/ 124,500',l:'Ventas del mes',d:'+12.4% vs. mayo',col:'#4ADE80',sparklinePath:'M 0 20 L 20 15 L 40 25 L 60 10 L 80 18 L 100 5',sparklineCol:'#4ADE80'},
+        {k:'38',l:'Cotizaciones nuevas',d:'+9 esta semana',col:'#4ADE80',sparklinePath:'M 0 25 L 20 18 L 40 10 L 60 22 L 80 12 L 100 8',sparklineCol:'#4ADE80'},
+        {k:'212',l:'Productos activos',d:'4 categorías',col:'#9AA1AC',sparklinePath:'M 0 15 L 20 15 L 40 15 L 60 15 L 80 15 L 100 15',sparklineCol:'#9AA1AC'},
+        {k:String(all.filter(p=>Number(p.stock)<15).length),l:'Stock bajo',d:'Requieren atención',col:'#FFC107',sparklinePath:'M 0 5 L 20 12 L 40 8 L 60 20 L 80 15 L 100 25',sparklineCol:'#FFC107'},
       ],
       bars:[{m:'Ene',h:'52%'},{m:'Feb',h:'63%'},{m:'Mar',h:'47%'},{m:'Abr',h:'78%'},{m:'May',h:'69%'},{m:'Jun',h:'92%'},{m:'Jul',h:'58%'}],
       lowStock:all.filter(p=>Number(p.stock)<15).map(p=>({name:p.name,cat:p.cat,stock:p.stock})),
