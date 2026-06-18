@@ -17,11 +17,33 @@ body{margin:0}
 ::selection{background:#E11D26;color:#fff}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-thumb{background:#2A2E36;border-radius:6px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 input,textarea,select,button{font-family:inherit}
 input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
-/* --- PREMIUM STYLES --- */
+/* --- PREMIUM STYLES & ANIMATIONS --- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes floatHero {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes waPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+@keyframes badgePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
 .premium-card {
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s !important;
 }
@@ -30,8 +52,63 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   border-color: rgba(225, 29, 38, 0.4) !important;
   box-shadow: 0 12px 30px rgba(225, 29, 38, 0.12) !important;
 }
+.premium-card svg {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.premium-card:hover svg {
+  transform: scale(1.15) rotate(-3deg);
+}
+
 .page-fade {
   animation: fadeUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Entrance classes */
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.delay-1 { animation-delay: 0.12s; }
+.delay-2 { animation-delay: 0.24s; }
+.delay-3 { animation-delay: 0.36s; }
+.delay-4 { animation-delay: 0.48s; }
+.delay-5 { animation-delay: 0.6s; }
+
+/* Float classes */
+.float-hero-visual {
+  animation: floatHero 6s ease-in-out infinite;
+}
+
+/* Primary Button Animation */
+.btn-primary {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(225, 29, 38, 0.35);
+  background: #f12a33 !important;
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button Animation */
+.btn-secondary {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* Cart Badge Pop */
+.badge-pop-active {
+  animation: badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Cart Drawer */
@@ -76,7 +153,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   padding: 14px 18px;
   margin-bottom: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,12 +161,18 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 .wizard-option:hover {
   background: rgba(225, 29, 38, 0.06);
   border-color: rgba(225, 29, 38, 0.3);
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 .wizard-option.selected {
   background: rgba(225, 29, 38, 0.12);
   border-color: #E11D26;
   font-weight: 600;
+}
+.wizard-option svg {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.wizard-option:hover svg {
+  transform: translateX(3px) scale(1.1);
 }
 
 /* WhatsApp Bubble */
@@ -149,13 +232,40 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   background: rgba(37, 211, 102, 0.08);
   border-color: #25D366;
 }
+.wa-trigger-btn {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+}
+.wa-trigger-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.45);
+}
 
-/* Backlight Glows */
+/* Backlight Glows with pulsating pseudo-elements */
 .backlight-red {
-  background: radial-gradient(120% 90% at 80% -10%, rgba(225, 29, 38, 0.1) 0%, rgba(12, 13, 16, 0) 60%) !important;
+  position: relative;
+  background: #0C0D10 !important;
+}
+.backlight-red::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 80% -10%, rgba(225, 29, 38, 0.1) 0%, rgba(12, 13, 16, 0) 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glowPulse 8s ease-in-out infinite;
 }
 .backlight-yellow {
-  background: radial-gradient(100% 100% at 20% 20%, rgba(255, 193, 7, 0.06) 0%, rgba(12, 13, 16, 0) 70%) !important;
+  position: relative;
+  background: #111317 !important;
+}
+.backlight-yellow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(100% 100% at 20% 20%, rgba(255, 193, 7, 0.05) 0%, rgba(12, 13, 16, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glowPulse 10s ease-in-out infinite;
 }
 
 /* Accordion Steps (Servicios) */
@@ -177,10 +287,11 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   border-color: rgba(225,29,38,0.25);
   border-top-color: #E11D26;
 }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+.step-num {
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.step-card:hover .step-num {
+  transform: scale(1.08);
 }
 </style>
 </helmet>
@@ -216,21 +327,21 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 80%)"></div>
         <div style="position:relative;max-width:1200px;margin:0 auto;padding:74px 28px 84px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
           <div>
-            <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(225,29,38,.12);border:1px solid rgba(225,29,38,.3);color:#FF6168;font-family:'Barlow';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:2px;margin-bottom:24px"><span style="width:7px;height:7px;background:#E11D26;border-radius:50%;box-shadow:0 0 8px #E11D26"></span>Seguridad industrial · Lima, Perú</div>
-            <h1 style="font-family:'Saira';font-weight:800;font-size:60px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:0 0 22px;text-wrap:balance">{{ heroTitle }}</h1>
-            <p style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
-            <div style="display:flex;gap:13px;flex-wrap:wrap">
-              <button onClick="{{ goCat }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 28px;cursor:pointer;border-radius:2px">Ver catálogo</button>
-              <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
+            <div class="animate-fade-in-up" style="display:inline-flex;align-items:center;gap:9px;background:rgba(225,29,38,.12);border:1px solid rgba(225,29,38,.3);color:#FF6168;font-family:'Barlow';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:2px;margin-bottom:24px"><span style="width:7px;height:7px;background:#E11D26;border-radius:50%;box-shadow:0 0 8px #E11D26"></span>Seguridad industrial · Lima, Perú</div>
+            <h1 class="animate-fade-in-up delay-1" style="font-family:'Saira';font-weight:800;font-size:60px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:0 0 22px;text-wrap:balance">{{ heroTitle }}</h1>
+            <p class="animate-fade-in-up delay-2" style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
+            <div class="animate-fade-in-up delay-3" style="display:flex;gap:13px;flex-wrap:wrap">
+              <button onClick="{{ goCat }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 28px;cursor:pointer;border-radius:2px">Ver catálogo</button>
+              <button onClick="{{ goContact }}" class="btn-secondary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
             </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px">
+            <div class="animate-fade-in-up delay-4" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px">
               <sc-for list="{{ certs }}" as="c" hint-placeholder-count="5">
                 <span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;color:#7E8591;border:1px solid rgba(255,255,255,.12);padding:6px 12px;border-radius:2px">{{ c }}</span>
               </sc-for>
             </div>
           </div>
           <!-- Hero visual -->
-          <div style="position:relative;aspect-ratio:4/4.4;border-radius:4px;overflow:hidden;background:linear-gradient(160deg,#23262F,#15171C);border:1px solid rgba(255,255,255,.09)">
+          <div class="float-hero-visual" style="position:relative;aspect-ratio:4/4.4;border-radius:4px;overflow:hidden;background:linear-gradient(160deg,#23262F,#15171C);border:1px solid rgba(255,255,255,.09)">
             <div style="position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(45deg,#FFC107 0 13px,#1A1C22 13px 26px);z-index:2"></div>
             {{ heroImgBgEl }}
             <sc-if value="{{ !hasHeroImg }}" hint-placeholder-val="{{ true }}">
@@ -605,7 +716,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
           <div onClick="{{ s.onClick }}" class="step-card {{ s.on ? 'active' : '' }}" style="display:flex;flex-direction:column;justify-content:space-between;min-height:180px">
             <div>
-              <div style="font-family:'Saira';font-weight:800;font-size:26px;color:#2A2E36;margin-bottom:14px;transition:color 0.2s" style-hover="color:#E11D26">{{ s.num }}</div>
+              <div class="step-num" style="font-family:'Saira';font-weight:800;font-size:26px;color:#2A2E36;margin-bottom:14px;transition:color 0.2s" style-hover="color:#E11D26">{{ s.num }}</div>
               <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:8px">{{ s.t }}</div>
               <div style="font-size:13.5px;line-height:1.5;color:#8A9099">{{ s.d }}</div>
             </div>
@@ -734,7 +845,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
       </svg>
       <sc-if value="{{ !cartIsEmpty }}" hint-placeholder-val="{{ false }}">
-        <span style="position:absolute;top:-4px;right:-4px;background:#FFC107;color:#15171C;font-family:'Saira';font-weight:700;font-size:11px;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">{{ cartCount }}</span>
+        <span key="{{ cartCount }}" class="badge-pop-active" style="position:absolute;top:-4px;right:-4px;background:#FFC107;color:#15171C;font-family:'Saira';font-weight:700;font-size:11px;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">{{ cartCount }}</span>
       </sc-if>
     </button>
 
@@ -811,7 +922,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
     <div class="wa-bubble {{ waOpen ? 'open' : '' }}">
       <div class="wa-header" style="background:#25D366;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;color:#fff">
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;animation:pulse 1.5s infinite"></div>
+          <div style="width:10px;height:10px;background:#fff;border-radius:50%;animation:waPulse 1.8s infinite"></div>
           <div>
             <div style="font-family:'Saira';font-weight:700;font-size:14px;line-height:1.2">Soporte Brizuvic</div>
             <div style="font-size:11px;opacity:0.9">En línea - Respuesta inmediata</div>
@@ -838,7 +949,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         </a>
       </div>
     </div>
-    <button onClick="{{ toggleWa }}" style="position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;border:0;cursor:pointer">{{ waIconEl }}</button>
+    <button onClick="{{ toggleWa }}" class="wa-trigger-btn" style="position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.45);color:#fff;border:0;cursor:pointer">{{ waIconEl }}</button>
   </div>
   </sc-if>
 
