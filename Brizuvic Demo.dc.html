@@ -411,6 +411,141 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   0% { transform: scale(0.3); opacity: 1; }
   100% { transform: scale(1.5); opacity: 0; }
 }
+
+/* Fast Quote Modal & CTA Button Styles */
+.pulse-btn-cotiza {
+  position: relative;
+  font-family: 'Barlow';
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #fff;
+  background: #E11D26;
+  border: 0;
+  padding: 11px 20px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 0 rgba(225, 29, 38, 0.5);
+  animation: pulseBorder 2s infinite;
+}
+.pulse-btn-cotiza:hover {
+  background: #f12a33;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(225, 29, 38, 0.4);
+}
+@keyframes pulseBorder {
+  0% { box-shadow: 0 0 0 0 rgba(225, 29, 38, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(225, 29, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(225, 29, 38, 0); }
+}
+.fq-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 11, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  animation: fqFadeIn 0.3s forwards ease-out;
+}
+.fq-modal {
+  background: rgba(18, 20, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95);
+  opacity: 0;
+  animation: fqModalScale 0.3s 0.05s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes fqFadeIn {
+  to { opacity: 1; }
+}
+@keyframes fqModalScale {
+  to { transform: scale(1); opacity: 1; }
+}
+.fq-option-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 22px;
+  cursor: pointer;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  transition: all 0.25s ease;
+}
+.fq-option-card:hover {
+  background: rgba(225, 29, 38, 0.05);
+  border-color: rgba(225, 29, 38, 0.3);
+  transform: translateY(-2px);
+}
+.fq-option-card.selected {
+  background: rgba(225, 29, 38, 0.08);
+  border-color: #E11D26;
+  box-shadow: 0 0 12px rgba(225, 29, 38, 0.15);
+}
+.fq-pill-checkbox {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #A6ADB8;
+  font-family: 'Barlow';
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fq-pill-checkbox:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.fq-pill-checkbox.active {
+  background: rgba(225, 29, 38, 0.12);
+  border-color: #E11D26;
+  color: #fff;
+}
+.fq-input {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.25s ease;
+}
+.fq-input:focus {
+  border-color: #E11D26 !important;
+  box-shadow: 0 0 8px rgba(225, 29, 38, 0.25);
+  background: rgba(18, 20, 26, 0.98);
+}
+.fq-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.fq-progress-fill {
+  height: 100%;
+  background: #E11D26;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 </style>
 </helmet>
 
@@ -433,7 +568,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             <button onClick="{{ n.onClick }}" style="font-family:'Barlow';font-weight:600;font-size:13px;letter-spacing:.04em;color:{{ n.col }};background:transparent;border:0;border-bottom:2px solid {{ n.bar }};padding:9px 14px;cursor:pointer;text-transform:uppercase;transition:color .15s">{{ n.label }}</button>
           </sc-for>
         </nav>
-        <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:#E11D26;border:0;padding:11px 20px;cursor:pointer;border-radius:2px">Cotiza ahora</button>
+        <button onClick="{{ openFq }}" class="pulse-btn-cotiza">Cotiza ahora</button>
       </div>
     </header>
 
@@ -450,7 +585,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             <p class="animate-fade-in-up delay-2" style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
             <div class="animate-fade-in-up delay-3" style="display:flex;gap:13px;flex-wrap:wrap">
               <button onClick="{{ goCat }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 28px;cursor:pointer;border-radius:2px">Ver catálogo</button>
-              <button onClick="{{ goContact }}" class="btn-secondary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
+              <button onClick="{{ openFq }}" class="btn-secondary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
             </div>
             <div class="animate-fade-in-up delay-4" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px">
               <sc-for list="{{ certs }}" as="c" hint-placeholder-count="5">
@@ -723,7 +858,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
           <div style="position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(45deg,#FFC107 0 14px,#15171C 14px 28px)"></div>
           <h2 style="font-family:'Saira';font-weight:800;font-size:40px;color:#fff;margin:0 0 12px;letter-spacing:-.01em">¿Listo para certificar tu empresa?</h2>
           <p style="font-size:17px;color:#A6ADB8;max-width:560px;margin:0 auto 28px">Recibe una cotización a medida en menos de 24 horas hábiles.</p>
-          <button onClick="{{ goContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:16px 34px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
+          <button onClick="{{ openFq }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:16px 34px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
         </div>
       </section>
 
@@ -2112,6 +2247,243 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   </div>
   </sc-if>
 
+  <!-- Modal de Cotización Rápida B2B -->
+  <sc-if value="{{ fqOpen }}">
+    <div onClick="{{ closeFq }}" class="fq-overlay">
+      <div onClick="{{ stopProp }}" class="fq-modal">
+
+        <!-- Modal Header -->
+        <div style="padding:22px 28px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;letter-spacing:-.01em;">Cotizador Inteligente B2B</span>
+              <span style="background:rgba(225,29,38,.12);border:1px solid rgba(225,29,38,.3);color:#FF6168;font-family:'Barlow';font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:2px;">Respuesta &lt; 24h</span>
+            </div>
+            <div style="width:360px;">
+              <div class="fq-progress-bar">
+                <div class="fq-progress-fill" style="width:{{ fqStep === 1 ? '25%' : (fqStep === 2 ? '50%' : (fqStep === 3 ? '75%' : '100%')) }}"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#8A9099;margin-top:5px;font-family:'Barlow';font-weight:600;text-transform:uppercase;letter-spacing:.04em;">
+                <span>1. Selección</span>
+                <span>2. Especificación</span>
+                <span>3. Datos de contacto</span>
+                <span>4. Éxito</span>
+              </div>
+            </div>
+          </div>
+          <button onClick="{{ closeFq }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:6px;border-radius:3px;transition:color 0.2s" style-hover="color:#fff">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- STEP 1: SELECT CHANNEL -->
+        <sc-if value="{{ fqIsStep1 }}">
+          <div style="padding:28px;display:flex;flex-direction:column;gap:18px;">
+            <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:4px;">¿Qué tipo de cotización deseas realizar?</div>
+
+            <div onClick="()=>this.setFqType('products')" class="fq-option-card">
+              <div style="width:44px;height:44px;border-radius:4px;background:rgba(225,29,38,.1);display:flex;align-items:center;justify-content:center;color:#E11D26;flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:4px;">Equipos de Seguridad y EPP</div>
+                <div style="font-size:13px;color:#8A9099;line-height:1.4;">Cotización por volumen de extintores, cascos, calzado, señalización y kits de emergencia.</div>
+              </div>
+            </div>
+
+            <div onClick="()=>this.setFqType('services')" class="fq-option-card">
+              <div style="width:44px;height:44px;border-radius:4px;background:rgba(255,193,7,.1);display:flex;align-items:center;justify-content:center;color:#FFC107;flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:4px;">Servicios Técnicos Especializados</div>
+                <div style="font-size:13px;color:#8A9099;line-height:1.4;">Recarga de extintores bajo NTP 350.043, inspección de redes húmedas (NFPA) o capacitaciones.</div>
+              </div>
+            </div>
+
+            <div onClick="()=>this.setFqType('callback')" class="fq-option-card">
+              <div style="width:44px;height:44px;border-radius:4px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;color:#4ADE80;flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:4px;">Llamada Técnica Express</div>
+                <div style="font-size:13px;color:#8A9099;line-height:1.4;">Un ingeniero técnico de nuestro equipo lo llamará en menos de 15 minutos para resolver dudas.</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- STEP 2: TECH DETAILS -->
+        <sc-if value="{{ fqIsStep2 }}">
+          <div style="padding:28px;display:flex;flex-direction:column;gap:20px;">
+
+            <sc-if value="{{ fqIsTypeProducts }}">
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Selecciona las categorías requeridas:</div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+                  <div onClick="()=>this.toggleFqCategory('EPP')" class="fq-pill-checkbox {{ fqCatActiveEPP ? 'active' : '' }}">
+                    <span style="font-size:16px;">🪖</span> EPP y Calzado
+                  </div>
+                  <div onClick="()=>this.toggleFqCategory('Extintores')" class="fq-pill-checkbox {{ fqCatActiveExtintores ? 'active' : '' }}">
+                    <span style="font-size:16px;">🧯</span> Extintores ABC/CO₂
+                  </div>
+                  <div onClick="()=>this.toggleFqCategory('Contra Incendio')" class="fq-pill-checkbox {{ fqCatActiveContraIncendio ? 'active' : '' }}">
+                    <span style="font-size:16px;">🔥</span> Gabinetes y Mangueras
+                  </div>
+                  <div onClick="()=>this.toggleFqCategory('Señalización')" class="fq-pill-checkbox {{ fqCatActiveSenalizacion ? 'active' : '' }}">
+                    <span style="font-size:16px;">🚪</span> Señales y Cintas
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">2. Volumen estimado del pedido:</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                  <div onClick="()=>this.setFqVolume('Bajo (1-10 unds)')" class="fq-pill-checkbox {{ fqVolBajo ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                    Bajo (1-10)
+                  </div>
+                  <div onClick="()=>this.setFqVolume('Corporativo (10-50 unds)')" class="fq-pill-checkbox {{ fqVolCorp ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                    Corp. (10-50)
+                  </div>
+                  <div onClick="()=>this.setFqVolume('Por Mayor (>50 unds)')" class="fq-pill-checkbox {{ fqVolMayor ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                    Al Mayor (&gt;50)
+                  </div>
+                </div>
+                <sc-if value="{{ fqVolMayor }}">
+                  <div style="margin-top:10px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);padding:10px;border-radius:2px;font-size:12px;color:#4ADE80;display:flex;align-items:center;gap:8px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Se aplicará un descuento especial de hasta el 15% por volumen mayorista.
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ fqIsTypeServices }}">
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Selecciona el servicio técnico:</div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+                  <div onClick="()=>this.setFqService('Recarga de extintores')" class="fq-pill-checkbox {{ fqSrvRecarga ? 'active' : '' }}">
+                    Recarga Extintores (NTP)
+                  </div>
+                  <div onClick="()=>this.setFqService('Sistemas contra incendio')" class="fq-pill-checkbox {{ fqSrvSistemas ? 'active' : '' }}">
+                    Sistemas Húmedos (NFPA)
+                  </div>
+                  <div onClick="()=>this.setFqService('Capacitaciones')" class="fq-pill-checkbox {{ fqSrvCapacitaciones ? 'active' : '' }}">
+                    Capacitación Brigadas
+                  </div>
+                  <div onClick="()=>this.setFqService('Equipamiento de EPP')" class="fq-pill-checkbox {{ fqSrvEquipamiento ? 'active' : '' }}">
+                    Consultoría EPP
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:8px;">2. Detalles técnicos o cantidad estimada:</div>
+                <textarea value="{{ fqValDetails }}" onChange="{{ onFqDetailsChange }}" placeholder="Ej: Recarga de 15 extintores PQS de 6kg, o inspección de planta de 2,000 m2..." class="fq-input" style="height:80px;resize:none;"></textarea>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ fqIsTypeCallback }}">
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Nivel de urgencia técnica:</div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+                  <div onClick="()=>this.setFqUrgency('Alta (Llamar ya)')" class="fq-pill-checkbox {{ fqUrgAlta ? 'active' : '' }}" style="justify-content:center;">
+                    🚨 Alta (Llamar ya)
+                  </div>
+                  <div onClick="()=>this.setFqUrgency('Normal')" class="fq-pill-checkbox {{ fqUrgNormal ? 'active' : '' }}" style="justify-content:center;">
+                    📅 Normal (En el día)
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:8px;">2. Breve consulta (opcional):</div>
+                <textarea value="{{ fqValDetails }}" onChange="{{ onFqDetailsChange }}" placeholder="Ej: Necesito saber si dictan charlas certificadas de primer auxilio..." class="fq-input" style="height:80px;resize:none;"></textarea>
+              </div>
+            </sc-if>
+
+            <div style="display:flex;justify-content:space-between;margin-top:10px;border-top:1px solid rgba(255,255,255,.06);padding-top:18px;">
+              <button onClick="()=>this.setFqStep(1)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
+                Atrás
+              </button>
+              <button onClick="()=>this.setFqStep(3)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
+                Siguiente
+              </button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- STEP 3: CONTACT FORM -->
+        <sc-if value="{{ fqIsStep3 }}">
+          <div style="padding:28px;display:flex;flex-direction:column;gap:18px;">
+            <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:4px;">Datos de Contacto Corporativo</div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div>
+                <label style="display:block;font-size:12px;color:#8A9099;margin-bottom:6px;font-family:'Barlow';font-weight:600;text-transform:uppercase;">Empresa o Razón Social *</label>
+                <input type="text" value="{{ fqValName }}" onChange="{{ onFqNameChange }}" placeholder="Ej: Minera Las Bambas" class="fq-input" />
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;color:#8A9099;margin-bottom:6px;font-family:'Barlow';font-weight:600;text-transform:uppercase;">RUC (Opcional)</label>
+                <input type="text" value="{{ fqValRuc }}" onChange="{{ onFqRucChange }}" placeholder="Ej: 20123456789" class="fq-input" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div>
+                <label style="display:block;font-size:12px;color:#8A9099;margin-bottom:6px;font-family:'Barlow';font-weight:600;text-transform:uppercase;">Correo Electrónico *</label>
+                <input type="email" value="{{ fqValEmail }}" onChange="{{ onFqEmailChange }}" placeholder="compras@empresa.com" class="fq-input" />
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;color:#8A9099;margin-bottom:6px;font-family:'Barlow';font-weight:600;text-transform:uppercase;">Teléfono / Celular *</label>
+                <input type="tel" value="{{ fqValPhone }}" onChange="{{ onFqPhoneChange }}" placeholder="987 654 321" class="fq-input" />
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:#5A616C;line-height:1.4;">
+              * Campos obligatorios. Su información técnica será tratada con confidencialidad absoluta bajo la Ley N° 29733 de Protección de Datos Personales.
+            </div>
+
+            <div style="display:flex;justify-content:space-between;margin-top:10px;border-top:1px solid rgba(255,255,255,.06);padding-top:18px;">
+              <button onClick="()=>this.setFqStep(2)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
+                Atrás
+              </button>
+              <button onClick="{{ submitFq }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
+                Finalizar Solicitud
+              </button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- STEP 4: SUCCESS -->
+        <sc-if value="{{ fqIsStep4 }}">
+          <div style="padding:40px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:#4ADE80;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3 style="font-family:'Saira';font-weight:800;font-size:24px;color:#fff;margin:0;">¡Solicitud Recibida Correctamente!</h3>
+            <p style="font-size:14.5px;line-height:1.6;color:#8A9099;max-width:480px;margin:0 0 10px;">
+              Su requerimiento ha sido registrado en nuestro sistema. Un ingeniero especialista de Brizuvic Corp. ha sido asignado a su cuenta y se pondrá en contacto en breve.
+            </p>
+            <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:4px;padding:15px;width:100%;text-align:left;font-size:13px;color:#A6ADB8;">
+              <div style="font-family:'Saira';font-weight:700;color:#fff;margin-bottom:6px;">Detalle registrado:</div>
+              <div style="margin-bottom:4px;">• Empresa: {{ fqValName }}</div>
+              <div style="margin-bottom:4px;">• Contacto: {{ fqValPhone }} / {{ fqValEmail }}</div>
+              <div>• Tipo: {{ fqIsTypeProducts ? 'Equipos y EPP' : fqIsTypeServices ? 'Servicio Técnico' : 'Llamada Express' }}</div>
+            </div>
+            <div style="display:flex;gap:12px;width:100%;margin-top:14px;">
+              <button onClick="{{ closeFq }}" style="flex:1;font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:14px 20px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
+                Entendido
+              </button>
+              <a href="{{ whatsappHref }}" target="_blank" style="flex:1;font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#25D366;border:0;padding:14px 20px;cursor:pointer;border-radius:2px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s" style-hover="background:#20ba56">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Seguimiento WhatsApp
+              </a>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
@@ -2127,6 +2499,20 @@ class Component extends DCLogic {
     cart:[], cartOpen:false, wizardStep:1, wizardRisk:null, wizardSize:null, wizardResult:null,
     waOpen:false, searchQuery:'', maxPrice:800, activeStep:'01', activeUsTab:'mision',
     pdfModalOpen:false, pdfQuoteData:null,
+    fqOpen: false,
+    fqStep: 1,
+    fqType: '',
+    fqForm: {
+      name: '',
+      ruc: '',
+      email: '',
+      phone: '',
+      categories: [],
+      volume: 'Corporativo (10-50 unds)',
+      service: '',
+      details: '',
+      urgency: 'Normal'
+    },
     activeProductDetailId:null, detailQty:1,
     logs:[
       {id:'l1',time:'Hace 5 mins',u:'ZH',desc:'Zuleica Huicho modificó el stock del Casco V-Gard'},
@@ -2217,6 +2603,99 @@ class Component extends DCLogic {
   uid(prefix){ return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
   // CART METHODS
+  openFq(type = 'initial') {
+    this.setState({
+      fqOpen: true,
+      fqStep: 1,
+      fqType: type === 'initial' ? '' : type,
+      fqForm: {
+        name: '',
+        ruc: '',
+        email: '',
+        phone: '',
+        categories: [],
+        volume: 'Corporativo (10-50 unds)',
+        service: type === 'services' ? 'Recarga de extintores' : '',
+        details: '',
+        urgency: 'Normal'
+      }
+    });
+    if (type !== 'initial') {
+      this.setState({ fqStep: 2 });
+    }
+  }
+  closeFq() {
+    this.setState({ fqOpen: false });
+  }
+  setFqStep(step) {
+    this.setState({ fqStep: step });
+  }
+  setFqType(type) {
+    this.setState({ fqType: type, fqStep: 2 });
+  }
+  toggleFqCategory(cat) {
+    const categories = this.state.fqForm.categories;
+    const idx = categories.indexOf(cat);
+    const newCats = idx === -1 ? [...categories, cat] : categories.filter(c => c !== cat);
+    this.setState({ fqForm: { ...this.state.fqForm, categories: newCats } });
+  }
+  setFqField(field, val) {
+    this.setState({ fqForm: { ...this.state.fqForm, [field]: val } });
+  }
+  submitFq() {
+    const { fqForm, fqType } = this.state;
+    if (!fqForm.name || !fqForm.email || !fqForm.phone) {
+      alert("Por favor completa los campos obligatorios.");
+      return;
+    }
+    let itemsStr = "";
+    let montoVal = 0;
+    if (fqType === 'products') {
+      const catsCount = fqForm.categories.length || 1;
+      const volMap = {
+        'Bajo (1-10 unds)': [10, 800],
+        'Corporativo (10-50 unds)': [30, 3200],
+        'Por Mayor (>50 unds)': [80, 8400]
+      };
+      const [qty, val] = volMap[fqForm.volume] || volMap['Corporativo (10-50 unds)'];
+      itemsStr = `Equipos y EPP (${fqForm.categories.join(', ') || 'General'}) x ${qty} unds`;
+      montoVal = val * catsCount;
+    } else if (fqType === 'services') {
+      itemsStr = `Servicio: ${fqForm.service}`;
+      if (fqForm.details) itemsStr += ` (${fqForm.details})`;
+      const srvMap = {
+        'Recarga de extintores': 1500,
+        'Sistemas contra incendio': 12000,
+        'Capacitaciones': 3500,
+        'Equipamiento de EPP': 6800
+      };
+      montoVal = srvMap[fqForm.service] || 2500;
+    } else {
+      itemsStr = "Solicitud de Asesoría / Llamada Express";
+      montoVal = 0;
+    }
+    const newQuote = {
+      id: 'q' + Date.now(),
+      cliente: fqForm.name,
+      cont: (fqForm.ruc ? `RUC: ${fqForm.ruc}` : 'Contacto Directo') + ` · ${fqForm.phone}`,
+      items: itemsStr,
+      monto: montoVal,
+      estado: 'Nuevo',
+      fecha: 'Hoy'
+    };
+    const newLog = {
+      id: 'l' + Date.now(),
+      time: 'Hace unos instantes',
+      u: 'WEB',
+      desc: `Se recibió solicitud de cotización de ${fqForm.name} (${fqType === 'products' ? 'EPP' : fqType === 'services' ? 'Servicios' : 'Llamada'})`
+    };
+    this.setState({
+      quotes: [newQuote, ...this.state.quotes],
+      logs: [newLog, ...this.state.logs.slice(0, 10)],
+      fqStep: 4
+    });
+  }
+
   addToCart(id, qty = 1) {
     const list = this.state.cart;
     const found = list.find(x => x.id === id);
@@ -2456,9 +2935,9 @@ class Component extends DCLogic {
       onEdit:()=>this.openModal('service',sv.id),
       onDelete:()=>this.removeItem('services',sv.id),
       onQuoteService:()=> {
+        this.openFq('services');
         this.setState({
-          contactForm: { ...this.state.contactForm, message: d.waText },
-          sitePage: 'contacto'
+          fqForm: { ...this.state.fqForm, service: sv.n }
         });
       }
     };
@@ -2802,6 +3281,52 @@ class Component extends DCLogic {
       cfFillEpp:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, deseo solicitar una cotización corporativa para la adquisición de equipos de protección personal (cascos, botas, respiradores) para nuestra plana de trabajadores.'}}),
       cfFillExtintores:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, me interesa solicitar el servicio de mantenimiento y recarga de extintores de seguridad. Indicar precios por volumen y tiempos de entrega.'}}),
       cfFillIncendio:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, requiero asesoría técnica especializada para el diseño, instalación o pruebas operativas de sistemas contra incendio bajo normas NFPA.'}}),
+
+      fqOpen: s.fqOpen,
+      fqStep: s.fqStep,
+      fqType: s.fqType,
+      fqForm: s.fqForm,
+      fqIsStep1: s.fqStep === 1,
+      fqIsStep2: s.fqStep === 2,
+      fqIsStep3: s.fqStep === 3,
+      fqIsStep4: s.fqStep === 4,
+      fqIsTypeProducts: s.fqType === 'products',
+      fqIsTypeServices: s.fqType === 'services',
+      fqIsTypeCallback: s.fqType === 'callback',
+      fqHasCats: s.fqForm.categories.length > 0,
+      openFq: (type) => this.openFq(type),
+      closeFq: () => this.closeFq(),
+      setFqStep: (step) => this.setFqStep(step),
+      setFqType: (type) => this.setFqType(type),
+      toggleFqCategory: (cat) => this.toggleFqCategory(cat),
+      setFqField: (field, val) => this.setFqField(field, val),
+      submitFq: () => this.submitFq(),
+      fqCatActiveEPP: s.fqForm.categories.includes('EPP'),
+      fqCatActiveExtintores: s.fqForm.categories.includes('Extintores'),
+      fqCatActiveContraIncendio: s.fqForm.categories.includes('Contra Incendio'),
+      fqCatActiveSenalizacion: s.fqForm.categories.includes('Señalización'),
+      setFqVolume: (vol) => this.setFqField('volume', vol),
+      setFqService: (srv) => this.setFqField('service', srv),
+      setFqUrgency: (urg) => this.setFqField('urgency', urg),
+      fqVolBajo: s.fqForm.volume === 'Bajo (1-10 unds)',
+      fqVolCorp: s.fqForm.volume === 'Corporativo (10-50 unds)',
+      fqVolMayor: s.fqForm.volume === 'Por Mayor (>50 unds)',
+      fqSrvRecarga: s.fqForm.service === 'Recarga de extintores',
+      fqSrvSistemas: s.fqForm.service === 'Sistemas contra incendio',
+      fqSrvCapacitaciones: s.fqForm.service === 'Capacitaciones',
+      fqSrvEquipamiento: s.fqForm.service === 'Equipamiento de EPP',
+      fqUrgAlta: s.fqForm.urgency === 'Alta (Llamar ya)',
+      fqUrgNormal: s.fqForm.urgency === 'Normal',
+      fqValName: s.fqForm.name,
+      fqValRuc: s.fqForm.ruc,
+      fqValEmail: s.fqForm.email,
+      fqValPhone: s.fqForm.phone,
+      fqValDetails: s.fqForm.details,
+      onFqNameChange: (e) => this.setFqField('name', e.target.value),
+      onFqRucChange: (e) => this.setFqField('ruc', e.target.value),
+      onFqEmailChange: (e) => this.setFqField('email', e.target.value),
+      onFqPhoneChange: (e) => this.setFqField('phone', e.target.value),
+      onFqDetailsChange: (e) => this.setFqField('details', e.target.value),
     };
   }
 }
