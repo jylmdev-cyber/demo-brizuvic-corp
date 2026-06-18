@@ -293,6 +293,48 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 .step-card:hover .step-num {
   transform: scale(1.08);
 }
+
+/* Alternating Services Layout */
+.service-row-card {
+  background: #15171C;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.service-row-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 29, 38, 0.2);
+  box-shadow: 0 12px 30px rgba(225, 29, 38, 0.15);
+}
+.service-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 320px;
+  width: 100%;
+}
+.service-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.service-row-card:hover .service-img {
+  transform: scale(1.06);
+}
+.service-benefit-item {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #A6ADB8;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.service-benefit-item svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
 </style>
 </helmet>
 
@@ -701,12 +743,80 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Soluciones integrales de seguridad</h1>
       <p style="font-size:16px;color:#8A9099;margin:0 0 36px;max-width:640px">Desde la dotación de tu equipo hasta la certificación de tus sistemas contra incendio, gestionamos cada etapa.</p>
 
-      <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:50px">
+      <div style="display:flex;flex-direction:column;gap:24px;margin-bottom:50px">
         <sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
-          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px 28px;display:grid;grid-template-columns:70px 1fr auto;gap:24px;align-items:center">
-            <div style="font-family:'Saira';font-weight:800;font-size:40px;color:#E11D26;line-height:1">{{ s.num }}</div>
-            <div><div style="font-family:'Saira';font-weight:700;font-size:21px;color:#fff;margin-bottom:5px">{{ s.n }}</div><div style="font-size:14.5px;line-height:1.5;color:#8A9099;max-width:600px">{{ s.d }}</div></div>
-            <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;color:#FFC107;text-transform:uppercase;border:1px solid rgba(255,193,7,.3);padding:7px 13px;border-radius:2px">{{ s.tag }}</div>
+          <div class="service-row-card">
+            
+            <!-- Even Service (Text Left, Image Right) -->
+            <sc-if value="{{ s.isEven }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center">
+                <!-- Text block -->
+                <div style="padding:40px 45px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="font-family:'Saira';font-weight:800;font-size:36px;color:#E11D26;line-height:1">{{ s.num }}</span>
+                    <span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;color:#FFC107;text-transform:uppercase;border:1px solid rgba(255,193,7,.3);padding:4px 10px;border-radius:2px">{{ s.tag }}</span>
+                  </div>
+                  <h3 style="font-family:'Saira';font-weight:700;font-size:24px;color:#fff;margin:0 0 12px;line-height:1.2">{{ s.n }}</h3>
+                  <p style="font-size:14.5px;line-height:1.6;color:#8A9099;margin:0 0 20px">{{ s.d }}</p>
+                  
+                  <!-- Benefits checklist -->
+                  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+                    <sc-for list="{{ s.benefits }}" as="b" hint-placeholder-count="3">
+                      <div class="service-benefit-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E11D26" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>{{ b }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  
+                  <!-- CTA Button -->
+                  <button onClick="{{ s.onQuoteService }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:#E11D26;border:0;padding:11px 20px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#b3141b">
+                    Solicitar Cotización de Servicio
+                  </button>
+                </div>
+                
+                <!-- Image block -->
+                <div class="service-img-wrapper" style="height:100%;min-height:360px">
+                  <img src="{{ s.img }}" class="service-img" alt="{{ s.n }}" />
+                </div>
+              </div>
+            </sc-if>
+            
+            <!-- Odd Service (Image Left, Text Right) -->
+            <sc-if value="{{ !s.isEven }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center">
+                <!-- Image block -->
+                <div class="service-img-wrapper" style="height:100%;min-height:360px">
+                  <img src="{{ s.img }}" class="service-img" alt="{{ s.n }}" />
+                </div>
+                
+                <!-- Text block -->
+                <div style="padding:40px 45px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="font-family:'Saira';font-weight:800;font-size:36px;color:#E11D26;line-height:1">{{ s.num }}</span>
+                    <span style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;color:#FFC107;text-transform:uppercase;border:1px solid rgba(255,193,7,.3);padding:4px 10px;border-radius:2px">{{ s.tag }}</span>
+                  </div>
+                  <h3 style="font-family:'Saira';font-weight:700;font-size:24px;color:#fff;margin:0 0 12px;line-height:1.2">{{ s.n }}</h3>
+                  <p style="font-size:14.5px;line-height:1.6;color:#8A9099;margin:0 0 20px">{{ s.d }}</p>
+                  
+                  <!-- Benefits checklist -->
+                  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+                    <sc-for list="{{ s.benefits }}" as="b" hint-placeholder-count="3">
+                      <div class="service-benefit-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E11D26" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>{{ b }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  
+                  <!-- CTA Button -->
+                  <button onClick="{{ s.onQuoteService }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:#E11D26;border:0;padding:11px 20px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#b3141b">
+                    Solicitar Cotización de Servicio
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+
           </div>
         </sc-for>
       </div>
@@ -1946,8 +2056,68 @@ class Component extends DCLogic {
   }
   get allProducts(){ return this.state.products.map(p=>this.decorate(p)); }
 
-  decorateService(sv){
-    return { ...sv, onEdit:()=>this.openModal('service',sv.id), onDelete:()=>this.removeItem('services',sv.id) };
+  decorateService(sv, idx){
+    const svDetailsMap = {
+      sv1: {
+        img: './uploads/b1.png',
+        benefits: [
+          'Prueba hidrostática certificada y cambio de repuestos oficiales.',
+          'Préstamo de extintores de retén sin costo adicional.',
+          'Certificado de operatividad válido ante INDECI y Municipalidades.'
+        ],
+        waText: 'Hola, me interesa cotizar el servicio de Recarga de Extintores para mi empresa.'
+      },
+      sv2: {
+        img: './uploads/hero.png',
+        benefits: [
+          'Diseño y firma de planos por Ingenieros Mecánicos y Eléctricos colegiados.',
+          'Instalación bajo estricto estándar NFPA (NFPA 13, 14, 72 y 25).',
+          'Protocolos de prueba e inspección de operatividad semestral/anual.'
+        ],
+        waText: 'Hola, me interesa una cotización para el diseño o mantenimiento de Sistemas Contra Incendio.'
+      },
+      sv3: {
+        img: './uploads/b3.png',
+        benefits: [
+          'Capacitación teórica y práctica en lucha contra incendios y primeros auxilios.',
+          'Simulacros con materiales de entrenamiento y personal especializado.',
+          'Certificado oficial de capacitación del personal exigido por Defensa Civil.'
+        ],
+        waText: 'Hola, me interesa cotizar el servicio de Capacitación de Brigadas de Emergencia.'
+      },
+      sv4: {
+        img: './uploads/b2.png',
+        benefits: [
+          'Elaboración de matriz de EPP según los riesgos por puesto de trabajo.',
+          'EPP homologado con marcas de garantía internacional (ANSI, OSHA, CE).',
+          'Descuentos corporativos por volumen de compra y entregas programadas.'
+        ],
+        waText: 'Hola, me interesa cotizar Equipamiento y EPP al por mayor para mi empresa.'
+      }
+    };
+
+    const d = svDetailsMap[sv.id] || {
+      img: './uploads/hero.png',
+      benefits: ['Calidad garantizada', 'Personal altamente calificado', 'Cumplimiento normativo'],
+      waText: 'Hola, me interesa cotizar uno de sus servicios especializados.'
+    };
+
+    const imgEl = React.createElement('img',{src:d.img,style:{width:'100%',height:'100%',objectFit:'cover',transition:'transform .3s ease'},className:'service-img'});
+
+    return { ...sv,
+      img: d.img,
+      imgEl,
+      benefits: d.benefits,
+      isEven: idx % 2 === 0,
+      onEdit:()=>this.openModal('service',sv.id),
+      onDelete:()=>this.removeItem('services',sv.id),
+      onQuoteService:()=> {
+        this.setState({
+          contactForm: { ...this.state.contactForm, message: d.waText },
+          sitePage: 'contacto'
+        });
+      }
+    };
   }
   decorateBlog(b){
     const imgEl = b.img ? React.createElement('img',{src:b.img,style:{width:'100%',height:'100%',objectFit:'cover'}}) : null;
@@ -2161,7 +2331,7 @@ class Component extends DCLogic {
       certs:['NTP 350.043','ISO 9001','INDECI','OSHA','RNP'],
       certCards:[{k:'NTP 350.043',l:'Recarga de extintores'},{k:'ISO 9001:2015',l:'Gestión de calidad'},{k:'INDECI',l:'Defensa civil'},{k:'OSHA',l:'Estándar internacional'}],
       stats:[{k:'+12',l:'años en el rubro'},{k:'+500',l:'empresas atendidas'},{k:'24/7',l:'emergencias'},{k:'100%',l:'extintores certificados'}],
-      services:s.services.map(sv=>this.decorateService(sv)),
+      services:s.services.map((sv,idx)=>this.decorateService(sv,idx)),
       steps: steps,
       values:[
         {t:'Cumplimiento garantizado',d:'Cada entrega llega con documentación válida ante INDECI y auditorías.',iconEl:this.el(this.ICON.sign)},
