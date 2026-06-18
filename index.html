@@ -348,6 +348,69 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   border-color: rgba(255, 255, 255, 0.18) !important;
   box-shadow: 0 8px 25px rgba(0,0,0,0.35);
 }
+
+/* Contact Form & Map Styles */
+.contact-input {
+  transition: all 0.25s ease;
+}
+.contact-input:focus {
+  border-color: #E11D26 !important;
+  box-shadow: 0 0 8px rgba(225, 29, 38, 0.25);
+  outline: none;
+  background: #191B22 !important;
+}
+.contact-card-link {
+  transition: all 0.25s ease;
+  cursor: pointer;
+  display: block;
+}
+.contact-card-link:hover {
+  transform: translateY(-3px);
+  border-color: rgba(225,29,38,0.25) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+.contact-pill-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #A6ADB8;
+  font-family: 'Barlow';
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.contact-pill-btn:hover {
+  background: rgba(225, 29, 38, 0.08);
+  border-color: #E11D26;
+  color: #fff;
+}
+.location-dot {
+  width: 14px;
+  height: 14px;
+  background-color: #E11D26;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 10px #E11D26;
+}
+.location-dot::after {
+  content: '';
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #E11D26;
+  position: absolute;
+  top: -9px;
+  left: -9px;
+  animation: redPulse 1.8s infinite ease-out;
+}
+@keyframes redPulse {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
 </style>
 </helmet>
 
@@ -1079,22 +1142,50 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
     <!-- ===== CONTACTO ===== -->
     <sc-if value="{{ conOn }}" hint-placeholder-val="{{ true }}">
     <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:44px">
+      <!-- Left: Form -->
       <div>
         <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Contacto</div>
         <h1 style="font-family:'Saira';font-weight:800;font-size:42px;color:#fff;margin:0 0 8px;letter-spacing:-.02em">Solicita tu cotización</h1>
-        <p style="font-size:16px;color:#8A9099;margin:0 0 30px">Cuéntanos qué necesitas y un asesor te responde en menos de 24 horas hábiles.</p>
+        <p style="font-size:16px;color:#8A9099;margin:0 0 24px">Cuéntanos qué necesitas y un asesor te responde en menos de 24 horas hábiles.</p>
+        
         <sc-if value="{{ !contactSent }}" hint-placeholder-val="{{ true }}">
         <div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label><input placeholder="Tu nombre" value="{{ contactForm.name }}" onChange="{{ cfSetName }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
-          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Empresa</label><input placeholder="Razón social" value="{{ contactForm.company }}" onChange="{{ cfSetCompany }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
-          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Correo</label><input placeholder="correo@empresa.com" value="{{ contactForm.email }}" onChange="{{ cfSetEmail }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
-          <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono</label><input placeholder="+51 999 999 999" value="{{ contactForm.phone }}" onChange="{{ cfSetPhone }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px"></div>
-        </div>
-        <div style="margin-bottom:18px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Mensaje</label><textarea placeholder="Describe los productos o servicios que necesitas..." rows="4" value="{{ contactForm.message }}" onInput="{{ cfSetMessage }}" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px;resize:vertical"></textarea></div>
-        <button onClick="{{ submitContact }}" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 30px;cursor:pointer;border-radius:2px">Enviar solicitud</button>
+          <!-- Quick Inquiry Selection -->
+          <div style="margin-bottom:24px">
+            <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#7E8591;margin-bottom:10px">¿Qué necesitas consultar? (Plantilla rápida)</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button onClick="{{ cfFillEpp }}" class="contact-pill-btn">Cotizar EPP</button>
+              <button onClick="{{ cfFillExtintores }}" class="contact-pill-btn">Recarga de Extintores</button>
+              <button onClick="{{ cfFillIncendio }}" class="contact-pill-btn">Sistemas Contra Incendio</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label>
+              <input placeholder="Tu nombre" value="{{ contactForm.name }}" onChange="{{ cfSetName }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px">
+            </div>
+            <div>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Empresa</label>
+              <input placeholder="Razón social" value="{{ contactForm.company }}" onChange="{{ cfSetCompany }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px">
+            </div>
+            <div>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Correo</label>
+              <input placeholder="correo@empresa.com" value="{{ contactForm.email }}" onChange="{{ cfSetEmail }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px">
+            </div>
+            <div>
+              <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono</label>
+              <input placeholder="+51 999 999 999" value="{{ contactForm.phone }}" onChange="{{ cfSetPhone }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px">
+            </div>
+          </div>
+          <div style="margin-bottom:18px">
+            <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Mensaje</label>
+            <textarea placeholder="Describe los productos o servicios que necesitas..." rows="5" value="{{ contactForm.message }}" onInput="{{ cfSetMessage }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px;resize:vertical;line-height:1.5"></textarea>
+          </div>
+          <button onClick="{{ submitContact }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 30px;cursor:pointer;border-radius:2px">Enviar solicitud</button>
         </div>
         </sc-if>
+        
         <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
         <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:4px;padding:30px;text-align:center">
           <div style="font-family:'Saira';font-weight:700;font-size:19px;color:#4ADE80;margin-bottom:8px">¡Solicitud enviada!</div>
@@ -1103,18 +1194,81 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         </div>
         </sc-if>
       </div>
+
+      <!-- Right: Direct contact info & Stylized Map -->
       <div>
-        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:28px;margin-bottom:14px">
-          <sc-for list="{{ contactInfo }}" as="c" hint-placeholder-count="4">
-            <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-              <div style="color:#E11D26;flex-shrink:0">{{ c.iconEl }}</div>
-              <div><div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8A9099;margin-bottom:2px">{{ c.label }}</div><div style="font-size:15px;color:#fff">{{ c.value }}</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px">
+          <!-- Card Dirección -->
+          <a href="https://maps.google.com/?q=Av.+Argentina+327,+Cercado+de+Lima" target="_blank" class="contact-card-link" style="text-decoration:none">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px;display:flex;gap:16px;align-items:center">
+              <div style="color:#E11D26;flex-shrink:0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8A9099;margin-bottom:2px">Sede Central (Oficina & Almacén)</div>
+                <div style="font-size:14.5px;color:#fff;font-weight:500">Av. Argentina 327, Cercado de Lima</div>
+              </div>
             </div>
-          </sc-for>
+          </a>
+
+          <!-- Card Teléfonos -->
+          <a href="tel:961823490" class="contact-card-link" style="text-decoration:none">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px;display:flex;gap:16px;align-items:center">
+              <div style="color:#E11D26;flex-shrink:0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8A9099;margin-bottom:2px">Teléfonos de Atención</div>
+                <div style="font-size:14.5px;color:#fff;font-weight:500">(01) 759-4690 · 961 823 490</div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card Correo -->
+          <a href="mailto:ventas@brizuvic.com" class="contact-card-link" style="text-decoration:none">
+            <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:20px 24px;display:flex;gap:16px;align-items:center">
+              <div style="color:#E11D26;flex-shrink:0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8A9099;margin-bottom:2px">Correo Electrónico</div>
+                <div style="font-size:14.5px;color:#fff;font-weight:500">ventas@brizuvic.com</div>
+              </div>
+            </div>
+          </a>
         </div>
-        <div style="aspect-ratio:1/.7;background:linear-gradient(150deg,#23262F,#181A20);border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:30px 30px"></div>
-          <div style="position:relative;text-align:center;color:#5A616C"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><div style="font-family:'Saira';font-size:12px;margin-top:8px;letter-spacing:.04em">Av. Argentina 327, Cercado de Lima</div></div>
+
+        <!-- Stylized Dark Mode Map Vector -->
+        <div style="aspect-ratio:1/.7;background:#131519;border:1px solid rgba(255,255,255,.08);border-radius:4px;position:relative;overflow:hidden">
+          <!-- Grid Background representing streets -->
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:24px 24px"></div>
+          
+          <!-- Diagonal Streets Representation -->
+          <div style="position:absolute;top:20%;left:-20%;width:150%;height:3px;background:rgba(255,255,255,0.06);transform:rotate(12deg)"></div>
+          <div style="position:absolute;top:70%;left:-20%;width:150%;height:4px;background:rgba(255,255,255,0.06);transform:rotate(12deg)"></div>
+          <div style="position:absolute;top:-20%;left:45%;width:4px;height:150%;background:rgba(255,255,255,0.06);transform:rotate(-35deg)"></div>
+          <div style="position:absolute;top:-20%;left:15%;width:3px;height:150%;background:rgba(255,255,255,0.06);transform:rotate(-35deg)"></div>
+          
+          <!-- Street Names -->
+          <div style="position:absolute;top:14%;left:35%;font-family:'Saira';font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.05em;transform:rotate(12deg)">AV. ARGENTINA</div>
+          <div style="position:absolute;top:64%;left:5%;font-family:'Saira';font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.05em;transform:rotate(12deg)">AV. ENRIQUE MEIGGS</div>
+          <div style="position:absolute;top:30%;left:22%;font-family:'Saira';font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.05em;transform:rotate(-35deg)">AV. DUEÑAS</div>
+
+          <!-- Glowing Marker Dot -->
+          <div style="position:absolute;top:40%;left:65%;display:flex;flex-direction:column;align-items:center">
+            <div class="location-dot"></div>
+            <div style="background:#E11D26;color:#fff;font-family:'Saira';font-weight:700;font-size:10px;padding:3px 8px;border-radius:3px;margin-top:6px;box-shadow: 0 4px 10px rgba(0,0,0,0.5);white-space:nowrap;letter-spacing:0.02em">
+              BRIZUVIC CORP.
+            </div>
+          </div>
+          
+          <!-- Map Overlay Button -->
+          <a href="https://maps.google.com/?q=Av.+Argentina+327,+Cercado+de+Lima" target="_blank" style="position:absolute;bottom:12px;right:12px;text-decoration:none">
+            <div style="background:rgba(21, 23, 28, 0.9);border:1px solid rgba(255,255,255,0.15);padding:6px 12px;border-radius:4px;font-family:'Barlow';font-weight:700;font-size:11px;color:#fff;display:flex;align-items:center;gap:6px;transition:all 0.2s" style-hover="background:#E11D26;border-color:#E11D26">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver Mapa Completo
+            </div>
+          </a>
         </div>
       </div>
     </div>
@@ -2645,6 +2799,9 @@ class Component extends DCLogic {
       setUsTabMision:()=>this.setState({activeUsTab:'mision'}),
       setUsTabVision:()=>this.setState({activeUsTab:'vision'}),
       setUsTabValores:()=>this.setState({activeUsTab:'valores'}),
+      cfFillEpp:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, deseo solicitar una cotización corporativa para la adquisición de equipos de protección personal (cascos, botas, respiradores) para nuestra plana de trabajadores.'}}),
+      cfFillExtintores:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, me interesa solicitar el servicio de mantenimiento y recarga de extintores de seguridad. Indicar precios por volumen y tiempos de entrega.'}}),
+      cfFillIncendio:()=>this.setState({contactForm:{...this.state.contactForm,message:'Hola, requiero asesoría técnica especializada para el diseño, instalación o pruebas operativas de sistemas contra incendio bajo normas NFPA.'}}),
     };
   }
 }
