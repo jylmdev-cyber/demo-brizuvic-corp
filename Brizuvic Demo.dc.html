@@ -335,6 +335,19 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   flex-shrink: 0;
   margin-top: 3px;
 }
+
+/* Nosotros Layout & Hover Effects */
+.nosotros-img-container:hover .nosotros-hero-img {
+  transform: scale(1.05);
+}
+.cobertura-card {
+  transition: all 0.25s ease;
+}
+.cobertura-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
 </style>
 </helmet>
 
@@ -875,14 +888,191 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
     <!-- ===== NOSOTROS ===== -->
     <sc-if value="{{ nosOn }}" hint-placeholder-val="{{ true }}">
     <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px">
+      <!-- Section Tag & Title -->
       <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Nosotros</div>
-      <h1 style="font-family:'Saira';font-weight:800;font-size:48px;color:#fff;margin:0 0 20px;letter-spacing:-.02em;max-width:780px;line-height:1.02">Más de 12 años blindando la industria peruana</h1>
-      <p style="font-size:18px;line-height:1.6;color:#A6ADB8;max-width:720px;margin:0 0 44px">Corporación Brizuvic nace en Lima con una misión simple: que ninguna empresa tenga que elegir entre productividad y la vida de su gente. Hoy equipamos minería, construcción, industria alimentaria y salud con EPP certificado y sistemas contra incendio operativos.</p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
-        <sc-for list="{{ values }}" as="v" hint-placeholder-count="3">
-          <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:28px"><div style="color:#E11D26;margin-bottom:18px">{{ v.iconEl }}</div><div style="font-family:'Saira';font-weight:700;font-size:19px;color:#fff;margin-bottom:8px">{{ v.t }}</div><div style="font-size:14px;line-height:1.55;color:#8A9099">{{ v.d }}</div></div>
-        </sc-for>
+      
+      <!-- Split-screen Grid (Story and Image) -->
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:center;margin-bottom:56px">
+        <!-- Left: Story Text -->
+        <div>
+          <h1 style="font-family:'Saira';font-weight:800;font-size:44px;color:#fff;margin:0 0 20px;letter-spacing:-.02em;line-height:1.05">Más de 12 años blindando la industria peruana</h1>
+          <p style="font-size:16px;line-height:1.7;color:#A6ADB8;margin:0 0 20px">
+            <span style="font-size:24px;font-family:'Saira';font-weight:700;color:#E11D26;float:left;margin-right:8px;line-height:1">C</span>orporación Brizuvic nace en Lima con una misión clara y firme: garantizar que ninguna empresa tenga que comprometer la seguridad de sus trabajadores. Nos especializamos en proveer equipamiento de protección personal (EPP) y sistemas contra incendio certificados bajo los más estrictos estándares técnicos.
+          </p>
+          <p style="font-size:16px;line-height:1.7;color:#8A9099;margin:0">
+            A lo largo de más de una década, hemos atendido a importantes empresas de los sectores minero, industrial, construcción e institucional en todo el Perú, logrando posicionarnos como un socio estratégico confiable en la prevención de riesgos laborales.
+          </p>
+        </div>
+        
+        <!-- Right: Premium Image Container -->
+        <div style="border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.08);height:340px;position:relative" class="nosotros-img-container">
+          <img src="./uploads/hero.png" style="width:100%;height:100%;object-fit:cover;transition:transform .5s ease" class="nosotros-hero-img" alt="Brizuvic Operations" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(12,13,16,.85) 0%, transparent 60%)"></div>
+          <div style="position:absolute;bottom:20px;left:20px">
+            <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:2px">Operaciones Certificadas</div>
+            <div style="font-size:12px;color:#FFC107;text-transform:uppercase;letter-spacing:.05em">Lima y Cobertura Nacional</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Interactive Strategic Pillars (Tabs) -->
+      <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:36px;margin-bottom:56px;position:relative" class="backlight-red">
+        <div style="display:flex;gap:12px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:18px;margin-bottom:28px">
+          <button onClick="{{ setUsTabMision }}" style="font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:10px 20px;cursor:pointer;border:0;border-bottom:2px solid {{ isMisionActive ? '#E11D26' : 'transparent' }};color:{{ isMisionActive ? '#fff' : '#7E8591' }};background:transparent;transition:all 0.2s">Nuestra Misión</button>
+          <button onClick="{{ setUsTabVision }}" style="font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:10px 20px;cursor:pointer;border:0;border-bottom:2px solid {{ isVisionActive ? '#E11D26' : 'transparent' }};color:{{ isVisionActive ? '#fff' : '#7E8591' }};background:transparent;transition:all 0.2s">Nuestra Visión</button>
+          <button onClick="{{ setUsTabValores }}" style="font-family:'Barlow';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:10px 20px;cursor:pointer;border:0;border-bottom:2px solid {{ isValoresActive ? '#E11D26' : 'transparent' }};color:{{ isValoresActive ? '#fff' : '#7E8591' }};background:transparent;transition:all 0.2s">Nuestros Valores</button>
+        </div>
+
+        <!-- Tab Content: Misión -->
+        <sc-if value="{{ isMisionActive }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
+            <div style="width:80px;height:80px;border-radius:50%;background:rgba(225,29,38,.08);border:1px solid rgba(225,29,38,.2);display:flex;align-items:center;justify-content:center;color:#E11D26">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2c-5.523 0-10 4.477-10 10s4.477 10 10 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            </div>
+            <div>
+              <h4 style="font-family:'Saira';font-weight:700;font-size:22px;color:#fff;margin:0 0 8px">Salvar vidas mediante la prevención</h4>
+              <p style="font-size:15px;line-height:1.65;color:#A6ADB8;margin:0">Nuestra misión es proveer equipos de protección personal (EPP) y sistemas de extinción de incendios certificados con los más altos estándares nacionales e internacionales (NTP, NFPA, ANSI). Acompañamos a nuestros clientes con asesoría técnica especializada para asegurar una operatividad continua que resguarde el recurso más valioso de toda empresa: la vida de sus trabajadores.</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- Tab Content: Visión -->
+        <sc-if value="{{ isVisionActive }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
+            <div style="width:80px;height:80px;border-radius:50%;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);display:flex;align-items:center;justify-content:center;color:#FFC107">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div>
+              <h4 style="font-family:'Saira';font-weight:700;font-size:22px;color:#fff;margin:0 0 8px">El socio estratégico de seguridad líder en el Perú</h4>
+              <p style="font-size:15px;line-height:1.65;color:#A6ADB8;margin:0">Nos proyectamos hacia el 2030 como la corporación líder a nivel nacional en distribución de EPP homologado y desarrollo de ingeniería contra incendios para sectores críticos como minería, construcción y manufactura pesada. Queremos destacar por nuestra innovación en soluciones digitales B2B y por ofrecer el menor tiempo de respuesta ante emergencias de seguridad a nivel país.</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- Tab Content: Valores -->
+        <sc-if value="{{ isValoresActive }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+            <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,0.04);padding:20px;border-radius:4px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">✓</span> Compromiso con la Vida
+              </div>
+              <p style="font-size:13px;line-height:1.5;color:#8A9099;margin:0">Cada producto que entregamos y sistema que instalamos cumple estrictamente con regulaciones vigentes para asegurar una protección real de las personas.</p>
+            </div>
+            <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,0.04);padding:20px;border-radius:4px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">✓</span> Certificación Rigurosa
+              </div>
+              <p style="font-size:13px;line-height:1.5;color:#8A9099;margin:0">No escatimamos en calidad. Trabajamos exclusivamente con marcas internacionales y locales homologadas con respaldo formal y certificaciones oficiales NTP, UL, ANSI and CE.</p>
+            </div>
+            <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,0.04);padding:20px;border-radius:4px">
+              <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">✓</span> Respuesta Inmediata
+              </div>
+              <p style="font-size:13px;line-height:1.5;color:#8A9099;margin:0">Entendemos que la seguridad industrial no puede esperar. Ofrecemos recargas rápidas, despacho programado y soporte técnico en campo disponible 24/7.</p>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- Cobertura Nacional Section -->
+      <div style="margin-bottom:56px">
+        <h2 style="font-family:'Saira';font-weight:800;font-size:32px;color:#fff;margin:0 0 6px;letter-spacing:-.01em">Cobertura y Operaciones a Nivel Nacional</h2>
+        <p style="font-size:15px;color:#8A9099;margin:0 0 28px;max-width:640px">Brindamos soporte logístico y servicios de ingeniería in-situ en las zonas más estratégicas de la actividad económica del país.</p>
+        
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <!-- Sede Lima -->
+          <div class="cobertura-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #E11D26">
+            <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:4px">Lima y Callao (Sede Central)</div>
+            <div style="font-size:12px;color:#8A9099;margin-bottom:14px">Av. Argentina, Cercado de Lima</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">▪</span> <strong>Entrega de EPP:</strong> Despacho express en 24h
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">▪</span> <strong>Servicio de Extintores:</strong> Taller certificado local
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#E11D26">▪</span> <strong>Emergencias:</strong> Respuesta en menos de 2h
+              </div>
+            </div>
+          </div>
+
+          <!-- Arequipa -->
+          <div class="cobertura-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #FFC107">
+            <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:4px">Región Sur (Arequipa / Cusco)</div>
+            <div style="font-size:12px;color:#8A9099;margin-bottom:14px">Soporte Técnico Especializado</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#FFC107">▪</span> <strong>Servicio Minería:</strong> Corredor vial del sur
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#FFC107">▪</span> <strong>Redes de Incendio:</strong> Diseño NFPA in-situ
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#FFC107">▪</span> <strong>Soporte Técnico:</strong> Asistencia técnica en 12h
+              </div>
+            </div>
+          </div>
+
+          <!-- Apurimac -->
+          <div class="cobertura-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #7E8591">
+            <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:4px">Zonas Mineras (Las Bambas)</div>
+            <div style="font-size:12px;color:#8A9099;margin-bottom:14px">Abastecimiento Industrial Continuo</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#7E8591">▪</span> <strong>EPP Especializado:</strong> Homologación minera
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#7E8591">▪</span> <strong>Recarga Extintores:</strong> Logística in-situ
+              </div>
+              <div style="font-size:13px;color:#A6ADB8;display:flex;align-items:center;gap:8px">
+                <span style="color:#7E8591">▪</span> <strong>Capacitaciones:</strong> Brigadistas en campamentos
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chronological Timeline -->
+      <div>
+        <h2 style="font-family:'Saira';font-weight:800;font-size:32px;color:#fff;margin:0 0 6px;letter-spacing:-.01em">Nuestra Trayectoria</h2>
+        <p style="font-size:15px;color:#8A9099;margin:0 0 32px">Hitos clave que definen el crecimiento y liderazgo de Corporación Brizuvic.</p>
+        
+        <div style="position:relative;padding-left:36px;border-left:2px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:36px;margin-left:10px">
+          <!-- 2014 -->
+          <div style="position:relative">
+            <!-- Bullet -->
+            <div style="position:absolute;left:-45px;top:4px;width:16px;height:16px;border-radius:50%;background:#E11D26;border:4px solid #0C0D10;box-shadow: 0 0 8px rgba(225,29,38,.8)"></div>
+            <div style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;margin-bottom:4px">2014 — Fundación e Inicio de Operaciones</div>
+            <p style="font-size:14.2px;line-height:1.55;color:#8A9099;margin:0;max-width:760px">Iniciamos actividades en la ciudad de Lima brindando el servicio de mantenimiento y recarga de extintores para locales comerciales y almacenes, con certificaciones locales conformes a Defensa Civil (INDECI).</p>
+          </div>
+
+          <!-- 2018 -->
+          <div style="position:relative">
+            <!-- Bullet -->
+            <div style="position:absolute;left:-45px;top:4px;width:16px;height:16px;border-radius:50%;background:#FFC107;border:4px solid #0C0D10"></div>
+            <div style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;margin-bottom:4px">2018 — Alianzas Internacionales de EPP</div>
+            <p style="font-size:14.2px;line-height:1.55;color:#8A9099;margin:0;max-width:760px">Expandimos nuestro catálogo a la distribución a nivel nacional de EPP (Equipos de Protección Personal) homologado, firmando alianzas estratégicas con marcas líderes de garantía internacional en protección de cabeza, manos y calzado dieléctrico.</p>
+          </div>
+
+          <!-- 2022 -->
+          <div style="position:relative">
+            <!-- Bullet -->
+            <div style="position:absolute;left:-45px;top:4px;width:16px;height:16px;border-radius:50%;background:#E11D26;border:4px solid #0C0D10"></div>
+            <div style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;margin-bottom:4px">2022 — Ingeniería Contra Incendios y NFPA</div>
+            <p style="font-size:14.2px;line-height:1.55;color:#8A9099;margin:0;max-width:760px">Certificamos a nuestra plana de ingenieros mecánicos y eléctricos en normativas internacionales NFPA. Comenzamos a brindar servicios avanzados de diseño de planos, instalación e inspección técnica de redes de agua y sistemas de detección para industrias críticas.</p>
+          </div>
+
+          <!-- 2026 -->
+          <div style="position:relative">
+            <!-- Bullet -->
+            <div style="position:absolute;left:-45px;top:4px;width:16px;height:16px;border-radius:50%;background:#4ADE80;border:4px solid #0C0D10;box-shadow: 0 0 8px rgba(74,222,128,.8)"></div>
+            <div style="font-family:'Saira';font-weight:800;font-size:20px;color:#fff;margin-bottom:4px">2026 — Liderazgo Digital B2B</div>
+            <p style="font-size:14.2px;line-height:1.55;color:#8A9099;margin:0;max-width:760px">Lanzamiento del primer Cotizador Inteligente y del Asistente Selector de Extintores interactivo, agilizando el abastecimiento y la cotización de proyectos para nuestros clientes corporativos.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
     </sc-if>
 
@@ -1781,7 +1971,7 @@ class Component extends DCLogic {
     contactForm:{name:'',company:'',email:'',phone:'',message:''}, contactSent:false,
     sectionsOn:{clientes:true,testimonios:true,galeria:true,blogPreview:true},
     cart:[], cartOpen:false, wizardStep:1, wizardRisk:null, wizardSize:null, wizardResult:null,
-    waOpen:false, searchQuery:'', maxPrice:800, activeStep:'01',
+    waOpen:false, searchQuery:'', maxPrice:800, activeStep:'01', activeUsTab:'mision',
     pdfModalOpen:false, pdfQuoteData:null,
     activeProductDetailId:null, detailQty:1,
     logs:[
@@ -2449,6 +2639,12 @@ class Component extends DCLogic {
       wSetSizePequeno:()=>this.setWizardSize('pequeno'),
       wSetSizeMediano:()=>this.setWizardSize('mediano'),
       wSetSizeGrande:()=>this.setWizardSize('grande'),
+      isMisionActive:s.activeUsTab==='mision',
+      isVisionActive:s.activeUsTab==='vision',
+      isValoresActive:s.activeUsTab==='valores',
+      setUsTabMision:()=>this.setState({activeUsTab:'mision'}),
+      setUsTabVision:()=>this.setState({activeUsTab:'vision'}),
+      setUsTabValores:()=>this.setState({activeUsTab:'valores'}),
     };
   }
 }
