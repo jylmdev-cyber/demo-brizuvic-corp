@@ -2281,7 +2281,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
           <div style="padding:28px;display:flex;flex-direction:column;gap:18px;">
             <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:4px;">¿Qué tipo de cotización deseas realizar?</div>
 
-            <div onClick="()=>this.setFqType('products')" class="fq-option-card">
+            <div onClick="{{ fqSelectProducts }}" class="fq-option-card">
               <div style="width:44px;height:44px;border-radius:4px;background:rgba(225,29,38,.1);display:flex;align-items:center;justify-content:center;color:#E11D26;flex-shrink:0;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1z"/></svg>
               </div>
@@ -2291,7 +2291,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               </div>
             </div>
 
-            <div onClick="()=>this.setFqType('services')" class="fq-option-card">
+            <div onClick="{{ fqSelectServices }}" class="fq-option-card">
               <div style="width:44px;height:44px;border-radius:4px;background:rgba(255,193,7,.1);display:flex;align-items:center;justify-content:center;color:#FFC107;flex-shrink:0;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
               </div>
@@ -2301,7 +2301,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               </div>
             </div>
 
-            <div onClick="()=>this.setFqType('callback')" class="fq-option-card">
+            <div onClick="{{ fqSelectCallback }}" class="fq-option-card">
               <div style="width:44px;height:44px;border-radius:4px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;color:#4ADE80;flex-shrink:0;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </div>
@@ -2321,16 +2321,16 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               <div>
                 <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Selecciona las categorías requeridas:</div>
                 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-                  <div onClick="()=>this.toggleFqCategory('EPP')" class="fq-pill-checkbox {{ fqCatActiveEPP ? 'active' : '' }}">
+                  <div onClick="{{ fqToggleEPP }}" class="fq-pill-checkbox {{ fqCatActiveEPP ? 'active' : '' }}">
                     <span style="font-size:16px;">🪖</span> EPP y Calzado
                   </div>
-                  <div onClick="()=>this.toggleFqCategory('Extintores')" class="fq-pill-checkbox {{ fqCatActiveExtintores ? 'active' : '' }}">
+                  <div onClick="{{ fqToggleExtintores }}" class="fq-pill-checkbox {{ fqCatActiveExtintores ? 'active' : '' }}">
                     <span style="font-size:16px;">🧯</span> Extintores ABC/CO₂
                   </div>
-                  <div onClick="()=>this.toggleFqCategory('Contra Incendio')" class="fq-pill-checkbox {{ fqCatActiveContraIncendio ? 'active' : '' }}">
+                  <div onClick="{{ fqToggleContraIncendio }}" class="fq-pill-checkbox {{ fqCatActiveContraIncendio ? 'active' : '' }}">
                     <span style="font-size:16px;">🔥</span> Gabinetes y Mangueras
                   </div>
-                  <div onClick="()=>this.toggleFqCategory('Señalización')" class="fq-pill-checkbox {{ fqCatActiveSenalizacion ? 'active' : '' }}">
+                  <div onClick="{{ fqToggleSenalizacion }}" class="fq-pill-checkbox {{ fqCatActiveSenalizacion ? 'active' : '' }}">
                     <span style="font-size:16px;">🚪</span> Señales y Cintas
                   </div>
                 </div>
@@ -2338,13 +2338,13 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               <div>
                 <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">2. Volumen estimado del pedido:</div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-                  <div onClick="()=>this.setFqVolume('Bajo (1-10 unds)')" class="fq-pill-checkbox {{ fqVolBajo ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                  <div onClick="{{ fqSetVolBajo }}" class="fq-pill-checkbox {{ fqVolBajo ? 'active' : '' }}" style="justify-content:center;text-align:center;">
                     Bajo (1-10)
                   </div>
-                  <div onClick="()=>this.setFqVolume('Corporativo (10-50 unds)')" class="fq-pill-checkbox {{ fqVolCorp ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                  <div onClick="{{ fqSetVolCorp }}" class="fq-pill-checkbox {{ fqVolCorp ? 'active' : '' }}" style="justify-content:center;text-align:center;">
                     Corp. (10-50)
                   </div>
-                  <div onClick="()=>this.setFqVolume('Por Mayor (>50 unds)')" class="fq-pill-checkbox {{ fqVolMayor ? 'active' : '' }}" style="justify-content:center;text-align:center;">
+                  <div onClick="{{ fqSetVolMayor }}" class="fq-pill-checkbox {{ fqVolMayor ? 'active' : '' }}" style="justify-content:center;text-align:center;">
                     Al Mayor (&gt;50)
                   </div>
                 </div>
@@ -2361,16 +2361,16 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               <div>
                 <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Selecciona el servicio técnico:</div>
                 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-                  <div onClick="()=>this.setFqService('Recarga de extintores')" class="fq-pill-checkbox {{ fqSrvRecarga ? 'active' : '' }}">
+                  <div onClick="{{ fqSetSrvRecarga }}" class="fq-pill-checkbox {{ fqSrvRecarga ? 'active' : '' }}">
                     Recarga Extintores (NTP)
                   </div>
-                  <div onClick="()=>this.setFqService('Sistemas contra incendio')" class="fq-pill-checkbox {{ fqSrvSistemas ? 'active' : '' }}">
+                  <div onClick="{{ fqSetSrvSistemas }}" class="fq-pill-checkbox {{ fqSrvSistemas ? 'active' : '' }}">
                     Sistemas Húmedos (NFPA)
                   </div>
-                  <div onClick="()=>this.setFqService('Capacitaciones')" class="fq-pill-checkbox {{ fqSrvCapacitaciones ? 'active' : '' }}">
+                  <div onClick="{{ fqSetSrvCapacitaciones }}" class="fq-pill-checkbox {{ fqSrvCapacitaciones ? 'active' : '' }}">
                     Capacitación Brigadas
                   </div>
-                  <div onClick="()=>this.setFqService('Equipamiento de EPP')" class="fq-pill-checkbox {{ fqSrvEquipamiento ? 'active' : '' }}">
+                  <div onClick="{{ fqSetSrvEquipamiento }}" class="fq-pill-checkbox {{ fqSrvEquipamiento ? 'active' : '' }}">
                     Consultoría EPP
                   </div>
                 </div>
@@ -2385,10 +2385,10 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               <div>
                 <div style="font-family:'Saira';font-weight:700;font-size:15px;color:#fff;margin-bottom:12px;">1. Nivel de urgencia técnica:</div>
                 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-                  <div onClick="()=>this.setFqUrgency('Alta (Llamar ya)')" class="fq-pill-checkbox {{ fqUrgAlta ? 'active' : '' }}" style="justify-content:center;">
+                  <div onClick="{{ fqSetUrgAlta }}" class="fq-pill-checkbox {{ fqUrgAlta ? 'active' : '' }}" style="justify-content:center;">
                     🚨 Alta (Llamar ya)
                   </div>
-                  <div onClick="()=>this.setFqUrgency('Normal')" class="fq-pill-checkbox {{ fqUrgNormal ? 'active' : '' }}" style="justify-content:center;">
+                  <div onClick="{{ fqSetUrgNormal }}" class="fq-pill-checkbox {{ fqUrgNormal ? 'active' : '' }}" style="justify-content:center;">
                     📅 Normal (En el día)
                   </div>
                 </div>
@@ -2400,10 +2400,10 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             </sc-if>
 
             <div style="display:flex;justify-content:space-between;margin-top:10px;border-top:1px solid rgba(255,255,255,.06);padding-top:18px;">
-              <button onClick="()=>this.setFqStep(1)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
+              <button onClick="{{ fqGoStep1 }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
                 Atrás
               </button>
-              <button onClick="()=>this.setFqStep(3)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
+              <button onClick="{{ fqGoStep3 }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
                 Siguiente
               </button>
             </div>
@@ -2442,7 +2442,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             </div>
 
             <div style="display:flex;justify-content:space-between;margin-top:10px;border-top:1px solid rgba(255,255,255,.06);padding-top:18px;">
-              <button onClick="()=>this.setFqStep(2)" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
+              <button onClick="{{ fqGoStep2 }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#A6ADB8;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 22px;cursor:pointer;border-radius:2px;transition:all 0.2s" style-hover="color:#fff;border-color:rgba(255,255,255,.3)">
                 Atrás
               </button>
               <button onClick="{{ submitFq }}" style="font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:12px 24px;cursor:pointer;border-radius:2px;transition:background 0.2s" style-hover="background:#f12a33">
@@ -3327,6 +3327,31 @@ class Component extends DCLogic {
       onFqEmailChange: (e) => this.setFqField('email', e.target.value),
       onFqPhoneChange: (e) => this.setFqField('phone', e.target.value),
       onFqDetailsChange: (e) => this.setFqField('details', e.target.value),
+      // Named handlers for Step 1 type selection (DC engine doesn't support inline arrow fns)
+      fqSelectProducts: () => this.setFqType('products'),
+      fqSelectServices: () => this.setFqType('services'),
+      fqSelectCallback: () => this.setFqType('callback'),
+      // Named handlers for step navigation
+      fqGoStep1: () => this.setFqStep(1),
+      fqGoStep2: () => this.setFqStep(2),
+      fqGoStep3: () => this.setFqStep(3),
+      // Named handlers for category toggles
+      fqToggleEPP: () => this.toggleFqCategory('EPP'),
+      fqToggleExtintores: () => this.toggleFqCategory('Extintores'),
+      fqToggleContraIncendio: () => this.toggleFqCategory('Contra Incendio'),
+      fqToggleSenalizacion: () => this.toggleFqCategory('Señalización'),
+      // Named handlers for volume selection
+      fqSetVolBajo: () => this.setFqField('volume', 'Bajo (1-10 unds)'),
+      fqSetVolCorp: () => this.setFqField('volume', 'Corporativo (10-50 unds)'),
+      fqSetVolMayor: () => this.setFqField('volume', 'Por Mayor (>50 unds)'),
+      // Named handlers for service selection
+      fqSetSrvRecarga: () => this.setFqField('service', 'Recarga de extintores'),
+      fqSetSrvSistemas: () => this.setFqField('service', 'Sistemas contra incendio'),
+      fqSetSrvCapacitaciones: () => this.setFqField('service', 'Capacitaciones'),
+      fqSetSrvEquipamiento: () => this.setFqField('service', 'Equipamiento de EPP'),
+      // Named handlers for urgency selection
+      fqSetUrgAlta: () => this.setFqField('urgency', 'Alta (Llamar ya)'),
+      fqSetUrgNormal: () => this.setFqField('urgency', 'Normal'),
     };
   }
 }
