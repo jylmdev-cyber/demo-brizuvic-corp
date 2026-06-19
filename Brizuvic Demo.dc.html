@@ -546,6 +546,229 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
   background: #E11D26;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ============================================================
+   RESPONSIVE UTILITIES & MEDIA QUERIES
+   ============================================================ */
+
+/* --- Grid Utility Classes --- */
+.r-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.r-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.r-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.r-container { max-width: 1200px; margin: 0 auto; padding-left: 28px; padding-right: 28px; }
+
+/* --- Hamburger Button (hidden on desktop) --- */
+.mob-menu-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 3px;
+  color: #fff;
+  padding: 7px 9px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* --- Mobile Nav Drawer --- */
+.mob-nav-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+.mob-nav-drawer.open { display: block; }
+.mob-nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8,9,11,.7);
+  backdrop-filter: blur(6px);
+}
+.mob-nav-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #101216;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  padding: 20px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transform: translateY(-100%);
+  animation: slideDown 0.28s ease-out forwards;
+}
+@keyframes slideDown {
+  to { transform: translateY(0); }
+}
+.mob-nav-btn {
+  font-family: 'Barlow';
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #A6ADB8;
+  background: transparent;
+  border: 0;
+  padding: 13px 4px;
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: color 0.15s;
+}
+.mob-nav-btn:last-child { border-bottom: 0; }
+.mob-nav-btn:hover { color: #fff; }
+
+/* --- Dashboard Mobile Bottom Nav --- */
+.dash-layout { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+.dash-sidebar {
+  background: #101216;
+  border-right: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px;
+}
+.dash-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  background: #101216;
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dash-bottom-nav::-webkit-scrollbar { display: none; }
+.dash-bottom-nav-inner {
+  display: flex;
+  min-width: max-content;
+  padding: 4px 8px;
+}
+.dash-bnav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Saira';
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   BREAKPOINT: TABLET LANDSCAPE (<=1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+  /* Header nav visible, just tighter */
+  .r-container { padding-left: 20px; padding-right: 20px; }
+
+  /* Hero */
+  .hero-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; padding: 54px 20px 64px !important; }
+  .hero-title { font-size: 46px !important; }
+
+  /* Grid utilities */
+  .r-grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Split 2-col */
+  .split-col { gap: 28px !important; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+
+  /* Dashboard */
+  .dash-layout { grid-template-columns: 200px 1fr; }
+  .dash-sidebar .dash-brand-label { display: none; }
+}
+
+/* ============================================================
+   BREAKPOINT: TABLET PORTRAIT (<=768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Hide desktop nav, show hamburger */
+  .header-nav { display: none !important; }
+  .mob-menu-btn { display: flex; align-items: center; justify-content: center; }
+  .header-inner { gap: 14px !important; }
+
+  /* Hero collapses to 1 col */
+  .hero-grid { grid-template-columns: 1fr !important; padding: 44px 18px 52px !important; }
+  .hero-visual { display: none !important; }
+  .hero-title { font-size: 38px !important; }
+  .hero-sub { font-size: 16px !important; }
+
+  /* Grid utilities */
+  .r-grid-4, .r-grid-3 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Split 2-col */
+  .split-col { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .split-col-img { display: none !important; }
+
+  /* Section padding & titles */
+  .section-wrap { padding: 48px 18px !important; }
+  .section-title { font-size: 30px !important; }
+
+  /* Footer: 2 cols on tablet, 1 col on mobile */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; }
+  .footer-bottom { flex-direction: column !important; gap: 6px !important; text-align: center; }
+
+  /* FQ Modal: full height bottom sheet */
+  .fq-overlay { padding: 0 !important; align-items: flex-end !important; }
+  .fq-modal { max-height: 88vh !important; border-radius: 10px 10px 0 0 !important; }
+
+  /* Dashboard: hide sidebar, show bottom nav */
+  .dash-layout { grid-template-columns: 1fr !important; }
+  .dash-sidebar { display: none !important; }
+  .dash-bottom-nav { display: flex; }
+  .dash-main { padding-bottom: 68px !important; max-height: calc(100vh - 68px) !important; }
+  .dash-topbar { padding: 12px 16px !important; }
+  .dash-topbar-title { font-size: 16px !important; }
+
+  /* Dashboard content grids */
+  .dash-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .dash-chart-grid { grid-template-columns: 1fr !important; }
+
+  /* Product detail modal */
+  .product-detail-modal { grid-template-columns: 1fr !important; }
+  .product-detail-gallery { min-height: 220px !important; }
+}
+
+/* ============================================================
+   BREAKPOINT: MOBILE (<=480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero-title { font-size: 28px !important; line-height: 1.1 !important; }
+  .hero-sub { font-size: 14px !important; }
+
+  /* Grid utilities — all single column */
+  .r-grid-4, .r-grid-3, .r-grid-2 { grid-template-columns: 1fr !important; }
+
+  /* Footer: single column */
+  .footer-grid { grid-template-columns: 1fr !important; }
+
+  /* Section titles */
+  .section-title { font-size: 24px !important; }
+
+  /* Floating cart / wa buttons */
+  .wa-trigger-btn { bottom: 84px !important; }
+
+  /* Dashboard KPI: 1 col on very small */
+  .dash-kpi-grid { grid-template-columns: 1fr !important; }
+
+  /* FQ Modal contact grid */
+  .fq-contact-grid { grid-template-columns: 1fr !important; }
+
+  /* Cotiza ahora button — hide label on very small if needed */
+  .pulse-btn-cotiza { font-size: 11px !important; padding: 10px 14px !important; }
+}
 </style>
 </helmet>
 
@@ -558,19 +781,40 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
     <!-- Header -->
     <header style="position:sticky;top:0;z-index:40;background:rgba(12,13,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)">
-      <div style="max-width:1200px;margin:0 auto;padding:15px 28px;display:flex;align-items:center;gap:30px">
+      <div class="r-container header-inner" style="padding-top:15px;padding-bottom:15px;display:flex;align-items:center;gap:30px">
         <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:9px;font-family:'Saira';font-weight:800;font-size:23px;letter-spacing:-.02em;color:#fff;cursor:pointer">
           {{ logoHeaderEl }}
           <span style="display:flex;align-items:baseline">BRIZUVIC<span style="color:#E11D26;font-size:13px;font-weight:700;margin-left:5px;letter-spacing:0">Corp.</span></span>
         </div>
-        <nav style="display:flex;gap:2px;margin-left:auto">
+        <nav class="header-nav" style="display:flex;gap:2px;margin-left:auto">
           <sc-for list="{{ siteNav }}" as="n" hint-placeholder-count="5">
             <button onClick="{{ n.onClick }}" style="font-family:'Barlow';font-weight:600;font-size:13px;letter-spacing:.04em;color:{{ n.col }};background:transparent;border:0;border-bottom:2px solid {{ n.bar }};padding:9px 14px;cursor:pointer;text-transform:uppercase;transition:color .15s">{{ n.label }}</button>
           </sc-for>
         </nav>
         <button onClick="{{ openFq }}" class="pulse-btn-cotiza">Cotiza ahora</button>
+        <!-- Hamburger -->
+        <button onClick="{{ toggleMobNav }}" class="mob-menu-btn" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
     </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mob-nav-drawer {{ mobNavOpen ? 'open' : '' }}">
+      <div onClick="{{ toggleMobNav }}" class="mob-nav-backdrop"></div>
+      <div class="mob-nav-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-family:'Saira';font-weight:800;font-size:18px;color:#fff;">BRIZUVIC<span style="color:#E11D26;font-size:11px;margin-left:4px;">Corp.</span></span>
+          <button onClick="{{ toggleMobNav }}" style="background:transparent;border:0;color:#9AA1AC;cursor:pointer;padding:4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <sc-for list="{{ siteNav }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.onClick }}" class="mob-nav-btn">{{ n.label }}</button>
+        </sc-for>
+        <button onClick="{{ openFq }}" class="pulse-btn-cotiza" style="margin-top:10px;width:100%;text-align:center;">Cotiza ahora</button>
+      </div>
+    </div>
 
     <!-- ===== HOME ===== -->
     <sc-if value="{{ homeOn }}" hint-placeholder-val="{{ true }}">
@@ -578,11 +822,11 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <!-- Hero -->
       <section class="backlight-red" style="position:relative;overflow:hidden;background:radial-gradient(120% 90% at 80% -10%,#1c1f27 0%,#0C0D10 55%)">
         <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 80%)"></div>
-        <div style="position:relative;max-width:1200px;margin:0 auto;padding:74px 28px 84px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
+        <div class="hero-grid" style="position:relative;max-width:1200px;margin:0 auto;padding:74px 28px 84px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
           <div>
             <div class="animate-fade-in-up" style="display:inline-flex;align-items:center;gap:9px;background:rgba(225,29,38,.12);border:1px solid rgba(225,29,38,.3);color:#FF6168;font-family:'Barlow';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:2px;margin-bottom:24px"><span style="width:7px;height:7px;background:#E11D26;border-radius:50%;box-shadow:0 0 8px #E11D26"></span>Seguridad industrial · Lima, Perú</div>
-            <h1 class="animate-fade-in-up delay-1" style="font-family:'Saira';font-weight:800;font-size:60px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:0 0 22px;text-wrap:balance">{{ heroTitle }}</h1>
-            <p class="animate-fade-in-up delay-2" style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
+            <h1 class="animate-fade-in-up delay-1 hero-title" style="font-family:'Saira';font-weight:800;font-size:60px;line-height:.98;letter-spacing:-.02em;color:#fff;margin:0 0 22px;text-wrap:balance">{{ heroTitle }}</h1>
+            <p class="animate-fade-in-up delay-2 hero-sub" style="font-size:18px;line-height:1.55;color:#A6ADB8;max-width:520px;margin:0 0 32px">{{ heroSub }}</p>
             <div class="animate-fade-in-up delay-3" style="display:flex;gap:13px;flex-wrap:wrap">
               <button onClick="{{ goCat }}" class="btn-primary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#E11D26;border:0;padding:15px 28px;cursor:pointer;border-radius:2px">Ver catálogo</button>
               <button onClick="{{ openFq }}" class="btn-secondary" style="font-family:'Barlow';font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);padding:15px 28px;cursor:pointer;border-radius:2px">Solicitar cotización</button>
@@ -594,7 +838,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             </div>
           </div>
           <!-- Hero visual -->
-          <div class="float-hero-visual" style="position:relative;aspect-ratio:4/4.4;border-radius:4px;overflow:hidden;background:linear-gradient(160deg,#23262F,#15171C);border:1px solid rgba(255,255,255,.09)">
+          <div class="hero-visual float-hero-visual" style="position:relative;aspect-ratio:4/4.4;border-radius:4px;overflow:hidden;background:linear-gradient(160deg,#23262F,#15171C);border:1px solid rgba(255,255,255,.09)">
             <div style="position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(45deg,#FFC107 0 13px,#1A1C22 13px 26px);z-index:2"></div>
             {{ heroImgBgEl }}
             <sc-if value="{{ !hasHeroImg }}" hint-placeholder-val="{{ true }}">
@@ -612,7 +856,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
       <!-- Categorías -->
       <section style="max-width:1200px;margin:0 auto;padding:18px 28px 8px">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div class="r-grid-4">
           <sc-for list="{{ categoryCards }}" as="c" hint-placeholder-count="4">
             <div onClick="{{ c.onClick }}" style="position:relative;background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;cursor:pointer;overflow:hidden;transition:border-color .2s" style-hover="border-color:rgba(225,29,38,.5)" class="premium-card">
               <div style="color:#E11D26;margin-bottom:30px">{{ c.iconEl }}</div>
@@ -731,7 +975,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
       <!-- Stats band -->
       <section style="max-width:1200px;margin:46px auto;padding:0 28px">
-        <div style="background:#E11D26;border-radius:4px;display:grid;grid-template-columns:repeat(4,1fr)">
+        <div class="r-grid-4" style="background:#E11D26;border-radius:4px">
           <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
             <div style="padding:30px 26px;border-right:1px solid rgba(255,255,255,.16)"><div style="font-family:'Saira';font-weight:800;font-size:42px;color:#fff;line-height:1">{{ s.k }}</div><div style="font-size:13px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.05em;margin-top:6px">{{ s.l }}</div></div>
           </sc-for>
@@ -742,7 +986,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <sc-if value="{{ sectionsOn.clientes }}" hint-placeholder-val="{{ true }}">
       <section style="max-width:1200px;margin:0 auto;padding:36px 28px 10px">
         <div style="text-align:center;font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#7E8591;margin-bottom:24px">Empresas que confían en nosotros</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div class="r-grid-4">
           <sc-for list="{{ clientCards }}" as="c" hint-placeholder-count="8">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;display:flex;align-items:center;justify-content:center;height:64px">
               <sc-if value="{{ c.logoEl }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">{{ c.logoEl }}</div></sc-if>
@@ -759,7 +1003,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
           <div><div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Lo que hacemos</div><h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Servicios certificados</h2></div>
           <button onClick="{{ goServ }}" style="font-family:'Barlow';font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 18px;cursor:pointer;border-radius:2px">Ver todos</button>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div class="r-grid-4">
           <sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;display:flex;flex-direction:column">
               <div style="font-family:'Saira';font-weight:800;font-size:32px;color:#2A2E36;line-height:1;margin-bottom:18px">{{ s.num }}</div>
@@ -778,7 +1022,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
           <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Testimonios</div>
           <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Lo que dicen nuestros clientes</h2>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div class="r-grid-3">
           <sc-for list="{{ testimonialCards }}" as="t" hint-placeholder-count="3">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
               <div style="color:#FFC107;font-size:14px;letter-spacing:2px;margin-bottom:14px">★★★★★</div>
@@ -800,7 +1044,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
         <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Catálogo</div>
         <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0 0 26px;letter-spacing:-.01em">Productos destacados</h2>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div class="r-grid-4">
           <sc-for list="{{ featured }}" as="p" hint-placeholder-count="4">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
               <div style="aspect-ratio:1/.82;background:linear-gradient(150deg,#23262F,#181A20);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)">
@@ -825,7 +1069,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <section style="max-width:1200px;margin:0 auto;padding:30px 28px">
         <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Galería</div>
         <h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0 0 26px;letter-spacing:-.01em">Proyectos en campo</h2>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div class="r-grid-4" style="gap:12px">
           <sc-for list="{{ galleryCards }}" as="g" hint-placeholder-count="8">
             <div style="aspect-ratio:1/.85;border-radius:4px;overflow:hidden;background:linear-gradient(150deg,#23262F,#181A20);position:relative;border:1px solid rgba(255,255,255,.08)">
               <sc-if value="{{ g.imgEl }}" hint-placeholder-val="{{ false }}">{{ g.imgEl }}</sc-if>
@@ -838,13 +1082,13 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
       <!-- Certificaciones (light) -->
       <section style="background:#F4F2EC;margin-top:46px">
-        <div style="max-width:1200px;margin:0 auto;padding:50px 28px;display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center">
+        <div class="split-col" style="max-width:1200px;margin:0 auto;padding:50px 28px;display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center">
           <div>
             <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:10px">Respaldo</div>
             <h2 style="font-family:'Saira';font-weight:800;font-size:34px;color:#14161A;margin:0 0 14px;letter-spacing:-.01em;line-height:1.05">Cumplimos la normativa que tu auditoría exige</h2>
             <p style="font-size:16px;line-height:1.55;color:#54585F;margin:0">Cada producto y servicio se entrega con documentación válida ante INDECI y auditorías de seguridad. Trabajamos bajo norma técnica peruana y estándares internacionales.</p>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+          <div class="r-grid-2">
             <sc-for list="{{ certCards }}" as="c" hint-placeholder-count="4">
               <div style="background:#fff;border:1px solid #E4E1D8;border-radius:4px;padding:20px 22px"><div style="font-family:'Saira';font-weight:800;font-size:20px;color:#14161A">{{ c.k }}</div><div style="font-size:13px;color:#7A7E85;margin-top:3px">{{ c.l }}</div></div>
             </sc-for>
@@ -869,7 +1113,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
           <div><div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Blog</div><h2 style="font-family:'Saira';font-weight:800;font-size:38px;color:#fff;margin:0;letter-spacing:-.01em">Últimos artículos</h2></div>
           <button onClick="{{ goBlog }}" style="font-family:'Barlow';font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#9AA1AC;background:transparent;border:1px solid rgba(255,255,255,.14);padding:11px 18px;cursor:pointer;border-radius:2px">Ver todos los artículos</button>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div class="r-grid-3">
           <sc-for list="{{ blogPreview }}" as="b" hint-placeholder-count="3">
             <div onClick="{{ goBlog }}" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden;cursor:pointer">
               <div style="aspect-ratio:16/10;background:linear-gradient(150deg,#23262F,#181A20)">
@@ -900,7 +1144,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       </div>
 
       <!-- Filtros Avanzados -->
-      <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:18px 24px;margin-bottom:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center">
+      <div class="split-col" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:18px 24px;margin-bottom:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center">
         <!-- Búsqueda -->
         <div>
           <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:8px">Buscar por nombre o descripción:</label>
@@ -925,7 +1169,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+      <div class="r-grid-4">
         <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
           <div onClick="{{ p.onClick }}" class="premium-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden;cursor:pointer">
             <div style="aspect-ratio:1/.82;background:linear-gradient(150deg,#23262F,#181A20);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(255,255,255,.06)">
@@ -960,7 +1204,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             
             <!-- Even Service (Text Left, Image Right) -->
             <sc-if value="{{ s.isEven }}" hint-placeholder-val="{{ true }}">
-              <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center">
+              <div class="split-col" style="display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center">
                 <!-- Text block -->
                 <div style="padding:40px 45px">
                   <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -995,7 +1239,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             
             <!-- Odd Service (Image Left, Text Right) -->
             <sc-if value="{{ !s.isEven }}" hint-placeholder-val="{{ false }}">
-              <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center">
+              <div class="split-col" style="display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center">
                 <!-- Image block -->
                 <div class="service-img-wrapper" style="height:100%;min-height:360px">
                   <img src="{{ s.img }}" class="service-img" alt="{{ s.n }}" />
@@ -1033,7 +1277,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       </div>
 
       <div style="font-family:'Saira';font-weight:800;font-size:30px;color:#fff;margin-bottom:24px;letter-spacing:-.01em">Cómo trabajamos</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px">
+      <div class="r-grid-4" style="margin-bottom:32px">
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
           <div onClick="{{ s.onClick }}" class="step-card {{ s.on ? 'active' : '' }}" style="display:flex;flex-direction:column;justify-content:space-between;min-height:180px">
             <div>
@@ -1067,7 +1311,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Blog</div>
       <h1 style="font-family:'Saira';font-weight:800;font-size:46px;color:#fff;margin:0 0 6px;letter-spacing:-.02em">Artículos y novedades</h1>
       <p style="font-size:16px;color:#8A9099;margin:0 0 36px">Prevención, normativa y casos de uso en seguridad industrial.</p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div class="r-grid-3">
         <sc-for list="{{ blogPosts }}" as="b" hint-placeholder-count="3">
           <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
             <div style="aspect-ratio:16/10;background:linear-gradient(150deg,#23262F,#181A20)">
@@ -1090,7 +1334,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Nosotros</div>
       
       <!-- Split-screen Grid (Story and Image) -->
-      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:center;margin-bottom:56px">
+      <div class="split-col" style="display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:center;margin-bottom:56px">
         <!-- Left: Story Text -->
         <div>
           <h1 style="font-family:'Saira';font-weight:800;font-size:44px;color:#fff;margin:0 0 20px;letter-spacing:-.02em;line-height:1.05">Más de 12 años blindando la industria peruana</h1>
@@ -1123,7 +1367,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Tab Content: Misión -->
         <sc-if value="{{ isMisionActive }}" hint-placeholder-val="{{ true }}">
-          <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
+          <div class="split-col" style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
             <div style="width:80px;height:80px;border-radius:50%;background:rgba(225,29,38,.08);border:1px solid rgba(225,29,38,.2);display:flex;align-items:center;justify-content:center;color:#E11D26">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2c-5.523 0-10 4.477-10 10s4.477 10 10 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
             </div>
@@ -1136,7 +1380,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Tab Content: Visión -->
         <sc-if value="{{ isVisionActive }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
+          <div class="split-col" style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:center">
             <div style="width:80px;height:80px;border-radius:50%;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);display:flex;align-items:center;justify-content:center;color:#FFC107">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
             </div>
@@ -1149,7 +1393,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Tab Content: Valores -->
         <sc-if value="{{ isValoresActive }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+          <div class="r-grid-3" style="gap:20px">
             <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,0.04);padding:20px;border-radius:4px">
               <div style="font-family:'Saira';font-weight:700;font-size:16px;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px">
                 <span style="color:#E11D26">✓</span> Compromiso con la Vida
@@ -1177,7 +1421,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <h2 style="font-family:'Saira';font-weight:800;font-size:32px;color:#fff;margin:0 0 6px;letter-spacing:-.01em">Cobertura y Operaciones a Nivel Nacional</h2>
         <p style="font-size:15px;color:#8A9099;margin:0 0 28px;max-width:640px">Brindamos soporte logístico y servicios de ingeniería in-situ en las zonas más estratégicas de la actividad económica del país.</p>
         
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="r-grid-3" style="gap:16px">
           <!-- Sede Lima -->
           <div class="cobertura-card" style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px;border-top:3px solid #E11D26">
             <div style="font-family:'Saira';font-weight:700;font-size:18px;color:#fff;margin-bottom:4px">Lima y Callao (Sede Central)</div>
@@ -1276,7 +1520,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
     <!-- ===== CONTACTO ===== -->
     <sc-if value="{{ conOn }}" hint-placeholder-val="{{ true }}">
-    <div style="max-width:1200px;margin:0 auto;padding:48px 28px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:44px">
+    <div class="split-col" style="max-width:1200px;margin:0 auto;padding:48px 28px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:44px">
       <!-- Left: Form -->
       <div>
         <div style="font-family:'Saira';font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#E11D26;margin-bottom:8px">Contacto</div>
@@ -1295,7 +1539,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div class="r-grid-2" style="margin-bottom:14px">
             <div>
               <label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre</label>
               <input placeholder="Tu nombre" value="{{ contactForm.name }}" onChange="{{ cfSetName }}" class="contact-input" style="width:100%;background:#15171C;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:13px 15px;color:#fff;font-size:14px">
@@ -1411,7 +1655,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
     <!-- Footer -->
     <footer style="border-top:1px solid rgba(255,255,255,.08);margin-top:20px">
-      <div style="max-width:1200px;margin:0 auto;padding:44px 28px 28px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px">
+      <div class="footer-grid" style="max-width:1200px;margin:0 auto;padding:44px 28px 28px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px">
         <div>
           <div style="display:flex;align-items:center;gap:8px;font-family:'Saira';font-weight:800;font-size:21px;color:#fff;margin-bottom:14px">
             {{ logoFooterEl }}
@@ -1423,7 +1667,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <div><div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px">Empresa</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#7E8591"><span>Nosotros</span><span>Servicios</span><span>Certificaciones</span><span>Contacto</span></div></div>
         <div><div style="font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px">Contacto</div><div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#7E8591"><span>(01) 759-4690</span><span>961 823 490</span><span>ventas@brizuvic.com</span></div></div>
       </div>
-      <div style="border-top:1px solid rgba(255,255,255,.06)"><div style="max-width:1200px;margin:0 auto;padding:18px 28px;display:flex;justify-content:space-between;font-size:12px;color:#5A616C"><span>© 2026 Corporación Brizuvic E.I.R.L.</span><span>Demo de propuesta · diseño conceptual</span></div></div>
+      <div style="border-top:1px solid rgba(255,255,255,.06)"><div class="footer-bottom" style="max-width:1200px;margin:0 auto;padding:18px 28px;display:flex;justify-content:space-between;font-size:12px;color:#5A616C"><span>© 2026 Corporación Brizuvic E.I.R.L.</span><span>Demo de propuesta · diseño conceptual</span></div></div>
     </footer>
 
     <!-- Carrito de Cotización Flotante -->
@@ -1544,11 +1788,11 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
   <!-- ============ PANEL CMS ============ -->
   <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
-  <div style="display:grid;grid-template-columns:248px 1fr;min-height:100vh">
+  <div class="dash-layout">
     <!-- Sidebar -->
-    <aside style="background:#101216;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:22px 16px">
+    <aside class="dash-sidebar">
       <div style="display:flex;align-items:baseline;font-family:'Saira';font-weight:800;font-size:20px;color:#fff;padding:0 8px;margin-bottom:4px">BRIZUVIC<span style="color:#E11D26;font-size:11px;margin-left:4px">Corp.</span></div>
-      <div style="font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#5A616C;padding:0 8px;margin-bottom:26px">Panel administrativo</div>
+      <div class="dash-brand-label" style="font-family:'Saira';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#5A616C;padding:0 8px;margin-bottom:26px">Panel administrativo</div>
       <nav style="display:flex;flex-direction:column;gap:3px">
         <button onClick="{{ nav.dashboard.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.dashboard.col }};background:{{ nav.dashboard.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.dashboard.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</button>
         <button onClick="{{ nav.productos.onClick }}" style="display:flex;align-items:center;gap:12px;font-family:'Saira';font-weight:600;font-size:14px;color:{{ nav.productos.col }};background:{{ nav.productos.bg }};border:0;border-radius:3px;padding:11px 12px;cursor:pointer;text-align:left;box-shadow:inset 3px 0 0 {{ nav.productos.bar }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Productos</button>
@@ -1564,8 +1808,42 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
       </div>
     </aside>
 
+    <!-- Mobile Bottom Navigation -->
+    <nav class="dash-bottom-nav">
+      <div class="dash-bottom-nav-inner">
+        <button onClick="{{ nav.dashboard.onClick }}" class="dash-bnav-btn" style="background:{{ nav.dashboard.bg }};color:{{ nav.dashboard.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button onClick="{{ nav.productos.onClick }}" class="dash-bnav-btn" style="background:{{ nav.productos.bg }};color:{{ nav.productos.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          Productos
+        </button>
+        <button onClick="{{ nav.servicios.onClick }}" class="dash-bnav-btn" style="background:{{ nav.servicios.bg }};color:{{ nav.servicios.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>
+          Servicios
+        </button>
+        <button onClick="{{ nav.cotizaciones.onClick }}" class="dash-bnav-btn" style="background:{{ nav.cotizaciones.bg }};color:{{ nav.cotizaciones.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          Cotizaciones
+        </button>
+        <button onClick="{{ nav.contenido.onClick }}" class="dash-bnav-btn" style="background:{{ nav.contenido.bg }};color:{{ nav.contenido.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+          Contenido
+        </button>
+        <button onClick="{{ nav.blog.onClick }}" class="dash-bnav-btn" style="background:{{ nav.blog.bg }};color:{{ nav.blog.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M8 7h6"/><path d="M8 11h8"/><path d="M16 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2 2 2 0 0 1 2 2v16a2 2 0 0 0 2 2"/></svg>
+          Blog
+        </button>
+        <button onClick="{{ nav.config.onClick }}" class="dash-bnav-btn" style="background:{{ nav.config.bg }};color:{{ nav.config.col }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2"/><circle cx="12" cy="12" r="3"/></svg>
+          Config
+        </button>
+      </div>
+    </nav>
+
     <!-- Main -->
-    <main style="background:#0C0D10;display:flex;flex-direction:column;max-height:100vh;overflow-y:auto">
+    <main class="dash-main" style="background:#0C0D10;display:flex;flex-direction:column;max-height:100vh;overflow-y:auto">
       <div style="position:sticky;top:0;z-index:10;background:rgba(12,13,16,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);padding:16px 30px;display:flex;align-items:center;gap:18px">
         <div style="font-family:'Saira';font-weight:700;font-size:20px;color:#fff">{{ adminTitle }}</div>
         <div style="margin-left:auto;position:relative"><svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#6A707A" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="Buscar..." style="background:#15171C;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:9px 12px 9px 34px;color:#fff;font-size:13px;width:220px"></div>
@@ -1576,7 +1854,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
         <!-- Dashboard -->
         <sc-if value="{{ dashOn }}" hint-placeholder-val="{{ true }}">
         <div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px">
+          <div class="dash-kpi-grid" style="margin-bottom:14px">
             <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
               <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:22px;display:flex;flex-direction:column;justify-content:space-between">
                 <div>
@@ -1593,7 +1871,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
               </div>
             </sc-for>
           </div>
-          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px">
+          <div class="dash-chart-grid">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:24px">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px"><div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff">Ventas 2026</div><div style="font-size:12px;color:#8A9099">Últimos 7 meses</div></div>
               <div style="display:flex;align-items:flex-end;gap:14px;height:180px;position:relative;padding-bottom:5px;">
@@ -1651,7 +1929,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Productos -->
         <sc-if value="{{ prodOn }}" hint-placeholder-val="{{ false }}">
-        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow-x:auto">
           <table style="width:100%;border-collapse:collapse">
             <thead><tr style="background:#101216;text-align:left">
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Producto</th>
@@ -1679,7 +1957,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Servicios -->
         <sc-if value="{{ svOn }}" hint-placeholder-val="{{ false }}">
-        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow-x:auto">
           <table style="width:100%;border-collapse:collapse">
             <thead><tr style="background:#101216;text-align:left">
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Núm</th>
@@ -1705,7 +1983,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Cotizaciones -->
         <sc-if value="{{ cotOn }}" hint-placeholder-val="{{ false }}">
-        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+        <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;overflow-x:auto">
           <table style="width:100%;border-collapse:collapse">
             <thead><tr style="background:#101216;text-align:left">
               <th style="font-family:'Saira';font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7E8591;padding:14px 20px">Cliente</th>
@@ -1775,7 +2053,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Contenido del home -->
         <sc-if value="{{ contOn }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="split-col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div style="display:flex;flex-direction:column;gap:14px">
             <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
               <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:4px">Banner principal (Hero)</div>
@@ -1868,21 +2146,21 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 
         <!-- Config -->
         <sc-if value="{{ cfgOn }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="split-col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div style="background:#15171C;border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:26px">
             <div style="font-family:'Saira';font-weight:700;font-size:17px;color:#fff;margin-bottom:20px">Datos de la empresa</div>
             <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Nombre / razón social</label><input value="{{ company.name }}" onChange="{{ cSetName }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div class="r-grid-2" style="margin-bottom:16px">
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">RUC</label><input value="{{ company.ruc }}" onChange="{{ cSetRuc }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Correo</label><input value="{{ company.email }}" onChange="{{ cSetEmail }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
             </div>
             <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Dirección</label><input value="{{ company.address }}" onChange="{{ cSetAddress }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div class="r-grid-2" style="margin-bottom:16px">
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono 1</label><input value="{{ company.phone1 }}" onChange="{{ cSetPhone1 }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Teléfono 2</label><input value="{{ company.phone2 }}" onChange="{{ cSetPhone2 }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
             </div>
             <div style="margin-bottom:16px"><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">WhatsApp (con código de país, sin +)</label><input value="{{ company.whatsapp }}" onChange="{{ cSetWhatsapp }}" placeholder="51961823490" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="r-grid-2">
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Instagram</label><input value="{{ company.instagram }}" onChange="{{ cSetInstagram }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
               <div><label style="display:block;font-family:'Saira';font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#9AA1AC;margin-bottom:7px">Facebook</label><input value="{{ company.facebook }}" onChange="{{ cSetFacebook }}" style="width:100%;background:#0C0D10;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:12px 14px;color:#fff;font-size:14px"></div>
             </div>
@@ -2490,6 +2768,7 @@ input:focus,textarea:focus{outline:none;border-color:#E11D26 !important}
 class Component extends DCLogic {
   state = {
     view:'site', sitePage:'home', adminPage:'dashboard', cat:'Todos',
+    mobNavOpen: false,
     heroTitle:'Protegemos lo que más importa: tu gente.',
     heroSub:'Equipos de protección personal, extintores y sistemas contra incendio con certificación NTP. Más de 12 años blindando la industria peruana.',
     heroImg:'./uploads/hero.png', logo:'./uploads/logo.png',
@@ -2632,6 +2911,12 @@ class Component extends DCLogic {
   }
   setFqType(type) {
     this.setState({ fqType: type, fqStep: 2 });
+  }
+  toggleMobNav() {
+    this.setState({ mobNavOpen: !this.state.mobNavOpen });
+  }
+  closeMobNav() {
+    this.setState({ mobNavOpen: false });
   }
   toggleFqCategory(cat) {
     const categories = this.state.fqForm.categories;
@@ -3055,7 +3340,7 @@ class Component extends DCLogic {
     const isSite=s.view==='site', isAdmin=s.view==='admin';
 
     const siteNav=[['Inicio','home'],['Catálogo','catalogo'],['Servicios','servicios'],['Blog','blog'],['Nosotros','nosotros'],['Contacto','contacto']]
-      .map(([label,page])=>{const on=s.sitePage===page;return {label,page,on,col:on?'#fff':'#9AA1AC',bar:on?'#E11D26':'transparent',onClick:()=>this.setState({view:'site',sitePage:page})};});
+      .map(([label,page])=>{const on=s.sitePage===page;return {label,page,on,col:on?'#fff':'#9AA1AC',bar:on?'#E11D26':'transparent',onClick:()=>this.setState({view:'site',sitePage:page,mobNavOpen:false})};});
 
     const cats=['Todos','EPP','Extintores','Contra Incendio','Señalización'];
     const catChips=cats.map(c=>{const on=s.cat===c;return {label:c,on,col:on?'#fff':'#9AA1AC',bg:on?'#E11D26':'transparent',bd:on?'#E11D26':'rgba(255,255,255,.14)',onClick:()=>this.setState({cat:c})};});
@@ -3296,6 +3581,8 @@ class Component extends DCLogic {
       fqHasCats: s.fqForm.categories.length > 0,
       openFq: (type) => this.openFq(type),
       closeFq: () => this.closeFq(),
+      toggleMobNav: () => this.toggleMobNav(),
+      mobNavOpen: s.mobNavOpen,
       setFqStep: (step) => this.setFqStep(step),
       setFqType: (type) => this.setFqType(type),
       toggleFqCategory: (cat) => this.toggleFqCategory(cat),
